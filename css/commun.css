@@ -22,8 +22,10 @@ header{position:fixed;top:0;left:0;right:0;height:var(--barre);z-index:30;displa
 body.defile header{background:rgba(10,34,46,.84)}
 .marque{display:flex;align-items:center;gap:12px;text-decoration:none;color:#fff;white-space:nowrap;flex:none}
 .marque img.sym{height:38px}
-.marque b{display:block;font-size:19px;letter-spacing:.14em;font-weight:700}
-.marque small{display:block;font-size:12px;opacity:.82;margin-top:1px}
+/* same type as the UNEP logo next to it: a plain grotesque, bold and tight */
+.marque b,.marque small{font-family:"Helvetica Neue",Helvetica,Arial,"Liberation Sans",sans-serif}
+.marque b{display:block;font-size:22px;line-height:1;letter-spacing:.01em;font-weight:700}
+.marque small{display:block;font-size:12.5px;line-height:1.15;font-weight:400;letter-spacing:0;opacity:.92;margin-top:3px}
 .marque .filet{width:1px;height:36px;background:rgba(255,255,255,.35);margin:0 6px}
 .marque img.unep{height:36px;opacity:.92}
 nav.principal{display:flex;align-items:center;gap:2px;margin-left:auto;flex-wrap:nowrap}
