@@ -32,12 +32,13 @@ nav.principal .item>a{display:flex;align-items:center;gap:4px;color:#fff;text-de
 nav.principal .item>a:hover{background:rgba(255,255,255,.12)}
 nav.principal .item.actif>a{background:var(--bleu)}
 nav.principal .item.a-sous>a::after{content:"";width:6px;height:6px;border:solid currentColor;border-width:0 1.5px 1.5px 0;transform:rotate(45deg) translateY(-2px);margin-left:4px;opacity:.8}
-nav.principal .sous{position:absolute;top:calc(100% + 6px);left:0;min-width:240px;background:#fff;border-radius:12px;box-shadow:0 14px 40px rgba(0,0,0,.25);padding:6px;
+nav.principal .sous{position:absolute;top:calc(100% + 6px);left:0;min-width:240px;background:rgba(10,34,46,.42);backdrop-filter:blur(14px) saturate(1.2);-webkit-backdrop-filter:blur(14px) saturate(1.2);border:1px solid rgba(255,255,255,.16);border-radius:12px;box-shadow:0 14px 40px rgba(0,0,0,.25);padding:6px;
  opacity:0;visibility:hidden;transform:translateY(-4px);transition:opacity .15s,transform .15s,visibility .15s}
 nav.principal .item:hover .sous,nav.principal .item:focus-within .sous{opacity:1;visibility:visible;transform:none}
-nav.principal .sous a{display:block;color:var(--texte);text-decoration:none;font-size:13.5px;padding:9px 12px;border-radius:8px}
-nav.principal .sous a:hover{background:var(--bleu-pale)}
-nav.principal .sous a small{display:block;color:var(--texte-doux);font-size:11.5px;margin-top:2px}
+nav.principal .sous a{display:block;color:#fff;text-decoration:none;font-size:13.5px;padding:9px 12px;border-radius:8px;transition:background .15s}
+nav.principal .sous a:hover{background:rgba(255,255,255,.14)}
+nav.principal .sous a small{display:block;color:rgba(255,255,255,.72);font-size:11.5px;margin-top:2px}
+body.defile nav.principal .sous{background:rgba(10,34,46,.82)}
 .langue{margin-left:14px;display:flex;gap:2px;background:rgba(255,255,255,.1);border-radius:10px;padding:3px;flex:none}
 .langue button{background:none;border:0;color:#fff;font:600 12px Inter,sans-serif;padding:6px 10px;border-radius:8px;cursor:pointer;opacity:.7}
 .langue button[aria-pressed=true]{background:rgba(255,255,255,.2);opacity:1}
