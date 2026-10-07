@@ -1,0 +1,82 @@
+/* Section "Fiches d'intervention / Intervention profiles". The same fi- rules are
+   repeated in css/resultats.css under "#resultats .sol-z" for the search shown at
+   the bottom of the "Most alarming variables" tab. */
+#fiches .fi-chercheur h2{font-size:24px;font-weight:650;color:#123746;margin:0 0 4px}
+#fiches .fi-chercheur input.champ{font-size:17px;min-height:50px}
+#fiches .fi-cap{font-size:12.5px;letter-spacing:.04em;color:var(--texte-doux);margin:16px 0 8px}
+#fiches .fi-cibles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+#fiches .fi-cible{border-radius:999px;background:#e3eef5;border:1px solid #b9d4e3;color:#123746;font:600 13.5px Inter,sans-serif;padding:10px 16px;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:background .15s,border-color .15s}
+#fiches .fi-cible:hover{background:#d4e6f0;border-color:var(--bleu)}
+#fiches .fi-ou{margin:14px 0 0}
+#fiches .fi-choix{max-width:900px}
+#fiches .fi-gris{color:#6b7590;margin-top:10px}
+#fiches .fi-info{background:#e8f1f8;border-radius:10px;padding:14px 16px;color:#1b4a66;font-size:14px;line-height:1.55;margin:12px 0}
+#fiches .fi-lab{font-size:11px;letter-spacing:.09em;text-transform:uppercase;font-weight:700;color:#8a93a5;margin:16px 0 5px}
+#fiches .fi-lab-act{color:#1a6b45;text-transform:none;letter-spacing:0;font-size:14px;margin:12px 0 4px}
+#fiches .fi-lab-cat{margin:20px 0 4px}
+#fiches .fi-lab-cat span{text-transform:none;letter-spacing:0;font-weight:500;color:#6b7590}
+#fiches .fi-x{font-size:13.5px;color:#3c4761;line-height:1.6;margin:0 0 6px;max-width:95ch}
+#fiches .fi-petit{font-size:12.5px}
+#fiches .fi-t{font-size:16px;font-weight:700;color:#101728;letter-spacing:-.015em;line-height:1.3}
+#fiches .fi-pli{margin:8px 0;background:#fff}
+#fiches .fi-pli>summary{font-weight:600}
+#fiches .fi-corps{padding:0 0 14px}
+#fiches .fi-corps .fi-pli{background:#fbfdfe}
+#fiches .fi-act{margin:2px 0 4px;padding-left:20px}
+#fiches .fi-act li{font-size:13.5px;color:#3c4761;line-height:1.62;margin-bottom:4px}
+#fiches .fi-act li::marker{color:#1a8a4f}
+#fiches .fi-nums{display:flex;gap:26px;flex-wrap:wrap;margin-bottom:10px}
+#fiches .fi-nums div{font-size:11.5px;color:#6b7590}
+#fiches .fi-nums b{display:block;font-size:17px;color:#101728;font-variant-numeric:tabular-nums;margin-top:1px}
+#fiches .fi-puces{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:4px}
+#fiches .fi-puce,#fiches .fi-paq-c{font-size:12px;color:#3c4761;background:#f2f6f3;border:1px solid #dde7e0;border-radius:999px;padding:3px 11px}
+#fiches .fi-contre{background:#fdf1ee;border-color:#f0d5cd}
+#fiches .fi-paq{border:1px solid #e3eaf3;border-left:4px solid #1a8a4f;border-radius:11px;padding:13px 16px;margin:10px 0;background:#fff}
+#fiches .fi-paq-vide{border-left-color:#d7e0ec}
+#fiches .fi-paq-t{font-size:14px;font-weight:700;color:#101728}
+#fiches .fi-paq-x{font-size:12.5px;color:#6b7590;line-height:1.55;margin:4px 0 9px}
+#fiches .fi-paq-l{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:10px}
+/* the drafted profile */
+#fiches .fi-fiche{border:1px solid var(--filet);border-radius:12px;padding:16px 18px;background:#fff;margin:6px 0}
+#fiches .fi-tete{display:grid;grid-template-columns:3.1fr 1fr;gap:16px;align-items:start}
+#fiches .fi-chips{margin-top:8px}
+#fiches .fi-chip{display:inline-block;font-size:11.5px;font-weight:700;border-radius:999px;padding:3px 11px;margin:0 6px 6px 0}
+#fiches .fi-effet{text-align:right}
+#fiches .fi-eff{font-size:21.5px;font-weight:700;letter-spacing:-.03em;font-variant-numeric:tabular-nums;line-height:1}
+#fiches .fi-eff-l{font-size:11.5px;color:#6b7590;margin-top:3px}
+#fiches .fi-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:8px 0}
+#fiches .fi-kpis span{display:block;font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:#8a93a5;font-weight:700}
+#fiches .fi-kpis b{font-size:17.5px;color:#101728;font-variant-numeric:tabular-nums}
+#fiches .fi-dec-l{display:grid;grid-template-columns:minmax(170px,3fr) 54px 54px 58px 104px;gap:8px;align-items:center;padding:4px 0;border-bottom:1px solid #f2f5f9;font-size:11.5px;color:#6b7590;font-variant-numeric:tabular-nums}
+#fiches .fi-dec-l>div:not(:first-child){text-align:right}
+#fiches .fi-dec-l>div:first-child{color:#101728}
+#fiches .fi-dec-h{font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:#8a93a5;font-weight:700;border:0}
+#fiches .fi-dec-h>div:first-child{color:#8a93a5}
+#fiches .fi-fort{color:#101728;font-weight:600}
+#fiches .fi-ct{font-weight:700}
+#fiches .fi-deux{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:12px 0}
+#fiches .fi-sans{margin:0}
+#fiches .fi-box{border:1px solid #e3e9f1;border-left:4px solid #c7d2e0;border-radius:8px;padding:11px 14px;background:#fbfcfe;height:100%}
+#fiches .fi-box-t{font-size:11.5px;font-weight:800;letter-spacing:.02em;margin:0 0 6px}
+#fiches .fi-box p{margin:0;font-size:12.5px;color:#3c4761;line-height:1.6}
+#fiches .fi-perf{border:1px solid #cfe6da;border-radius:8px;padding:12px 14px;background:#f3faf6;margin:4px 0 8px}
+#fiches .fi-perf-l{display:flex;gap:28px;flex-wrap:wrap;align-items:baseline}
+#fiches .fi-perf-v{font-size:24px;font-weight:800;letter-spacing:-.02em;color:#1a8a4f;font-variant-numeric:tabular-nums}
+#fiches .fi-perf-c{font-size:11.5px;color:#3c4761;margin-left:9px}
+#fiches .fi-perf-d{font-size:14px;color:#3c4761;font-weight:600;font-variant-numeric:tabular-nums}
+#fiches .fi-perf-d b{color:#101728}
+#fiches .fi-suivi>div{display:flex;gap:12px;align-items:baseline;padding:5px 0;border-bottom:1px solid #eef2f7}
+#fiches .fi-suivi span{flex:1 1 auto;font-size:12.5px;color:#101728}
+#fiches .fi-suivi b{font-size:12px;white-space:nowrap;font-variant-numeric:tabular-nums}
+#fiches .fi-depart{font-size:11.5px;color:#6b7590;margin-top:6px}
+#fiches .fi-terrain{border:1px solid var(--filet);border-radius:10px;padding:12px 14px;margin:10px 0;background:#fff}
+#fiches .fi-plan{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:10px 0;border-bottom:1px solid var(--filet)}
+@media(max-width:900px){
+ #fiches .fi-cibles,#fiches .fi-deux{grid-template-columns:1fr}
+ #fiches .fi-tete{grid-template-columns:1fr}
+ #fiches .fi-effet{text-align:left}
+ #fiches .fi-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+ #fiches .fi-dec{overflow-x:auto}
+ #fiches .fi-dec-l{min-width:470px}
+ #fiches .fi-chercheur h2{font-size:21px}
+}
