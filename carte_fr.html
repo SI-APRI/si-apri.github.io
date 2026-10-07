@@ -1473,4 +1473,17 @@ L.control.scale({imperial:false, position:'bottomleft'}).addTo(carte);
 <style>.etq-ville{background:none;border:none;box-shadow:none;color:#101728;
  font-weight:700;font-size:11.5px;text-shadow:0 0 3px #fff,0 0 3px #fff,
  0 0 3px #fff;padding:0}</style>
+<style>
+ #apri-export{position:absolute;left:58px;bottom:10px;z-index:1001;display:flex;align-items:center;gap:6px}
+ #apri-export .boutons{padding:0!important;display:flex;gap:6px;margin:0}
+ #apri-export button{font:600 12px Inter,system-ui,-apple-system,'Segoe UI',sans-serif;color:#1f3a4a;background:rgba(255,255,255,.92);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(219,230,238,.9);border-radius:999px;padding:7px 14px;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.18)}
+ #apri-export button:hover{background:#fff;border-color:#397fa3}
+ #apri-export button:disabled{opacity:.6;cursor:default}
+ #apri-export #exportEtat{padding:2px 8px!important;background:rgba(255,255,255,.9);border-radius:8px}
+ #apri-export #exportEtat:empty{display:none}
+ .leaflet-bottom.leaflet-left,.maplibregl-ctrl-bottom-left{bottom:44px!important}
+ @media(max-width:620px){#apri-export{left:10px;bottom:calc(50% + 48px)}}
+</style>
+<script>(function(){const b=document.getElementById('jpg'),st=document.getElementById('exportEtat');if(!b)return;
+ const box=document.createElement('div');box.id='apri-export';box.append(b.parentElement);if(st)box.append(st);document.body.append(box);})();</script>
 </body></html>
