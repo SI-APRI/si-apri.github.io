@@ -1,0 +1,436 @@
+{
+ "fr": {
+  "ressources": {
+   "jeux": [
+    {
+     "fichier": "01_resultats_descriptifs.xlsx",
+     "titre": "Résultats descriptifs",
+     "sous": "Les 503 questions par sous-population",
+     "volume": "503 questions",
+     "format": "XLSX",
+     "description": "Une ligne par modalité de réponse pour chaque question du questionnaire, avec les effectifs (n) et les pourcentages pour les 12 sous-populations de référence : total, sexe, catégorie économique A/B/C, quatre tranches d'âge, paysage littoral et montagne."
+    },
+    {
+     "fichier": "02_indicateurs_resilience.xlsx",
+     "titre": "Indicateurs de résilience",
+     "sous": "Valeur brute et score APRI par section communale",
+     "volume": "128 indicateurs",
+     "format": "XLSX",
+     "description": "Les 128 indicateurs de l'indice, avec leur dimension, leur pondération, leur échelle théorique, la valeur mesurée (en % de ménages) et le score 0–10 qui en découle, pour chacune des 10 sections communales et chaque sous-population."
+    },
+    {
+     "fichier": "03_ventilation_section_souspop.xlsx",
+     "titre": "Ventilation croisée",
+     "sous": "Scores des indicateurs par section communale et sous-population",
+     "volume": "128 indicateurs",
+     "format": "XLSX",
+     "description": "Le croisement complet section × sous-population : pour chaque section communale, chaque indicateur est ventilé par sexe, catégorie économique et tranche d'âge, avec l'effectif de base de chaque case."
+    },
+    {
+     "fichier": "04_scores_composites.xlsx",
+     "titre": "Scores composites pondérés",
+     "sous": "Synthèse par section et dimension",
+     "volume": "7 dimensions",
+     "format": "XLSX",
+     "description": "Le tableau de synthèse : score final pondéré et score de chacune des sept dimensions IRLA, pour chaque section communale et chaque sous-population. C'est la table qui alimente les cartes et les diagrammes radar."
+    },
+    {
+     "fichier": "06_dictionnaire_questionnaire.xlsx",
+     "titre": "Dictionnaire du questionnaire",
+     "sous": "",
+     "volume": "503 items",
+     "format": "XLSX",
+     "description": "La liste des items de l'enquête dans leur ordre de passation, avec leur section thématique, le libellé de la question et le type de réponse (choix unique ou multiple). Sert de clé de lecture aux autres fichiers."
+    },
+    {
+     "fichier": "07_organisations_communautaires.xlsx",
+     "titre": "Organisations communautaires de base",
+     "sous": "",
+     "volume": "34 organisations",
+     "format": "XLSX",
+     "description": "Une ligne par organisation : section communale, partenariat et son ancienneté, appui extérieur reçu, liens avec les autorités communales et les ONG, présence de femmes et de personnes de 18 à 30 ans à la direction."
+    }
+   ],
+   "bouton": "Télécharger",
+   "acces": {
+    "titre": "Base individuelle des ménages",
+    "texte": "Accès sur demande après validation. Indiquez votre organisme, l’objectif de votre étude et les données nécessaires. La demande ne vaut pas autorisation d’accès.",
+    "bouton": "Demander un accès"
+   }
+  },
+  "apropos": {
+   "lead": "APRI, l'Approche Paysages Résilients Intégrée, est une initiative du PNUE pour rendre les ménages et les territoires du Grand-Sud d'Haïti plus résilients, en traitant ensemble l'écologique, l'humain et le productif.",
+   "blocs": [
+    {
+     "k": "Pourquoi",
+     "x": "Pauvreté, écosystèmes dégradés, gouvernance fragile et catastrophes répétées s'entretiennent les unes les autres. Les projets isolés n'en traitent qu'un morceau. APRI les prend ensemble, avec les acteurs humanitaires, de développement et locaux."
+    },
+    {
+     "k": "Où",
+     "x": "Deux paysages pilotes, prioritaires pour le relèvement de la péninsule sud : enclavés, très exposés aux aléas, et parmi les derniers refuges de biodiversité du pays."
+    },
+    {
+     "k": "Comment",
+     "x": "La résilience y est mesurée sur sept dimensions, du physique au culturel, chacune avec ses indicateurs, ses barèmes et ses pondérations."
+    },
+    {
+     "k": "Déjà fait"
+    }
+   ],
+   "paysages": [
+    {
+     "nom": "Paysage Grand'Anse",
+     "surface": "767 km²",
+     "detail": "L'arrondissement de Corail et quatre communes : Roseaux, Corail, Beaumont, Pestel (y compris les îles des Cayemites)."
+    },
+    {
+     "nom": "Paysage Sud",
+     "surface": "740 km²",
+     "detail": "Trois arrondissements — Port-Salut, Coteaux, Chardonnières — et neuf communes : Tiburon, Chardonnières, Les Anglais, Port-à-Piment, Les Coteaux, Roche-à-Bateaux, Arniquet, Port-Salut, Saint-Jean-du-Sud."
+    }
+   ],
+   "jalons": [
+    {
+     "v": "16",
+     "l": "membres au comité de pilotage, dont 10 agences des Nations unies"
+    },
+    {
+     "v": "10",
+     "l": "sections communales couvertes par l'étude de ligne de base"
+    },
+    {
+     "v": "1",
+     "l": "matrice d'indicateurs pour le suivi APRI, en cours de validation"
+    },
+    {
+     "v": "4",
+     "l": "partenaires pour un projet pilote de paiement pour services environnementaux"
+    }
+   ],
+   "realisations": {
+    "titre": "Réalisations 2025 et 2026",
+    "liste": [
+     "Mise en place d'un système d'information APRI.",
+     "Élaboration d'une méthodologie harmonisée pour une planification communautaire de la résilience.",
+     "Établissement de plateformes de gouvernance multisectorielles dans 10 sections communales pilotes.",
+     "Élaboration de 10 plans de résilience, un par section communale pilote.",
+     "Établissement d'un comité opérationnel APRI dans chaque paysage.",
+     "Expansion de l'étude de ligne de base.",
+     "Lancement d'une étude économique sur les potentialités bleues, vertes et circulaires dans les paysages."
+    ]
+   },
+   "definitions": {
+    "titre": "Les deux mots, au sens où ils sont pris ici",
+    "mots": [
+     {
+      "mot": "Un paysage",
+      "texte": "Au-delà d'une mosaïque ou d'un groupe d'écosystèmes locaux qui se répète sous une forme similaire, il s'agit d'une configuration particulière de topographie, de végétation, d'utilisation des terres et de schéma d'implantation qui délimite une certaine cohérence des processus et activités naturels, historiques et culturels.",
+      "source": "D'après McNeely et Scherr (2003), p. 275"
+     },
+     {
+      "mot": "La résilience",
+      "texte": "Un concept holistique, issu des travaux fondateurs de Holling (1973), distinct de la stabilité comme de la vulnérabilité, et qui inclut des principes sociaux. Il faut l'entendre comme la capacité d'un système exposé aux risques à résister aux effets d'un aléa, à les absorber, à s'y adapter et à s'en remettre de manière opportune et efficace, y compris par la préservation, la restauration et l'amélioration de ses structures et fonctions de base essentielles.",
+      "source": "UNDRR, sur les travaux de Holling (1973)"
+     }
+    ]
+   },
+   "informations": {
+    "titre": "Données, confidentialité et utilisation",
+    "org": "Programme des Nations Unies pour l’environnement (PNUE)",
+    "blocs": [
+     {
+      "t": "À propos des données",
+      "x": "Les résultats proviennent notamment de l’enquête ménage de 2024. Les effectifs valides peuvent varier selon les questions. Une corrélation décrit une association et ne démontre pas une cause. Les simulations pédagogiques ne sont pas des prévisions."
+     },
+     {
+      "t": "Confidentialité",
+      "x": "Ne transmettez pas de noms, coordonnées GPS, numéros de téléphone ou réponses individuelles dans un message de signalement. Pour une demande concernant les données, contactez l’équipe APRI. Les données individuelles sont accessibles uniquement sur demande après validation."
+     },
+     {
+      "t": "Réutilisation",
+      "x": "Avant de réutiliser un résultat, vérifiez sa source, sa date, ses unités, ses limites et les droits applicables à la source. Citez APRI et la source concernée. Les logos ne constituent pas une autorisation de réutilisation."
+     },
+     {
+      "t": "Technique et accessibilité",
+      "x": "Cette version de l’application est un site statique hébergé sur GitHub Pages ; elle ne dépose aucun cookie et n’intègre aucun outil de suivi d’usage. Cela ne couvre pas les journaux et services propres à l’hébergeur, aux polices de caractères ou aux fournisseurs de cartes. Signalez un problème d’accès ou de lecture en précisant la page, la langue et votre appareil."
+     }
+    ],
+    "audience": "Audience : aucune statistique de fréquentation n’est collectée par le site lui-même. Aucun traceur publicitaire n’a été ajouté."
+   },
+   "cgu": {
+    "titre": "Conditions d’utilisation",
+    "maj": "Mise à jour : 21 septembre 2026",
+    "blocs": [
+     {
+      "t": "Objet",
+      "x": "APRI présente les paysages, les résultats d’enquête et les indicateurs de résilience en Haïti. La plateforme est portée par le Programme des Nations Unies pour l’environnement (PNUE)."
+     },
+     {
+      "t": "Bien utiliser les résultats",
+      "x": "Lisez la source, la date, l’effectif et la méthode avant d’utiliser un résultat. Une association statistique ne démontre pas une causalité. Les simulations sont pédagogiques et ne constituent pas des prévisions. Les données et méthodes peuvent être corrigées ou mises à jour."
+     },
+     {
+      "t": "Données individuelles",
+      "x": "L’accès aux données individuelles se fait sur demande après validation. Envoyer une demande ne donne pas automatiquement accès aux fichiers. Ne tentez pas d’identifier les ménages ni de contourner les restrictions d’accès."
+     },
+     {
+      "t": "Réutilisation et références",
+      "x": "Citez APRI, la source et la date de consultation. Vérifiez les droits propres à chaque donnée, document, image et logiciel avant réutilisation. La présence d’un téléchargement ne constitue pas une licence générale. Les logos ne doivent pas laisser croire à un soutien institutionnel non accordé."
+     },
+     {
+      "t": "Contact et services externes",
+      "x": "Pour signaler une erreur ou demander un accès, contactez l’équipe APRI. Ne joignez pas de données personnelles de ménages. Les liens externes et l’hébergement relèvent aussi des règles de leurs fournisseurs."
+     }
+    ],
+    "reference": "Référence institutionnelle : [conditions d’utilisation du PNUE](https://www.unep.org/terms-use). Ces indications pratiques ne remplacent pas les conditions institutionnelles ni les droits propres aux sources."
+   },
+   "plan": {
+    "titre": "Plan du site",
+    "pages": {
+     "portail": "Accueil",
+     "methodologie": "Cadre de résilience",
+     "accueil": "Le territoire",
+     "dimensions": "Analyse des résultats",
+     "boucles": "Boucles de rétroaction",
+     "actions": "Profils d’intervention",
+     "donnees": "Données",
+     "apropos": "À propos",
+     "contact": "Nous contacter",
+     "cgu": "Conditions d’utilisation"
+    }
+   },
+   "partage": {
+    "titre": "Partager APRI",
+    "legende": "Visuel pour accompagner votre publication",
+    "image": "apri-partage-fr.png"
+   }
+  },
+  "contact": {
+   "ap_c_titre": "Nous contacter",
+   "ap_c_x": "Pour une question de méthode, un chiffre à vérifier, une correction, ou une demande de données qui ne sont pas publiées ici.",
+   "ap_c_mail": "Par courriel",
+   "ap_c_qui": "Qui répond",
+   "ap_c_qui_x": "L'équipe du projet PNUE en charge de l'évaluation.",
+   "ap_c_donnees": "Demandes de données",
+   "ap_c_donnees_x": "Les sept jeux publiés sont sur la page Données, prêts à télécharger. Le fichier brut portant les identifiants directs n'est jamais publié : les demandes le concernant se traitent au cas par cas."
+  },
+  "courriel": "florent.leo@un.org"
+ },
+ "en": {
+  "ressources": {
+   "jeux": [
+    {
+     "fichier": "01_resultats_descriptifs.xlsx",
+     "titre": "Descriptive results",
+     "sous": "All 503 questions by sub-population",
+     "volume": "503 questions",
+     "format": "XLSX",
+     "description": "One row per answer option for every question in the questionnaire, with counts (n) and percentages for the 12 reference sub-populations: total, sex, economic group A/B/C, four age brackets, coastal and mountain landscape."
+    },
+    {
+     "fichier": "02_indicateurs_resilience.xlsx",
+     "titre": "Resilience indicators",
+     "sous": "Raw value and APRI score by communal section",
+     "volume": "128 indicators",
+     "format": "XLSX",
+     "description": "The 128 indicators of the index, with their dimension, weight, theoretical scale, measured value (in % of households) and resulting 0–10 score, for each of the 10 communal sections and each sub-population."
+    },
+    {
+     "fichier": "03_ventilation_section_souspop.xlsx",
+     "titre": "Cross-classification",
+     "sous": "Indicator scores by communal section and sub-population",
+     "volume": "128 indicators",
+     "format": "XLSX",
+     "description": "The full section × sub-population crossing: for each communal section, each indicator is broken down by sex, economic group and age bracket, with the base count for each cell."
+    },
+    {
+     "fichier": "04_scores_composites.xlsx",
+     "titre": "Weighted composite scores",
+     "sous": "Synthesis by section and dimension",
+     "volume": "7 dimensions",
+     "format": "XLSX",
+     "description": "The summary table: final weighted score and score for each of the seven IRLA dimensions, for every communal section and every sub-population. This is the table behind the maps and radar charts."
+    },
+    {
+     "fichier": "06_dictionnaire_questionnaire.xlsx",
+     "titre": "Questionnaire dictionary",
+     "sous": "",
+     "volume": "503 items",
+     "format": "XLSX",
+     "description": "The list of survey items in their order of administration, with their thematic section, question wording and answer type (single or multiple choice). Use it as the key to the other files."
+    },
+    {
+     "fichier": "07_organisations_communautaires.xlsx",
+     "titre": "Community-based organisations",
+     "sous": "",
+     "volume": "34 organisations",
+     "format": "XLSX",
+     "description": "One row per organisation: communal section, partnership and its duration, external support received, ties with communal authorities and NGOs, presence of women and of people aged 18 to 30 in leadership."
+    }
+   ],
+   "bouton": "Download",
+   "acces": {
+    "titre": "Individual household dataset",
+    "texte": "Access on request after approval. Describe your organisation, study purpose and the data needed. Submitting a request does not grant access.",
+    "bouton": "Request access"
+   }
+  },
+  "apropos": {
+   "lead": "APRI, the Integrated Resilient Landscape Approach, is a UNEP initiative to make households and territories in Haiti's Grand-Sud more resilient, by tackling the ecological, the human and the productive together.",
+   "blocs": [
+    {
+     "k": "Why",
+     "x": "Poverty, degraded ecosystems, fragile governance and repeated disasters feed one another. Isolated projects only tackle one piece. APRI takes them together, with humanitarian, development and local actors."
+    },
+    {
+     "k": "Where",
+     "x": "Two pilot landscapes, priorities for the recovery of the southern peninsula: isolated, highly exposed to hazards, and among the country's last biodiversity refuges."
+    },
+    {
+     "k": "How",
+     "x": "Resilience is measured there across seven dimensions, from physical to cultural, each with its own indicators, scales and weights."
+    },
+    {
+     "k": "Already done"
+    }
+   ],
+   "paysages": [
+    {
+     "nom": "Grand'Anse landscape",
+     "surface": "767 km²",
+     "detail": "The arrondissement of Corail and four communes: Roseaux, Corail, Beaumont, Pestel (including the Cayemites islands)."
+    },
+    {
+     "nom": "Sud landscape",
+     "surface": "740 km²",
+     "detail": "Three arrondissements — Port-Salut, Coteaux, Chardonnières — and nine communes: Tiburon, Chardonnières, Les Anglais, Port-à-Piment, Les Coteaux, Roche-à-Bateaux, Arniquet, Port-Salut, Saint-Jean-du-Sud."
+    }
+   ],
+   "jalons": [
+    {
+     "v": "16",
+     "l": "steering committee members, including 10 UN agencies"
+    },
+    {
+     "v": "10",
+     "l": "communal sections covered by the baseline study"
+    },
+    {
+     "v": "1",
+     "l": "indicator matrix for APRI monitoring, being validated"
+    },
+    {
+     "v": "4",
+     "l": "partners in a pilot payment for environmental services project"
+    }
+   ],
+   "realisations": {
+    "titre": "Delivered in 2025 and 2026",
+    "liste": [
+     "Setting up an APRI information system.",
+     "Drawing up a harmonised methodology for community resilience planning.",
+     "Establishing multisectoral governance platforms in 10 pilot communal sections.",
+     "Drawing up 10 resilience plans, one for each pilot communal section.",
+     "Establishing an APRI operational committee in each landscape.",
+     "Extending the baseline study.",
+     "Launching an economic study on blue, green and circular potential in the landscapes."
+    ]
+   },
+   "definitions": {
+    "titre": "The two words, as they are used here",
+    "mots": [
+     {
+      "mot": "A landscape",
+      "texte": "Beyond a mosaic, or a group of local ecosystems repeating in a similar form, a landscape is a particular configuration of topography, vegetation, land use and settlement pattern which marks out a certain coherence of natural, historical and cultural processes and activities.",
+      "source": "After McNeely and Scherr (2003), p. 275"
+     },
+     {
+      "mot": "Resilience",
+      "texte": "A holistic concept, rooted in Holling's founding work of 1973, distinct from stability and from vulnerability, and one that includes social principles. It is to be understood as the ability of a system exposed to hazards to resist, absorb, adapt to and recover from the effects of a hazard in a timely and efficient manner, including through the preservation, restoration and improvement of its essential basic structures and functions.",
+      "source": "UNDRR, building on Holling (1973)"
+     }
+    ]
+   },
+   "informations": {
+    "titre": "Data, privacy and use",
+    "org": "United Nations Environment Programme (UNEP)",
+    "blocs": [
+     {
+      "t": "About the data",
+      "x": "Results draw in particular on the 2024 household survey. Valid sample sizes may vary by question. Correlation describes an association and does not prove causation. Educational simulations are not forecasts."
+     },
+     {
+      "t": "Privacy",
+      "x": "Do not include names, GPS coordinates, phone numbers or individual responses in an issue report. Contact the APRI team about data requests. Individual data are available only on request after approval."
+     },
+     {
+      "t": "Reuse",
+      "x": "Before reusing a result, check its source, date, units, limitations and the rights applying to the source. Credit APRI and the relevant source. Logos do not grant permission to reuse content."
+     },
+     {
+      "t": "Technology and accessibility",
+      "x": "This version of the application is a static site hosted on GitHub Pages; it sets no cookie and includes no usage tracking. This does not cover the hosting provider’s, font providers’ or map providers’ own logs and services. Report access or readability issues with the page, language and device you used."
+     }
+    ],
+    "audience": "Audience: the site itself collects no visit statistics. No advertising tracker has been added."
+   },
+   "cgu": {
+    "titre": "Terms of use",
+    "maj": "Updated: 21 September 2026",
+    "blocs": [
+     {
+      "t": "Purpose",
+      "x": "APRI presents landscapes, survey findings and resilience indicators in Haiti. The platform is led by the United Nations Environment Programme (UNEP)."
+     },
+     {
+      "t": "Using the results",
+      "x": "Read the source, date, sample size and method before using a result. Statistical association does not demonstrate causation. Simulations are educational, not forecasts. Data and methods may be corrected or updated."
+     },
+     {
+      "t": "Individual data",
+      "x": "Access to individual data requires a request and approval. A request does not automatically grant access to files. Do not attempt to identify households or bypass access restrictions."
+     },
+     {
+      "t": "Reuse and references",
+      "x": "Credit APRI and the source, and record the access date. Check the rights applying to each dataset, document, image and software before reuse. A download does not grant a general licence. Logos must not imply institutional endorsement that has not been granted."
+     },
+     {
+      "t": "Contact and external services",
+      "x": "Contact the APRI team to report an error or request access. Do not attach household personal data. External links and hosting are also subject to their providers’ rules."
+     }
+    ],
+    "reference": "Institutional reference: [UNEP terms of use](https://www.unep.org/terms-use). This practical guidance does not replace institutional terms or source-specific rights."
+   },
+   "plan": {
+    "titre": "Site map",
+    "pages": {
+     "portail": "Home",
+     "methodologie": "Resilience framework",
+     "accueil": "The territory",
+     "dimensions": "Results analysis",
+     "boucles": "Feedback loops",
+     "actions": "Intervention profiles",
+     "donnees": "Data",
+     "apropos": "About APRI",
+     "contact": "Contact us",
+     "cgu": "Terms of use"
+    }
+   },
+   "partage": {
+    "titre": "Share APRI",
+    "legende": "Image to accompany your post",
+    "image": "apri-partage-en.png"
+   }
+  },
+  "contact": {
+   "ap_c_titre": "Contact us",
+   "ap_c_x": "For a question on the method, a figure you want to check, a correction, or a request for data that is not published here.",
+   "ap_c_mail": "By email",
+   "ap_c_qui": "Who answers",
+   "ap_c_qui_x": "The UNEP project team in charge of the assessment.",
+   "ap_c_donnees": "Data requests",
+   "ap_c_donnees_x": "The seven published datasets are on the Data page, ready to download. The raw file with direct identifiers is never published: requests for it are handled case by case."
+  },
+  "courriel": "florent.leo@un.org"
+ }
+}
