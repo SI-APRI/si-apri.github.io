@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>APRI · Système d'information sur la résilience des paysages | Haïti</title>
+<meta name="description" content="APRI, le système d'information du PNUE sur la résilience des paysages dans le Sud et la Grand'Anse, Haïti.">
+<link rel="icon" href="img/apri.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="img/fond.jpg">
+<link rel="stylesheet" href="css/commun.css">
+</head>
+<body>
+<header>
+ <a class="marque" href="#accueil">
+  <img class="sym" src="img/apri.png" alt="">
+  <span><b>APRI</b><small data-t="sous">Système d'information (SI)</small></span>
+  <span class="filet"></span>
+  <img class="unep" src="img/unep.png" alt="UNEP">
+ </a>
+ <button class="menu" aria-label="Menu">☰</button>
+ <nav class="principal" aria-label="Navigation"></nav>
+ <div class="langue" role="group" aria-label="Langue">
+  <button data-l="fr" aria-pressed="true">FR</button><button data-l="en" aria-pressed="false">EN</button>
+ </div>
+</header>
+
+<div id="points"></div>
+
+<main>
+<section id="accueil">
+ <div>
+  <h1 data-t="titre">Observatoire de la résilience</h1>
+  <p data-t="accroche">Le système d'information APRI sur la résilience des paysages.</p>
+  <a class="cta" href="#territoire" data-t="cta">Explorer le territoire</a>
+  <div class="chiffres">
+   <div><strong>1 200+</strong><span data-t="k1">ménages enquêtés</span></div>
+   <div><strong>10</strong><span data-t="k2">sections communales</span></div>
+   <div><strong>2</strong><span data-t="k3">paysages, Sud et Grand'Anse</span></div>
+  </div>
+ </div>
+ <a class="fleche" href="#territoire" aria-label="↓">⌄</a>
+</section>
+<section id="territoire" class="page"><div class="carte-page" id="contenu-territoire"><div class="chargement" data-t="charge">Chargement…</div></div></section>
+<section id="cadre" class="page"><div class="carte-page" id="contenu-cadre"><div class="chargement" data-t="charge">Chargement…</div></div></section>
+<section id="resultats" class="page"><div class="carte-page" id="contenu-resultats"><div class="chargement" data-t="charge">Chargement…</div></div></section>
+<section id="boucles" class="page"><div class="carte-page" id="contenu-boucles"><div class="chargement" data-t="charge">Chargement…</div></div></section>
+<section id="fiches" class="page"><div class="carte-page" id="contenu-fiches"><div class="chargement" data-t="charge">Chargement…</div></div></section>
+<section id="ressources" class="page"><div class="carte-page" id="contenu-ressources"><div class="chargement" data-t="charge">Chargement…</div></div></section>
+<section id="apropos" class="page"><div class="carte-page" id="contenu-apropos"><div class="chargement" data-t="charge">Chargement…</div></div></section>
+<section id="contact" class="page"><div class="carte-page" id="contenu-contact"><div class="chargement" data-t="charge">Chargement…</div></div></section>
+</main>
+
+<footer>
+ <span data-t="pied">© PNUE Haïti · APRI, Approche intégrée des paysages résilients.</span>
+ <span><a href="#apropos" data-t="f_apropos">À propos</a> · <a href="#contact" data-t="f_contact">Contact</a></span>
+</footer>
+
+<script type="module">
+import {apri, SECTIONS, charger, changerLangue, appliquerHash, menus} from './js/apri.js';
+
+const TXT = {en:{sous:'Information System (IS)',titre:'Resilience Observatory',accroche:'The APRI information system for landscape resilience.',
+ cta:'Explore the territory',k1:'households surveyed',k2:'communal sections',k3:"landscapes, Sud and Grand'Anse",charge:'Loading…',
+ pied:'© UNEP Haiti · APRI, Integrated Resilient Landscape Approach.',f_apropos:'About',f_contact:'Contact',accueil:'Home'}};
+const FR = {accueil:'Accueil'}; document.querySelectorAll('[data-t]').forEach(e=>FR[e.dataset.t]=e.textContent); TXT.fr=FR;
+
+// navigation with sub-menus read from the section modules
+const nav = document.querySelector('nav.principal');
+const ONGLETS = await menus();
+function construireNav(){
+ const l = apri.lang;
+ const items = [{id:'accueil', fr:FR.accueil, en:TXT.en.accueil}, ...SECTIONS.filter(s=>!s.menu)];
+ nav.innerHTML = '';
+ for(const s of items){
+  const sous = [...(ONGLETS[s.id]||[]).map(o=>({href:'#'+s.id+'/'+o.id, t:apri.t(o.fr,o.en), d:apri.t(o.dfr,o.den)})),
+               ...SECTIONS.filter(x=>x.menu===s.id).map(x=>({href:'#'+x.id, t:apri.t(x.fr,x.en)}))];
+  const div = document.createElement('div'); div.className='item'+(sous.length?' a-sous':''); div.dataset.sec=s.id;
+  div.innerHTML = `<a href="#${s.id}">${apri.esc(apri.t(s.fr,s.en))}</a>`+
+   (sous.length?`<div class="sous">${sous.map(x=>`<a href="${x.href}">${apri.esc(x.t)}${x.d?`<small>${apri.esc(x.d)}</small>`:''}</a>`).join('')}</div>`:'');
+  nav.append(div);
+ }
+ nav.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>nav.classList.remove('ouvert')));
+ marquer(courant);
+}
+document.querySelector('.menu').onclick=()=>nav.classList.toggle('ouvert');
+
+// dots on the right
+const points = document.getElementById('points');
+const ids = ['accueil', ...SECTIONS.map(s=>s.id)];
+points.innerHTML = ids.map(id=>`<a href="#${id}" data-sec="${id}" aria-label="${id}"></a>`).join('');
+
+// active section: tab in the bar (a sub-page lights its parent) and dot
+let courant = 'accueil';
+function marquer(id){
+ courant = id;
+ const parent = SECTIONS.find(s=>s.id===id)?.menu || id;
+ nav.querySelectorAll('.item').forEach(i=>i.classList.toggle('actif', i.dataset.sec===parent));
+ points.querySelectorAll('a').forEach(a=>a.classList.toggle('actif', a.dataset.sec===id));
+}
+// the section crossing the line at 45 % of the screen is the current one
+let rafSuivi;
+function suivre(){
+ cancelAnimationFrame(rafSuivi);
+ rafSuivi = requestAnimationFrame(()=>{
+  const y = innerHeight*0.45;
+  for(const id of ids){ const r = document.getElementById(id).getBoundingClientRect(); if(r.top<=y && r.bottom>y){ if(id!==courant) marquer(id); break; } }
+ });
+}
+addEventListener('scroll', suivre, {passive:true}); addEventListener('resize', suivre);
+new ResizeObserver(suivre).observe(document.querySelector('main'));
+
+// sections draw themselves when they come near the viewport
+const paresseux = new IntersectionObserver(es=>{
+ for(const e of es) if(e.isIntersecting){ paresseux.unobserve(e.target); charger(e.target.id); }
+},{rootMargin:'100% 0px'});
+// the 3D map is heavy: it starts only when its section is actually on screen
+// (and stays there half a second: a jump to a lower section only passes through it)
+let attente;
+const proche = new IntersectionObserver(es=>{
+ for(const e of es){
+  clearTimeout(attente);
+  if(e.isIntersecting) attente = setTimeout(()=>{ proche.unobserve(e.target); charger(e.target.id); }, 500);
+ }
+},{threshold:.15});
+SECTIONS.forEach(s=>(s.id==='territoire'?proche:paresseux).observe(document.getElementById(s.id)));
+
+// language
+function langue(l){
+ document.querySelectorAll('[data-t]').forEach(e=>{const v=TXT[l][e.dataset.t]; if(v) e.textContent=v;});
+ document.querySelectorAll('.langue button').forEach(b=>b.setAttribute('aria-pressed', String(b.dataset.l===l)));
+ changerLangue(l); construireNav(); ajuster();
+}
+document.querySelectorAll('.langue button').forEach(b=>b.onclick=()=>langue(b.dataset.l));
+let l0 = 'fr'; try{ l0 = localStorage.getItem('apri_lang') || ((navigator.language||'fr').startsWith('en')?'en':'fr'); }catch(e){}
+langue(l0==='en'?'en':'fr');
+
+// the bar never wraps: tighten it when the labels would not fit
+function ajuster(){
+ const b = document.body, h = document.querySelector('header');
+ b.classList.remove('serre','tres-serre');
+ if(innerWidth<=1100) return;
+ // width the bar needs (the drop-down panels are left out on purpose)
+ const besoin = ()=>{
+  const cs = getComputedStyle(h), gap = parseFloat(cs.columnGap)||0;
+  const liens = [...nav.querySelectorAll('.item>a')].reduce((t,a)=>t+a.offsetWidth+2,0);
+  return parseFloat(cs.paddingLeft)+parseFloat(cs.paddingRight)+document.querySelector('.marque').offsetWidth
+   +liens+document.querySelector('.langue').offsetWidth+parseFloat(getComputedStyle(document.querySelector('.langue')).marginLeft)+2*gap+8;
+ };
+ if(besoin()>h.clientWidth) b.classList.add('serre');
+ if(besoin()>h.clientWidth) b.classList.add('tres-serre');
+}
+addEventListener('resize', ajuster);
+addEventListener('scroll',()=>document.body.classList.toggle('defile', scrollY>40),{passive:true});
+
+// a map receives the wheel: it scrolls the page instead
+addEventListener('message', e=>{
+ if(e.data?.type==='apri-map-wheel') scrollBy({top: e.data.mode===1 ? e.data.dy*16 : e.data.dy});
+});
+
+addEventListener('hashchange', appliquerHash);
+if(location.hash) appliquerHash();
+</script>
+</body>
+</html>
