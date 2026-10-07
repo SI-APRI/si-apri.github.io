@@ -3,6 +3,7 @@
 // The page script of systeme_direct.GABARIT is ported almost line for line;
 // the sub-graph it receives (systeme_direct._donnees) is computed by moteur.js.
 import { charger, esc, barreExport, nettoyer, E } from './commun.js';
+import * as Q from './incertitude.js';
 
 export default async function render(zone, apri) {
   const { m, s, T } = await charger(apri);
@@ -209,9 +210,9 @@ export default async function render(zone, apri) {
       const e = cum[i];
       const vers = (amont.find(x => x.i === i) || {}).v;
       const bouts = [];
-      if (vers !== undefined) bouts.push('→ ' + fmt(vers, 2));
+      if (vers !== undefined) bouts.push(apri.t('agit sur elle : ', 'acts on it: ') + qual(vers));
       if (passages[i] > 0) bouts.push(passages[i] + ' ' + L.vagues);
-      if (Math.abs(e) > 0.005) bouts.push(fmt(e, 2));
+      if (Math.abs(e) > 0.005) bouts.push(qual(e));
       u.det.textContent = bouts.join('  ·  ');
       u.det.setAttribute('opacity', '1');
     });
@@ -244,6 +245,10 @@ export default async function render(zone, apri) {
     let t = 0; for (let j = 0; j < NO.length; j++) t += Math.abs(c[j]);
     return t;
   }
+  const LG = m.lang;
+  /** an effect in words, for the reader: arrow + size word (no decimals) */
+  function qual(v) { const q = E.qualifier(v, LG); return q.fleche + ' ' + q.mot; }
+  function qualHtml(v) { const q = E.qualifier(v, LG); return '<b style="color:' + q.coul + '">' + q.fleche + ' ' + esc(q.mot) + '</b>'; }
   function fmt(v, d) { const s2 = (v >= 0 && d ? '+' : '') + v.toFixed(d ? 2 : 1); return s2.replace('.', VIRG); }
 
   function niveauDe(i) { const n = NO[i], b = n.s === null ? 5 : n.s; return Math.max(0, Math.min(10, b + cum[i] + (n.id === src ? amp : 0))); }
@@ -285,11 +290,11 @@ export default async function render(zone, apri) {
       const i = IX[u.n.id];
       const bouge = cum[i] + (u.n.id === src ? amp : 0);
       const base = u.n.s;
-      if (base === null) { u.val.textContent = Math.abs(bouge) < SEUIL ? L.nm : fmt(bouge, 1); u.jauge.setAttribute('width', 0); }
+      if (base === null) { u.val.textContent = Math.abs(bouge) < SEUIL ? L.nm : qual(bouge); u.jauge.setAttribute('width', 0); }
       else {
         const v = Math.max(0, Math.min(10, base + bouge));
         u.jauge.setAttribute('width', 112 * v / 10);
-        u.val.textContent = fmt(v, 0) + (Math.abs(bouge) < SEUIL ? '' : '  ' + fmt(bouge, 1));
+        u.val.textContent = fmt(v, 0) + (Math.abs(bouge) < SEUIL ? '' : '  ' + qual(bouge));
       }
       const c = Math.abs(bouge) < SEUIL ? null : (bouge > 0 ? VERT : ROUGE);
       u.val.setAttribute('fill', c ? (u.n.c ? '#fff' : c) : (u.n.c ? '#fff' : '#3c4761'));
@@ -315,7 +320,7 @@ export default async function render(zone, apri) {
     const aval = NO.map((n, i) => ({ n, i, v: cum[i] })).filter(x => x.n.id !== src && Math.abs(x.v) > 0.004)
       .sort((a, b) => Math.abs(b.v) - Math.abs(a.v)).slice(0, 5);
     poserHalo(true);
-    const ligne = x => '<div class="sd-fl"><span>' + esc(x.n.nom) + '</span><b style="color:' + (x.v > 0 ? VERT : ROUGE) + '">' + fmt(x.v, 2) + '</b></div>';
+    const ligne = x => '<div class="sd-fl"><span>' + esc(x.n.nom) + '</span>' + qualHtml(x.v) + '</div>';
     const lignen = (n, txt) => '<div class="sd-fl"><span>' + esc(n.nom) + '</span><b>' + txt + '</b></div>';
     const chef = new Set(aval.slice(0, 3).map(x => x.n.id));
     vues.forEach(u => { const on = chef.has(u.n.id); u.anneau.setAttribute('opacity', on ? 1 : 0); u.anneau.classList.toggle('sd-cli', on); });
@@ -324,8 +329,10 @@ export default async function render(zone, apri) {
     $('fc').innerHTML = amont.map(ligne).join('');
     $('fp').innerHTML = aval.map(ligne).join('');
     const mul = classeSysteme(table).slice(0, 5);
-    const mag = v => v.toFixed(2).replace('.', VIRG);
-    $('fm').innerHTML = mul.map(x => lignen(x.n, mag(x.p))).join('');
+    // overall effect: a bar relative to the largest, and the size in words
+    const pmax = mul.length ? mul[0].p : 1;
+    $('fm').innerHTML = mul.map(x => '<div class="sd-fl"><span>' + esc(x.n.nom) + '</span><span class="qual-mini"><i style="width:' +
+      Math.round(100 * x.p / pmax) + '%"></i></span><b>' + esc(E.qualifier(x.p, LG).mot) + '</b></div>').join('');
     const bcl = NO.map((n, i) => ({ n, i, r: n.br || 0, b: n.bb || 0 })).filter(x => x.r + x.b > 0)
       .sort((a, b) => (b.r + b.b) - (a.r + a.b) || (b.r * b.b) - (a.r * a.b)).slice(0, 5);
     $('fb').innerHTML = bcl.length ? bcl.map(x => lignen(x.n, x.r + ' ' + L.bcl_r + ' · ' + x.b + ' ' + L.bcl_b)).join('')
@@ -454,4 +461,6 @@ export default async function render(zone, apri) {
   nettoyer('direct', () => { joue = false; if (anim) cancelAnimationFrame(anim); if (vbAnim) cancelAnimationFrame(vbAnim); minuteries.forEach(clearTimeout); });
   barreExport(apri, racine, svg);
   r.append(apri.h(`<p class="sx-caption">${esc(T('sd_perim'))}</p>`));
+  r.append(apri.h(Q.legende(apri)));
+  r.append(Q.noteSeuils(apri));
 }

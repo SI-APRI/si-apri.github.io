@@ -531,3 +531,264 @@ export function donneesRegler(m) {
     de: a.de, vers: a.vers, w: Math.round(m.A[m.idx[a.vers]][m.idx[a.de]] * 1e6) / 1e6, f: a.force, j: a.just || '' }));
   return { noeuds, aretes };
 }
+
+// ------------------------------------------------------------------ qualitative wording
+/* Shared definitions of BRIEF_BOUCLES.md: the five strength classes (the same
+   in every tab, in the workshop and in the Monte Carlo) and the wording of an
+   effect on the 0 to 10 score scale. Other tabs import these read-only. */
+export const CLASSES = [
+  { k: 1, fr: 'très faible', en: 'very weak',   c: 0.20, lo: 0.125, hi: 0.275 },
+  { k: 2, fr: 'faible',      en: 'weak',        c: 0.35, lo: 0.275, hi: 0.425 },
+  { k: 3, fr: 'moyenne',     en: 'moderate',    c: 0.50, lo: 0.425, hi: 0.575 },
+  { k: 4, fr: 'forte',       en: 'strong',      c: 0.65, lo: 0.575, hi: 0.725 },
+  { k: 5, fr: 'très forte',  en: 'very strong', c: 0.80, lo: 0.725, hi: 0.875 },
+];
+/** the class of a stored strength (its absolute value; 0.6 → class 4) */
+export function classeDe(force) {
+  const f = Math.abs(Number(force) || 0);
+  for (const c of CLASSES) if (f < c.hi) return c;
+  return CLASSES[CLASSES.length - 1];
+}
+/** stability target of the model (spectral radius after rescaling) */
+export const STABILITE = { centre: 0.6, lo: 0.5, hi: 0.8 };
+
+/* Size of an effect: |Δ| < 0.05 negligible, < 0.2 weak, < 0.5 moderate, else strong. */
+export const TAILLES_EFFET = [
+  { k: 'negligeable', fr: 'négligeable', en: 'negligible', max: 0.05 },
+  { k: 'faible',      fr: 'faible',      en: 'weak',       max: 0.2 },
+  { k: 'modere',      fr: 'modéré',      en: 'moderate',   max: 0.5 },
+  { k: 'fort',        fr: 'fort',        en: 'strong',     max: Infinity },
+];
+export function tailleEffet(delta) {
+  const a = Math.abs(Number(delta) || 0);
+  return TAILLES_EFFET.find(t => a < t.max);
+}
+/** qualifier(delta, lang) → { sens: 'hausse'|'baisse'|'nul', taille, mot, sensMot, texte, fleche, coul }
+    texte: "effet faible, positif" / "weak effect, positive"; a negligible effect has no direction. */
+export function qualifier(delta, lang = 'fr') {
+  const t = tailleEffet(delta);
+  const sens = t.k === 'negligeable' ? 'nul' : delta > 0 ? 'hausse' : 'baisse';
+  const fr = lang !== 'en';
+  const sensMot = { hausse: fr ? 'positif' : 'positive', baisse: fr ? 'négatif' : 'negative', nul: '' }[sens];
+  const mot = fr ? t.fr : t.en;
+  const texte = fr ? `effet ${mot}${sensMot ? ', ' + sensMot : ''}` : `${mot} effect${sensMot ? ', ' + sensMot : ''}`;
+  const n = { negligeable: 0, faible: 1, modere: 2, fort: 3 }[t.k];
+  const fleche = sens === 'nul' ? '→' : (sens === 'hausse' ? '↑' : '↓').repeat(n);
+  const coul = { hausse: '#1a8a4f', baisse: '#c33a24', nul: '#8a93a5' }[sens];
+  return { sens, taille: t.k, mot, sensMot, texte, fleche, coul };
+}
+
+// ------------------------------------------------------------------ Monte Carlo
+/** seeded random generator (mulberry32): the same seed gives the same draws */
+export function aleatoire(graine = 2026) {
+  let a = (graine >>> 0) || 1;
+  return () => {
+    a = (a + 0x6D2B79F5) >>> 0;
+    let t = a;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+/** the nodes lying on at least one cycle (the non-trivial strongly connected
+    components, Tarjan): the spectral radius is the largest radius among those
+    blocks, so the draws only need the 36 cyclic variables, not all 48. */
+const cacheCycliques = new WeakMap();
+function blocsCycliques(m) {
+  if (cacheCycliques.has(m.g)) return cacheCycliques.get(m.g);
+  const N = m.ids.length, succ = Array.from({ length: N }, () => []);
+  for (const e of m.g.aretes) succ[m.idx[e.de]].push(m.idx[e.vers]);
+  let index = 0; const pile = [], dans = new Array(N).fill(false), num = new Array(N).fill(-1), bas = new Array(N).fill(0), blocs = [];
+  const visiter = v => {
+    num[v] = bas[v] = index++; pile.push(v); dans[v] = true;
+    for (const w of succ[v]) {
+      if (num[w] < 0) { visiter(w); bas[v] = Math.min(bas[v], bas[w]); }
+      else if (dans[w]) bas[v] = Math.min(bas[v], num[w]);
+    }
+    if (bas[v] === num[v]) { const c = []; let w; do { w = pile.pop(); dans[w] = false; c.push(w); } while (w !== v); blocs.push(c); }
+  };
+  for (let v = 0; v < N; v++) if (num[v] < 0) visiter(v);
+  const out = blocs.filter(c => c.length > 1 || succ[c[0]].includes(c[0])).map(c => c.sort((a, b) => a - b));
+  cacheCycliques.set(m.g, out);
+  return out;
+}
+
+/** fast spectral radius for the draws: the same Gelfand formula as
+    rayonSpectral, on each cyclic block, flat arrays, stopped at 2^18
+    (relative error about 1e-5, far below the spread of the stability target
+    drawn in [0.5, 0.8]). */
+function rayonBloc(A, bloc, M = 18) {
+  const N = bloc.length;
+  let B = new Float64Array(N * N), C = new Float64Array(N * N), logS = 0;
+  for (let i = 0; i < N; i++) for (let j = 0; j < N; j++) B[i * N + j] = A[bloc[i]][bloc[j]];
+  for (let m = 0; m < M; m++) {
+    let nrm = 0;
+    for (let k = 0; k < N * N; k++) { const x = B[k] < 0 ? -B[k] : B[k]; if (x > nrm) nrm = x; }
+    if (nrm === 0) return 0;
+    for (let k = 0; k < N * N; k++) B[k] /= nrm;
+    logS += Math.log(nrm) / Math.pow(2, m);
+    C.fill(0);
+    for (let i = 0; i < N; i++) {
+      const ri = i * N;
+      for (let k = 0; k < N; k++) {
+        const v = B[ri + k]; if (v === 0) continue;
+        const rk = k * N;
+        for (let j = 0; j < N; j++) C[ri + j] += v * B[rk + j];
+      }
+    }
+    const t = B; B = C; C = t;
+  }
+  let nrm = 0;
+  for (let k = 0; k < N * N; k++) nrm = Math.max(nrm, Math.abs(B[k]));
+  return nrm === 0 ? Math.exp(logS) : Math.exp(logS + Math.log(nrm) / Math.pow(2, M));
+}
+/** power iteration on one block: converges geometrically when one real
+    eigenvalue dominates (the usual case here, 93 of the 100 links being
+    positive); returns null when the ratio does not settle, and the caller
+    falls back on the Gelfand formula. */
+function rayonPuissance(A, bloc, iter = 400) {
+  const N = bloc.length, lignes = [];
+  for (let i = 0; i < N; i++) { const l = []; for (let j = 0; j < N; j++) { const a = A[bloc[i]][bloc[j]]; if (a !== 0) l.push(j, a); } lignes.push(l); }
+  let x = new Float64Array(N).fill(1), y = new Float64Array(N), prec = -1, stable = 0;
+  for (let t = 0; t < iter; t++) {
+    let nrm = 0;
+    for (let i = 0; i < N; i++) { const l = lignes[i]; let s = 0; for (let k = 0; k < l.length; k += 2) s += l[k + 1] * x[l[k]]; y[i] = s; const a = s < 0 ? -s : s; if (a > nrm) nrm = a; }
+    if (nrm === 0) return 0;
+    for (let i = 0; i < N; i++) y[i] /= nrm;
+    const tmp = x; x = y; y = tmp;
+    if (prec > 0 && Math.abs(nrm - prec) < 1e-13 * nrm) { if (++stable >= 5) return nrm; } else stable = 0;
+    prec = nrm;
+  }
+  return null;
+}
+function rayonRapide(m, A) {
+  let r = 0;
+  for (const b of blocsCycliques(m)) { const p = rayonPuissance(A, b); r = Math.max(r, p != null ? p : rayonBloc(A, b)); }
+  return r;
+}
+
+/** tirerModele(m, rng, opts) — one Monte Carlo draw of the model.
+    Every link strength is drawn uniformly within its class interval and the
+    stability target uniformly in [0.5, 0.8]; the matrix is then rescaled
+    exactly as matrice() does. Returns a model usable by propager(),
+    effetIndice() and vagues() (same ids, idx, graph and scores, new A).
+    opts.forces: 'tirees' (default), 'centrales' (class centres) or
+    'nominales' (the stored strengths); opts.cible fixes the target.
+    With forces 'nominales' and cible 0.6 the result is m itself, bit for bit. */
+export function tirerModele(m, rng, opts = {}) {
+  const forces = opts.forces || 'tirees';
+  const cible = opts.cible != null ? opts.cible : STABILITE.lo + (STABILITE.hi - STABILITE.lo) * rng();
+  if (forces === 'nominales') {
+    const { A, rayon } = matrice(m.g, { ...m.C, RAYON_CIBLE: cible });
+    return { ...m, A, cible, rayon, facteur: rayon > cible ? cible / rayon : 1 };
+  }
+  const g = { ...m.g, aretes: m.g.aretes.map(e => {
+    const c = classeDe(e.force);
+    return { ...e, force: forces === 'centrales' ? c.c : c.lo + (c.hi - c.lo) * rng() };
+  }) };
+  const N = m.ids.length, idx = m.idx;
+  let A = Array.from({ length: N }, () => new Float64Array(N));
+  for (const e of g.aretes) A[idx[e.vers]][idx[e.de]] = e.signe * e.force;
+  const rayon = N ? (opts.exact ? rayonSpectral(A) : rayonRapide(m, A)) : 0;
+  if (N && rayon > cible) { const f = cible / rayon; A = A.map(r => r.map(x => x * f)); }
+  return { ...m, g, A, cible, rayon, facteur: rayon > cible ? cible / rayon : 1 };
+}
+
+/** (I − A)⁻¹ by Gauss-Jordan with partial pivoting, row-major in a Float64Array */
+export function inverseIA(A) {
+  const N = A.length, W = 2 * N;
+  const M = Array.from({ length: N }, (_, i) => {
+    const r = new Float64Array(W);
+    for (let j = 0; j < N; j++) r[j] = (i === j ? 1 : 0) - A[i][j];
+    r[N + i] = 1; return r;
+  });
+  for (let c = 0; c < N; c++) {
+    let p = c, mx = Math.abs(M[c][c]);
+    for (let r = c + 1; r < N; r++) if (Math.abs(M[r][c]) > mx) { mx = Math.abs(M[r][c]); p = r; }
+    if (mx < 1e-300) return null;
+    if (p !== c) { const t = M[p]; M[p] = M[c]; M[c] = t; }
+    const Mc = M[c], pv = Mc[c];
+    for (let j = c; j < W; j++) Mc[j] /= pv;
+    for (let r = 0; r < N; r++) {
+      if (r === c) continue;
+      const Mr = M[r], f = Mr[c]; if (f === 0) continue;
+      for (let j = c; j < W; j++) Mr[j] -= f * Mc[j];
+    }
+  }
+  const out = new Float64Array(N * N);
+  for (let i = 0; i < N; i++) for (let j = 0; j < N; j++) out[i * N + j] = M[i][N + j];
+  return out;
+}
+
+/** monteCarloIter(m, {n, graine}) — a generator doing the draws one by one
+    (so a page can spread them over several frames); its return value is the
+    same object as monteCarlo(). */
+export function* monteCarloIter(m, { n = 1000, graine = 2026 } = {}) {
+  const N = m.ids.length, rng = aleatoire(graine);
+  const inv = new Float32Array(n * N * N), portee = new Float64Array(n * N), cibles = new Float64Array(n);
+  for (let d = 0; d < n; d++) {
+    const t = tirerModele(m, rng);
+    const I = inverseIA(t.A);
+    cibles[d] = t.cible;
+    const base = d * N * N;
+    for (let k = 0; k < N * N; k++) inv[base + k] = I[k];
+    for (let u = 0; u < N; u++) {
+      let s = 0;
+      for (let k = 0; k < N; k++) if (k !== u) s += Math.abs(I[k * N + u]);
+      portee[d * N + u] = s;
+    }
+    yield d + 1;
+  }
+  return { n, graine, N, ids: m.ids, idx: m.idx, inv, portee, cibles };
+}
+/** monteCarlo(m, {n, graine}) — n draws at once (node, tests) */
+export function monteCarlo(m, opts = {}) {
+  const it = monteCarloIter(m, opts);
+  let r = it.next();
+  while (!r.done) r = it.next();
+  return r.value;
+}
+
+/** effects of a push in draw d (same meaning as propager: the push itself excluded) */
+export function propagerTirage(mc, d, variations) {
+  const { N, idx, inv } = mc, base = d * N * N, out = {};
+  const v = Object.entries(variations || {}).filter(([k]) => k in idx).map(([k, x]) => [idx[k], x]);
+  mc.ids.forEach((id, i) => {
+    let s = 0;
+    for (const [j, x] of v) s += inv[base + i * N + j] * x - (i === j ? x : 0);
+    out[id] = s;
+  });
+  return out;
+}
+
+/** reach of a +1 push on each lever of `ids`, and rank among them, in every draw */
+export function rangsLeviers(mc, ids) {
+  const { n, N, idx, portee } = mc, K = ids.length;
+  const rangs = ids.map(() => new Int16Array(n)), vals = ids.map(() => new Float64Array(n));
+  const ordre = ids.map((_, i) => i);
+  for (let d = 0; d < n; d++) {
+    const p = ids.map(id => portee[d * N + idx[id]]);
+    ordre.sort((a, b) => p[b] - p[a] || a - b);
+    ordre.forEach((i, r) => { rangs[i][d] = r + 1; vals[i][d] = p[i]; });
+  }
+  return ids.map((id, i) => {
+    const r = Array.from(rangs[i]).sort((a, b) => a - b), v = Array.from(vals[i]).sort((a, b) => a - b);
+    const q = (arr, p) => arr[Math.min(arr.length - 1, Math.max(0, Math.round(p * (arr.length - 1))))];
+    let top3 = 0; for (const x of rangs[i]) if (x <= 3) top3++;
+    const hist = new Array(K).fill(0); for (const x of rangs[i]) hist[x - 1]++;
+    return { id, rangMed: q(r, 0.5), rangLo: q(r, 0.05), rangHi: q(r, 0.95), pTop3: top3 / n, hist,
+      porteeLo: q(v, 0.05), porteeMed: q(v, 0.5), porteeHi: q(v, 0.95), rangs: rangs[i] };
+  });
+}
+
+/** quantiles and sign shares of a list of values */
+export function resumer(vals) {
+  const v = Array.from(vals).sort((a, b) => a - b), n = v.length;
+  const q = p => v[Math.min(n - 1, Math.max(0, Math.round(p * (n - 1))))];
+  let pos = 0, neg = 0;
+  for (const x of v) { if (x >= 0.05) pos++; else if (x <= -0.05) neg++; }
+  let sp = 0, sn = 0;
+  for (const x of v) { if (x > 0) sp++; else if (x < 0) sn++; }
+  return { lo: q(0.05), med: q(0.5), hi: q(0.95), pPos: sp / n, pNeg: sn / n, pHausse: pos / n, pBaisse: neg / n, n };
+}

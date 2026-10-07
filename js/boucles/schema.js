@@ -52,7 +52,8 @@ export function dessinerSchema(zone, { m, rang, aretes, centre, posInit, boucle,
       b.textContent = label + ' — '; p.append(b, document.createTextNode(text)); details.append(p);
     };
     row(d.origin, d.geography || '');
-    row(labels.strength, String(d.strength ?? '—') + ' · ' + labels.chosen);
+    const cl = d.strength != null ? E.classeDe(d.strength) : null;
+    row(labels.strength, (cl ? (lang === 'en' ? cl.en : cl.fr) + (lang === 'en' ? ` (class ${cl.k} of 5)` : ` (classe ${cl.k} sur 5)`) : '—') + ' · ' + labels.chosen);
     row(d.association_label, d.association ? 'ρ = ' + d.association.rho.toFixed(2) + ' · n = ' + d.association.n : labels.caution);
     if (d.association) row('', labels.caution);
     row(labels.detail, d.finding); row(labels.limits, d.limits);

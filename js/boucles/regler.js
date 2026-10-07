@@ -2,6 +2,7 @@
 // variables at their measured level; hold any of them and the gap propagates,
 // écart_{t+1} = écart_0 + A · écart_t, round by round until it settles.
 import { charger, esc, nettoyer, E } from './commun.js';
+import * as Q from './incertitude.js';
 
 export default async function render(el, apri) {
   const { m, T } = await charger(apri);
@@ -41,9 +42,13 @@ export default async function render(el, apri) {
 <p class="sy-note" data-id="etat"></p>
 </div>
 <p class="sx-caption">${e_('sy_avert')}</p>`;
+  r.querySelector('.sy-lg').insertAdjacentElement('afterend', apri.h(Q.legende(apri)));
+  r.append(Q.noteSeuils(apri));
   const $ = id => r.querySelector(`[data-id="${id}"]`);
   const q = (p, i) => r.querySelector(`[data-${p}="${i}"]`);
   const dec = (x, n) => x.toFixed(n).replace('.', VIRG);
+  // a change in words for the reader: arrow + size (no decimals)
+  const qual = x => { const q = E.qualifier(x, m.lang); return { t: q.fleche + ' ' + q.mot, c: q.coul }; };
 
   // ================================================================ GABARIT script
   const N = D.noeuds, Ed = D.aretes;
@@ -115,17 +120,18 @@ export default async function render(el, apri) {
       q('ba', i).setAttribute('aria-valuenow', v.toFixed(1));
       const vl = q('vl', i); vl.textContent = dec(v, 1); vl.style.color = Math.abs(ecart) < 0.05 ? '#3c4761' : coul;
       const dl = q('dl', i);
-      dl.textContent = Math.abs(ecart) < 0.05 ? (n.mesure ? '' : '?') : (ecart > 0 ? '+' : '−') + dec(Math.abs(ecart), 2);
+      dl.textContent = Math.abs(ecart) < 0.05 ? (n.mesure ? '' : '?') : E.qualifier(ecart, m.lang).fleche;
+      dl.title = Math.abs(ecart) < 0.05 ? '' : E.qualifier(ecart, m.lang).texte;
       dl.style.color = Math.abs(ecart) < 0.05 ? '#9aa4b5' : coul;
       const t = tenu[N[i].id] !== undefined;
       q('ba', i).classList.toggle('t', t); q('nm', i).classList.toggle('t', t);
     });
     $('kk').textContent = k; $('nt').textContent = Object.keys(tenu).length;
     $('nh').textContent = nh; $('nb').textContent = nb;
-    $('mo').textContent = cnt ? dec(somme / cnt, 2) : '—';
+    $('mo').textContent = cnt ? dec(somme / cnt, 1) : '—';
     const dm = cnt ? somme / cnt - MOY0 : 0;
     $('mos').innerHTML = esc(L.moy) + (Math.abs(dm) > 0.005
-      ? ` · <b style="font-size:11px;color:${dm > 0 ? HAUSSE : BAISSE}">${dm > 0 ? '+' : '−'}${dec(Math.abs(dm), 2)}</b>` : '');
+      ? ` · <b style="font-size:11px;color:${qual(dm).c}">${esc(qual(dm).t)}</b>` : '');
     const bil = $('bilan');
     if (!Object.keys(tenu).length) { bil.innerHTML = ''; bil.className = ''; }
     else {
@@ -134,7 +140,7 @@ export default async function render(el, apri) {
       bil.className = 'sy-bil';
       bil.innerHTML = '<h5>' + esc(L.bilan) + '</h5>' + (bouges.length
         ? '<div class="rg">' + bouges.map(x => '<span class="it">' + esc(x.n.nom) + '<b style="color:' + (x.e > 0 ? HAUSSE : BAISSE) + '">' +
-          (x.e > 0 ? '+' : '−') + dec(Math.abs(x.e), 2) + '</b></span>').join('') + '</div>'
+          esc(qual(x.e).t) + '</b></span>').join('') + '</div>'
         : '<p>' + esc(L.bilan0) + '</p>');
     }
     const rien = !Object.keys(tenu).length;

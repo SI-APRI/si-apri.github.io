@@ -40,9 +40,31 @@ export async function charger(apri) {
   return { m, s, T: fabriquerT(lang), f: fabriquerF(lang), L: lang };
 }
 
+/* Wording revised after the scientific review (BRIEF_BOUCLES.md): these
+   strings replace the Streamlit ones. "Bascule"/"pivot" and "the loops take
+   over" described the model's arithmetic, not an ecological tipping point. */
+const SURCHARGE = {
+  sx_bascule: { fr: 'très reliée', en: 'highly linked' },
+  sx_bascule_x: { fr: 'Une variable « très reliée » est prise à la fois dans des boucles qui amplifient et dans des boucles qui freinent : beaucoup d’effets s’y croisent. Ce n’est pas un point de bascule, le modèle n’en connaît pas.',
+    en: 'A “highly linked” variable sits both in loops that amplify and in loops that dampen: many effects cross there. It is not a tipping point; the model has none.' },
+  sx_col_porte: { fr: 'Effet d’ensemble d’une poussée d’un point', en: 'Overall effect of a one-point push' },
+  sx_col_porte_x: { fr: 'Ce que bouge, au total, une poussée d’un point sur cette variable, partout ailleurs dans le système (boucles comprises). C’est un calcul du modèle, pas un compte de flèches.',
+    en: 'How much a one-point push on this variable moves, in total, everywhere else in the system (loops included). It is a model calculation, not a count of arrows.' },
+  sd_basc: { fr: 'Relais {k} : l’effet a changé de sens pour {v}, une boucle le ramène dans l’autre sens.', en: 'Relay {k}: the effect changed direction for {v}, a loop is bringing it back the other way.' },
+  sd_basc_r: { fr: 'Relais {k} : ce relais porte plus que le précédent, le modèle amplifie fortement ce choc à cet endroit.', en: 'Relay {k}: this relay carries more than the one before, the model amplifies this shock strongly here.' },
+  sd_basc_b: { fr: 'Relais {k} : ce relais porte moins que le précédent, le choc commence à s’éteindre.', en: 'Relay {k}: this relay carries less than the one before, the shock is starting to fade.' },
+  sd_bcl_x: { fr: 'boucles qui passent par elles dans ce périmètre, qui amplifient (R) ou qui freinent (B) ; être dans les deux veut dire que beaucoup d’effets s’y croisent',
+    en: 'loops running through them inside this perimeter, amplifying (R) or dampening (B); being in both means many effects cross there' },
+  sd_mul_x: { fr: 'ce que bouge au total, ailleurs, une hausse d’un point chez chacune, boucles comprises', en: 'how much a one-point rise in each of them moves elsewhere in total, loops included' },
+  sd_connect_x: { fr: 'effet sur la variable poussée d’une hausse d’un point chez chacune, dans ce périmètre, boucles comprises', en: 'effect on the pushed variable of a one-point rise in each of them, inside this perimeter, loops included' },
+  sd_leg_e: { fr: 'score sur 10, et une flèche qui dit dans quel sens et combien il bouge', en: 'score out of 10, and an arrow saying which way and how much it moves' },
+  sy_intro: { fr: 'Chaque variable porte un niveau sur dix, celui mesuré par l’enquête là où il existe. Cliquez dans une barre pour lui imposer une autre valeur : la variable est alors tenue, l’écart qu’elle crée circule aussitôt dans le modèle, et chaque autre variable monte ou descend selon ce que ses voisines lui font, jusqu’à stabilisation. Ce qui a bougé, et dans quelle mesure, est nommé sous les barres. Lecture et pause servent à reprendre la propagation tour par tour.',
+    en: 'Every variable holds a level out of ten, the one measured by the survey where it exists. Click inside a bar to impose a different value: that variable is then held, the gap it creates travels through the model at once, and each other variable rises or falls according to what its neighbours do to it, until everything settles. What moved, and how much, is named under the bars. Play and pause let you take the propagation back round by round.' },
+};
+
 function fabriquerT(lang) {
   const T = (cle, kw) => {
-    const e = textes[cle];
+    const e = SURCHARGE[cle] || textes[cle];
     let t = e ? (e[lang] ?? e.fr ?? cle) : cle;
     if (kw) t = t.replace(/\{(\w+)\}/g, (x, k) => (k in kw ? String(kw[k]) : x));
     return t;
