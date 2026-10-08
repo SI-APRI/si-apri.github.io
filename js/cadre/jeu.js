@@ -1,9 +1,11 @@
 /* "Le cadre en bref": the resilience framework presented in five interactive steps.
-   1 the three capacities, 2 what each dimension weighs, 3 where the data come from,
+   1 the three capacities, 2 sorting resilience indicators and counterexamples, 3 where the data come from,
    4 from a raw value to a 0-10 score, 5 how indicators make a dimension score.
-   Everything comes from cadre.json, except the situations of step 1, written as
+   Framework data comes from cadre.json. Steps 1 and 2 also use explicit teaching examples.
+   The situations of step 1 are written as
    teaching examples from the framework's definitions. */
 import {css, donnees, teinte, encre, fmt} from './commun.js';
+import {nouvelleMancheDimensions, afficherTriDimensions} from './tri-dimensions.js';
 
 const DIM_COUL = {dim1:'#4f7ea8', dim2:'#7a5ea8', dim3:'#2f7a5b', dim4:'#c98a1b', dim5:'#c0603f', dim6:'#3f9a9a', dim7:'#9a5a7a'};
 const ATTR = [
@@ -121,7 +123,7 @@ function nouvellePartie(P){
  return {
   etape:0, points:Array(N_ET).fill(0), fini:Array(N_ET).fill(false), finale:false,
   e1:{cartes: melanger(SITUATIONS).slice(0,6), i:0, sel:[], valide:false},
-  e2:{cartes: melanger(P.indsDim).slice(0,6), i:0, rep:null},
+  e2:nouvelleMancheDimensions(),
   e3:{cartes: cartesSources(P), i:0, rep:null},
   e4:{cartes: melanger(P.mesures).slice(0,3), i:0, choix:null, valeur:null},
   e5:{cartes: melanger(P.indsPoids).slice(0,6), i:0, note:null},
@@ -200,29 +202,16 @@ export default async function render(el, apri){
   s.append(carte); s.append(apri.h(barre(N.i,n)));
  }
 
- /* ---------- 2. seven dimensions: sort an indicator ---------- */
+ /* ---------- 2. capacities versus exposure, vulnerability and context ---------- */
  function etape2(s){
-  const N = J.e2, n = N.cartes.length;
-  s.append(consigne(1, t("Les indicateurs sont rangés en sept dimensions. À quelle dimension cet indicateur appartient-il ?","Indicators are grouped into seven dimensions. Which dimension does this indicator belong to?")));
-  if(N.i>=n) return bilan(s, 1, n, ()=>{ J.e2={cartes:melanger(P.indsDim).slice(0,6),i:0,rep:null}; J.points[1]=0; J.fini[1]=false; render(el,apri); });
-  const x = N.cartes[N.i];
-  const carte = apri.h(`<div class="jeu-carte">
-   <div class="etiquette">${t('Indicateur','Indicator')}</div>
-   <div class="jeu-indic">${e(nomInd(x))}</div>
-   <div class="jeu-dgrille"></div><div class="jeu-retour" aria-live="polite"></div></div>`);
-  const zone = carte.querySelector('.jeu-dgrille');
-  DIMS.forEach(k=>{
-   const btn = apri.h(`<button type="button" class="jeu-dim jeu-dimc" style="--c:${DIM_COUL[k]}"><span>${e(nomDim(k))}</span></button>`);
-   if(N.rep){ btn.disabled=true; if(k===x.dim) btn.classList.add('bon'); else if(k===N.rep) btn.classList.add('faux'); }
-   btn.onclick = ()=>{ N.rep=k; if(k===x.dim) J.points[1]++; render(el,apri); };
-   zone.append(btn);
+  const N=J.e2,n=N.cartes.length;
+  s.append(consigne(1,t("Classez chaque indicateur dans l’une des sept dimensions s’il renseigne un attribut de résilience, ou dans « Ne mesure pas directement la résilience ». Un point par carte bien classée au premier essai.","Sort each indicator into one of the seven dimensions if it captures a resilience attribute, or into ‘Does not directly measure resilience’. One point per card correctly sorted on the first attempt.")));
+  if(N.termine) return bilan(s,1,n,()=>{J.e2=nouvelleMancheDimensions();J.points[1]=0;J.fini[1]=false;render(el,apri);});
+  const zone=document.createElement('div');s.append(zone);
+  afficherTriDimensions(zone,apri,N,nomDim,{
+   onPoint:()=>{J.points[1]++;racine.querySelector('.jeu-total b').textContent=J.points.reduce((a,b)=>a+b,0);},
+   onTerminer:()=>render(el,apri)
   });
-  if(N.rep){
-   const ret = carte.querySelector('.jeu-retour'), ok = N.rep===x.dim;
-   ret.innerHTML = `<p class="${ok?'oui':'non'}">${ok?t('Bien vu.','Well spotted.'):t('Pas tout à fait.','Not quite.')} ${t('Cet indicateur relève de','This indicator belongs to')} <b>${e(nomDim(x.dim))}</b>.</p>`;
-   suite(ret, N.i+1>=n, ()=>{ N.i++; N.rep=null; render(el,apri); });
-  }
-  s.append(carte); s.append(apri.h(barre(N.i,n)));
  }
 
  /* ---------- 3. with what data ---------- */
