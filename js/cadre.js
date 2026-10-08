@@ -1,7 +1,6 @@
 import {sectionAOnglets} from './apri.js';
 export const onglets = [
  {id:'jeu', fr:'Le cadre en bref', en:'The framework at a glance', dfr:'Capacités, dimensions, données et scores, en cinq étapes', den:'Capacities, dimensions, data and scores, in five steps'},
- {id:'mesure', fr:'Modèle et sources', en:'Model and sources'},
  {id:'indicateurs', fr:'Calcul des scores', en:'Score calculation'},
  {id:'boucles', fr:'Boucles de rétroaction', en:'Feedback loops'},
  {id:'tester', fr:'Tester le concept', en:'Test the concept'},
