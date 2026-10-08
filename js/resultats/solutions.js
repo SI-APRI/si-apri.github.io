@@ -15,7 +15,7 @@ function f(apri, v, dec = 2, signe = false){
  if(v == null || isNaN(v)) return '—';
  let s = Number(v).toFixed(dec);
  if(signe && !s.startsWith('-')) s = '+' + s;
- return apri.lang === 'fr' ? s.replace('.', ',') : s;
+ return apri.lang !== 'en' ? s.replace('.', ',') : s;
 }
 
 function alerte(score, ecart){
