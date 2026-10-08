@@ -22,7 +22,7 @@
  <button class="menu" aria-label="Menu">☰</button>
  <nav class="principal" aria-label="Navigation"></nav>
  <div class="langue" role="group" aria-label="Langue">
-  <button data-l="fr" aria-pressed="true">FR</button><button data-l="en" aria-pressed="false">EN</button>
+  <button data-l="fr" aria-pressed="true" title="Français">FR</button><button data-l="en" aria-pressed="false" title="English">EN</button><button data-l="es" aria-pressed="false" title="Español">ES</button><button data-l="ht" aria-pressed="false" title="Kreyòl ayisyen">KR</button>
  </div>
 </header>
 
@@ -62,7 +62,13 @@ import {apri, SECTIONS, charger, changerLangue, appliquerHash, menus} from './js
 
 const TXT = {en:{sous:'Information System (IS)',titre:'Resilience Observatory',accroche:'The APRI information system for landscape resilience.',
  cta:'Explore the territory',k1:'households surveyed',k2:'communal sections',k3:"landscapes, Sud and Grand'Anse",charge:'Loading…',
- pied:'© UNEP Haiti · APRI, Integrated Resilient Landscape Approach.',f_apropos:'About',f_contact:'Contact',accueil:'Home'}};
+ pied:'© UNEP Haiti · APRI, Integrated Resilient Landscape Approach.',f_apropos:'About',f_contact:'Contact',accueil:'Home'},
+ es:{sous:'Sistema de información (SI)',titre:'Observatorio de la resiliencia',accroche:'El sistema de información APRI sobre la resiliencia de los paisajes.',
+ cta:'Explorar el territorio',k1:'hogares encuestados',k2:'secciones comunales',k3:"paisajes, Sud y Grand'Anse",charge:'Cargando…',
+ pied:'© PNUMA Haití · APRI, Enfoque integrado de paisajes resilientes.',f_apropos:'Acerca de',f_contact:'Contacto',accueil:'Inicio'},
+ ht:{sous:'Sistèm enfòmasyon (SI)',titre:'Obsèvatwa rezilyans',accroche:'Sistèm enfòmasyon APRI sou rezilyans peyizaj yo.',
+ cta:'Eksplore teritwa a',k1:'fwaye ki reponn ankèt la',k2:'seksyon kominal',k3:"peyizaj, Sid ak Grandans",charge:'Chajman…',
+ pied:'© PNUE Ayiti · APRI, Apwòch entegre pou peyizaj ki rezilyan.',f_apropos:'Konsènan',f_contact:'Kontak',accueil:'Akèy'}};
 const FR = {accueil:'Accueil'}; document.querySelectorAll('[data-t]').forEach(e=>FR[e.dataset.t]=e.textContent); TXT.fr=FR;
 
 // navigation with sub-menus read from the section modules
@@ -70,13 +76,13 @@ const nav = document.querySelector('nav.principal');
 const ONGLETS = await menus();
 function construireNav(){
  const l = apri.lang;
- const items = [{id:'accueil', fr:FR.accueil, en:TXT.en.accueil}, ...SECTIONS.filter(s=>!s.menu)];
+ const items = [{id:'accueil', fr:FR.accueil, en:TXT.en.accueil, es:TXT.es.accueil, ht:TXT.ht.accueil}, ...SECTIONS.filter(s=>!s.menu)];
  nav.innerHTML = '';
  for(const s of items){
   const sous = [...(ONGLETS[s.id]||[]).map(o=>({href:'#'+s.id+'/'+o.id, t:apri.t(o.fr,o.en), d:apri.t(o.dfr,o.den)})),
                ...SECTIONS.filter(x=>x.menu===s.id).map(x=>({href:'#'+x.id, t:apri.t(x.fr,x.en)}))];
   const div = document.createElement('div'); div.className='item'+(sous.length?' a-sous':''); div.dataset.sec=s.id;
-  div.innerHTML = `<a href="#${s.id}">${apri.esc(apri.t(s.fr,s.en))}</a>`+
+  div.innerHTML = `<a href="#${s.id}">${apri.esc(s[l] ?? apri.t(s.fr,s.en))}</a>`+
    (sous.length?`<div class="sous">${sous.map(x=>`<a href="${x.href}">${apri.esc(x.t)}${x.d?`<small>${apri.esc(x.d)}</small>`:''}</a>`).join('')}</div>`:'');
   nav.append(div);
  }
@@ -126,14 +132,17 @@ const proche = new IntersectionObserver(es=>{
 SECTIONS.forEach(s=>(s.id==='territoire'?proche:paresseux).observe(document.getElementById(s.id)));
 
 // language
-function langue(l){
- document.querySelectorAll('[data-t]').forEach(e=>{const v=TXT[l][e.dataset.t]; if(v) e.textContent=v;});
+async function langue(l){
+ if(!TXT[l]) l = 'fr';
  document.querySelectorAll('.langue button').forEach(b=>b.setAttribute('aria-pressed', String(b.dataset.l===l)));
- changerLangue(l); construireNav(); ajuster();
+ await changerLangue(l);
+ document.querySelectorAll('[data-t]').forEach(e=>{const v=TXT[l][e.dataset.t]; if(v) e.textContent=v;});
+ construireNav(); ajuster();
 }
 document.querySelectorAll('.langue button').forEach(b=>b.onclick=()=>langue(b.dataset.l));
-let l0 = 'fr'; try{ l0 = localStorage.getItem('apri_lang') || ((navigator.language||'fr').startsWith('en')?'en':'fr'); }catch(e){}
-langue(l0==='en'?'en':'fr');
+const nav0 = (navigator.language||'fr').slice(0,2);
+let l0 = ({en:'en', es:'es', ht:'ht'})[nav0] || 'fr'; try{ l0 = localStorage.getItem('apri_lang') || l0; }catch(e){}
+await langue(TXT[l0] ? l0 : 'fr');
 
 // the bar never wraps: tighten it when the labels would not fit
 function ajuster(){
