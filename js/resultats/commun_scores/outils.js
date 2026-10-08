@@ -24,12 +24,12 @@ export const esc = s => String(s ?? '').replace(/[&<>"']/g, c=>({'&':'&amp;','<'
 export function f(v, dec=1){
  if(v==null || !isFinite(v)) return '—';
  const s = Number(v).toFixed(dec);
- return A.lang==='fr' ? s.replace('.', ',') : s;
+ return A.lang !== 'en' ? s.replace('.', ',') : s;
 }
 /** _n: a count with thousands separator */
 export function n(v){
  const s = Math.trunc(v).toLocaleString('en-US');
- return A.lang==='fr' ? s.replace(/,/g,' ') : s;
+ return A.lang !== 'en' ? s.replace(/,/g,' ') : s;
 }
 export const L = o => o==null ? '' : (typeof o==='object' ? (A.lang==='en' ? (o.en ?? o.fr) : (o.fr ?? o.en)) : o);
 
@@ -165,7 +165,7 @@ export function barres(lignes, ens, mesure, {fragile=20, large=null}={}){
    p.push(`<text x="${mg+utile+14}" y="${y+15}" font-size="11.5" fill="${GRIS}">n &lt; 5</text>`);
   }
   if(mesure==='score' && l.raw!=null)
-   p.push(`<text x="${mg+utile+(etroit?62:88)}" y="${y+15}" font-size="12.5" font-family="Georgia,serif" font-style="italic" fill="#466c91">${A.lang==='fr'?'brut':'raw'} : ${esc(l.raw)}</text>`);
+   p.push(`<text x="${mg+utile+(etroit?62:88)}" y="${y+15}" font-size="12.5" font-family="Georgia,serif" font-style="italic" fill="#466c91">${A.lang !== 'en'?'brut':'raw'} : ${esc(l.raw)}</text>`);
   if(mesure==='part' && !l.supp)
    p.push(`<text x="${X_N}" y="${y+15}" font-size="11" fill="${GRIS}" text-anchor="end">${l.k}/${l.n}</text>`);
   y += H_L + GAP;
@@ -191,7 +191,7 @@ export function tableau(lignes, ens, mesure){
 }
 export function brutInline(raw){
  if(raw==null) return '';
- return `<span class="sc-brut">${A.lang==='fr'?'brut':'raw'} : ${esc(raw)}</span>`;
+ return `<span class="sc-brut">${A.lang !== 'en'?'brut':'raw'} : ${esc(raw)}</span>`;
 }
 
 /** _synthese */
