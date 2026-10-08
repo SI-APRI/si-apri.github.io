@@ -2,7 +2,7 @@
 export const onglets = [];
 export default async function render(el, apri){
  el.classList.add('sans-marge');
- const src = 'carte_'+apri.lang+'.html';
+ const src = 'carte_'+({es:'en', ht:'fr'}[apri.lang] || apri.lang)+'.html';
  let f = el.querySelector('iframe');
  if(f && f.getAttribute('src')===src) return;
  el.innerHTML = '';
