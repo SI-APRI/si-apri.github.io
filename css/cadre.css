@@ -306,3 +306,28 @@
 }
 #cadre .jeu-gain{font:700 13px Inter,sans-serif;font-style:normal;color:var(--vert);white-space:nowrap}
 @media(max-width:600px){#cadre .jeu-src span{display:none}#cadre .jeu-src{padding:10px 12px}}
+#cadre .jeu-tete-nue{justify-content:flex-end;margin-bottom:8px}
+
+/* étape 1 : capacités en sélection multiple */
+#cadre .jeu-choix-multi{gap:10px}
+#cadre .jeu-capa{display:flex;flex:1 1 220px;flex-direction:column;align-items:flex-start;gap:3px;text-align:left;border-bottom-width:1.5px;border-left:5px solid var(--c);padding:12px 16px}
+#cadre .jeu-capa::before{display:none}
+#cadre .jeu-capa b{font-size:15px}
+#cadre .jeu-capa small{font-weight:500;font-size:12px;line-height:1.4;color:var(--texte-doux)}
+#cadre .jeu-capa.pris{background:var(--bleu-pale);box-shadow:inset 0 0 0 2px var(--c);border-color:var(--c)}
+#cadre .jeu-capa.pris:not(:disabled) b::after{content:" ✓";color:var(--c)}
+#cadre .jeu-bouton.manque,#cadre .jeu-dim.manque,#cadre .jeu-note.manque{opacity:1;border-color:var(--ambre);background:#fff8ec}
+/* étape 2 : ranger un indicateur dans une dimension */
+#cadre .jeu-dgrille{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:9px;margin-top:4px}
+#cadre .jeu-dgrille .jeu-dim{flex:none}
+#cadre .jeu-dgrille .jeu-dim span{font-size:13.5px}
+/* étape 5 : noter l'importance de 1 à 5 */
+#cadre .jeu-notes{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:8px 0}
+#cadre .jeu-note{display:flex;flex-direction:column;align-items:center;gap:3px;border:1.5px solid var(--filet);border-bottom:4px solid var(--c);border-radius:12px;padding:12px 6px;background:#fff;cursor:pointer;transition:transform .12s,border-color .12s}
+#cadre .jeu-note b{font-size:22px;line-height:1;color:var(--texte)}
+#cadre .jeu-note small{font-size:11px;color:var(--texte-doux);text-align:center;line-height:1.25}
+#cadre .jeu-note:hover:not(:disabled){transform:translateY(-2px);border-color:var(--bleu)}
+#cadre .jeu-note:disabled{cursor:default;opacity:.55}
+#cadre .jeu-note.bon{opacity:1;border-color:var(--vert);background:#eef8f2}
+#cadre .jeu-note.faux{opacity:1;border-color:var(--rouge);background:#fbefed}
+@media(max-width:600px){#cadre .jeu-note small{display:none}#cadre .jeu-notes{gap:6px}}
