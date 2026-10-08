@@ -37,7 +37,7 @@ export function fmt(apri, v, dec = 1, signe = false){
  if(v == null || isNaN(v)) return '—';
  let s = Number(v).toFixed(dec);
  if(signe && !s.startsWith('-')) s = '+' + s;
- return apri.lang === 'fr' ? s.replace('.', ',') : s;
+ return apri.lang !== 'en' ? s.replace('.', ',') : s;
 }
 
 /** escape, then **double asterisks** to bold */
