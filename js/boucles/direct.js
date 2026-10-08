@@ -13,7 +13,7 @@ export default async function render(zone, apri) {
   const r = document.createElement('div'); r.className = 'bcl';
   zone.append(r);
   if (!D.liens.length) { r.append(apri.h(`<div class="bcl-info">${esc(T('sd_court'))}</div>`)); return; }
-  const VIRG = m.lang === 'fr' ? ',' : '.';
+  const VIRG = m.lang !== 'en' ? ',' : '.';
   const L = {
     lire: T('sd_lire'), pause: T('sd_pause'), fin: T('sd_fin'), ret: T('sd_retour'), nm: T('sd_non_mesure'),
     dis: T('sd_distrib'), mois: T('sd_mois'), ans: T('sd_ans'), liens: T('sd_liens_n'), vagues: T('sd_vagues_n'),

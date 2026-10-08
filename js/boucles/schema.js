@@ -25,7 +25,7 @@ export function dessinerSchema(zone, { m, rang, aretes, centre, posInit, boucle,
     <button type="button" class="sc-b" data-z="in" aria-label="Zoom +">+</button>
     <button type="button" class="sc-b" data-z="out" aria-label="Zoom −">−</button>
     <button type="button" class="sc-b" data-z="reset"></button></div>
-    <svg class="sc-svg" role="img" aria-label="${esc(lang === 'fr' ? 'Schéma causal interactif' : 'Interactive causal diagram')}" font-family="Inter,system-ui,sans-serif">
+    <svg class="sc-svg" role="img" aria-label="${esc(lang !== 'en' ? 'Schéma causal interactif' : 'Interactive causal diagram')}" font-family="Inter,system-ui,sans-serif">
     <defs><marker id="sc-pos" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,1 L9,5 L0,9Z" fill="${POS}"/></marker>
     <marker id="sc-neg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,1 L9,5 L0,9Z" fill="${NEG}"/></marker></defs>
     <rect class="sc-fond" x="-100000" y="-100000" width="200000" height="200000" fill="#fff"/>

@@ -80,7 +80,7 @@ function fabriquerF(lang) {
     if (v == null) return '—';
     let s = Number(v).toFixed(dec);
     if (signe && !s.startsWith('-')) s = '+' + s;
-    return lang === 'fr' ? s.replace('.', ',') : s;
+    return lang !== 'en' ? s.replace('.', ',') : s;
   };
 }
 

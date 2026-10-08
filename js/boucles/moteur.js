@@ -432,7 +432,7 @@ export function decrire(edge, lang, association, t) {
   let url = src.url || '';
   if (!/^https?:\/\//i.test(url)) url = '';
   const published = !!url;
-  const local = k => edge[k + '_' + lang] || edge[k + '_en'] || edge[k + '_fr'] || '';
+  const local = k => edge[k + '_' + (lang === 'en' ? 'en' : 'fr')] || edge[k + '_en'] || edge[k + '_fr'] || '';
   return {
     origin: published ? t.documented : t.theory, code: published ? 'D' : 'H',
     strength_label: t.strength, strength: edge.force,
@@ -440,7 +440,7 @@ export function decrire(edge, lang, association, t) {
     citation: local('cite') || src.titre || t.no_source, url,
     finding: lang === 'fr' ? src.effet : local('ref'),
     limits: local('reserve'),
-    geography: lang === 'fr' ? src.geo : (src.geo_en || src.geo),
+    geography: lang !== 'en' ? src.geo : (src.geo_en || src.geo),
     caution: t.caution, chosen: t.chosen,
   };
 }

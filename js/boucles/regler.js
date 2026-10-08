@@ -10,7 +10,7 @@ export default async function render(el, apri) {
   el.innerHTML = '';
   const D = E.donneesRegler(m);
   const CD = (await apri.donnees('data/boucles/modele.json')).couleurs_dim;
-  const VIRG = m.lang === 'fr' ? ',' : '.';
+  const VIRG = m.lang !== 'en' ? ',' : '.';
   const L = { lire: T('sy_lire'), pause: T('sy_pause'), stable: T('sy_stable'), repos: T('sy_repos'), non_mesure: T('sy_non_mesure'),
     moy: T('sy_moyenne'), bilan: T('sy_bilan'), bilan0: T('sy_bilan_0'), moins: T('sy_moins'), plus: T('sy_plus') };
   const e_ = k => esc(T(k));
