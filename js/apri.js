@@ -145,7 +145,7 @@ export const apri = {
   onglets.forEach((o,i)=>{
    const b=document.createElement('button'); b.type='button'; b.setAttribute('role','tab');
    b.setAttribute('aria-selected', String(o.id===actif));
-   b.innerHTML=`<b>${String(i+1).padStart(2,'0')}</b><span>${apri.esc(apri.t(o.fr,o.en))}</span>`;
+   b.innerHTML=`<span>${apri.esc(apri.t(o.fr,o.en))}</span>`;
    b.onclick=()=>surChoix(o.id);
    bar.append(b);
   });
