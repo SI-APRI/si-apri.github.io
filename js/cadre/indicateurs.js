@@ -99,7 +99,7 @@ export function vueIndicateurs(el, apri, d){
    return;
   }
   const [num, ...r] = T(x.dim).split('. '); const court = r.join('. ');
-  const quoi = ((apri.lang==='fr' ? x.metrique_fr : x.metrique_en) || x.metrique || '').trim();
+  const quoi = ((apri.lang !== 'en' ? x.metrique_fr : x.metrique_en) || x.metrique || '').trim();
   const aide = quoi ? `<span class="cad-it-q" title="${esc(quoi)}" aria-label="${esc(quoi)}">?</span>` : '';
   const table = apri.h(`<table class="cad-it"><thead><tr><th>${esc(T('cad_ind_c_nom'))}</th><th>${esc(T('cad_ind_c_ech'))}</th>
    <th class="n">${esc(T('cad_ind_c_p'))}<span class="cad-it-ech">${esc(T('cad_ind_c_p_ech'))}</span></th></tr></thead><tbody>
@@ -216,7 +216,7 @@ function normalisations(x, T, esc){
 
 /* ---------- the metadata record (_v_metadonnees) ---------- */
 function fiche(x, apri, d, T){
- const esc = apri.esc, fr = apri.lang==='fr', L = apri.lang;
+ const esc = apri.esc, fr = apri.lang !== 'en', L = apri.lang;
  const nom = fr ? (x.nom_fr || x.nom) : x.nom;
  const mesure = (fr ? x.metrique_fr : x.metrique_en) || x.metrique || '';
  const note = (fr ? x.note : x.note_en) || x.note || '';
