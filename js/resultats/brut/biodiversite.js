@@ -100,7 +100,7 @@ function graphe(labels, values, ylabel, titre, lang){
  const pw = W - ML - MR, ph = H - MT - MB;
  const y = v => MT + ph - ph * v / vmax;
  const bw = pw / labels.length;
- const nf = v => lang === 'fr' ? String(v).replace('.', ',') : String(v);
+ const nf = v => lang !== 'en' ? String(v).replace('.', ',') : String(v);
  let s = `<text x="${ML}" y="28" font-size="15" fill="#34483f">${esc(titre)}</text>`;
  for(let v = 0; v <= vmax; v += pas){
   s += `<line x1="${ML}" x2="${W - MR}" y1="${y(v).toFixed(1)}" y2="${y(v).toFixed(1)}" stroke="#e6ecea"/><text x="${ML - 8}" y="${(y(v) + 4).toFixed(1)}" font-size="12" text-anchor="end" fill="#34483f">${nf(v)}</text>`;

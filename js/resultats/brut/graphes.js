@@ -9,12 +9,12 @@ export function esc(s){ return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&
 export function f(v, dec = 1, lang = 'fr'){
  if(v == null || Number.isNaN(v)) return '—';
  const s = Number(v).toFixed(dec);
- return lang === 'fr' ? s.replace('.', ',') : s;
+ return lang !== 'en' ? s.replace('.', ',') : s;
 }
 /** explorateur._n: thousands separated by a narrow space in French */
 export function n(v, lang = 'fr'){
  const s = Math.trunc(v).toLocaleString('en-US');
- return lang === 'fr' ? s.replace(/,/g, ' ') : s;
+ return lang !== 'en' ? s.replace(/,/g, ' ') : s;
 }
 /** "{a} and {b}" style templates of the Streamlit dictionary */
 export function fmt(t, kw = {}){
