@@ -94,7 +94,6 @@ export default async function render(el, apri){
   [t('Une échelle commune','A common scale'),t('Leurs valeurs sont ensuite <strong>normalisées sur des échelles de résilience de 0 à 10</strong>, afin de rendre les indicateurs comparables entre eux.','Their values are then <strong>normalized on resilience scales from 0 to 10</strong>, so that the indicators can be compared with one another.')]
  ];
  modelGroups.forEach(([label,body,detail])=>modelCopy.append(apri.h('<div class="model-group"><h4>'+e(label)+'</h4><div><p>'+body+'</p>'+(detail?'<p class="model-detail">'+e(detail)+'</p>':'')+'</div></div>')));
- const revealModel=()=>{modelCopy.querySelectorAll('.model-group').forEach((group,i)=>{group.getAnimations().forEach(a=>a.cancel());if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches)group.animate([{opacity:0,transform:'translateY(12px)'},{opacity:1,transform:'translateY(0)'}],{duration:600,delay:i*160,easing:'cubic-bezier(.2,.7,.2,1)',fill:'backwards'});});};
  const sc=section('capacites',t('Trois capacités','Three capacities'),t('Les capacités décrivent la manière dont un système anticipe les perturbations, en absorbe les effets et se transforme lorsque les conditions changent.','Capacities describe how a system anticipates disruption, absorbs its effects and transforms when conditions change.'));
  const caps=apri.h('<div class="guide-capacites"></div>');sc.append(caps);
  ATTR.forEach(a=>{const card=apri.h('<article class="guide-capacite" data-capacite="'+a.id+'" style="--capacity-color:'+a.c+'"><h4>'+t(a.fr,a.en)+'</h4><p>'+e(T('cad_'+a.id))+'</p></article>');caps.append(card);});
@@ -138,8 +137,15 @@ export default async function render(el, apri){
  si.append(apri.h('<p class="guide-fin">'+t('Le parcours se poursuit dans « Calcul des scores », puis dans « Boucles de rétroaction ». L’exemple interactif de test y permet de suivre pas à pas l’effet des seuils sur le passage d’une dynamique négative à une dynamique positive.','Continue with “Score calculations”, then “Feedback loops”. The interactive test example lets you follow step by step how thresholds affect the shift from a negative to a positive dynamic.')+'</p>'));
 
  const buttons=[...nav.querySelectorAll('button')],panels=[...sections.querySelectorAll('.guide-section')];
+ const revealPanel=panel=>{
+  panels.forEach(p=>p.getAnimations({subtree:true}).forEach(a=>{if(a.id==='apri-entrance')a.cancel();}));
+  if(!panel||window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  const groups='.guide-heading,.guide-model-copy,.guide-capacites,.guide-dimensions,.guide-sources,.guide-source-flux';
+  const items=[...panel.children].flatMap(child=>child.matches(groups)?[...child.children].filter(x=>x.tagName!=='STYLE'):[child]);
+  items.forEach((item,i)=>{const anim=item.animate([{opacity:0,translate:'0 22px'},{opacity:1,translate:'0 0'}],{duration:650,delay:i*170,easing:'cubic-bezier(.22,.61,.36,1)',fill:'backwards'});anim.id='apri-entrance';});
+ };
  nav.setAttribute('role','tablist');
- const select=id=>{buttons.forEach(b=>{const active=b.dataset.cible===id;b.classList.toggle('ici',active);b.setAttribute('aria-selected',String(active));b.tabIndex=active?0:-1;});panels.forEach(panel=>panel.hidden=panel.id!==id);if(id==='guide-modele')revealModel();};
+ const select=id=>{buttons.forEach(b=>{const active=b.dataset.cible===id;b.classList.toggle('ici',active);b.setAttribute('aria-selected',String(active));b.tabIndex=active?0:-1;});panels.forEach(panel=>panel.hidden=panel.id!==id);revealPanel(panels.find(panel=>panel.id===id));};
  buttons.forEach((b,i)=>{b.id='tab-'+b.dataset.cible;b.setAttribute('role','tab');b.onclick=()=>select(b.dataset.cible);b.onkeydown=ev=>{let n;if(ev.key==='ArrowRight')n=(i+1)%buttons.length;else if(ev.key==='ArrowLeft')n=(i+buttons.length-1)%buttons.length;else if(ev.key==='Home')n=0;else if(ev.key==='End')n=buttons.length-1;else return;ev.preventDefault();select(buttons[n].dataset.cible);buttons[n].focus();};});
  panels.forEach(panel=>{panel.setAttribute('role','tabpanel');panel.setAttribute('aria-labelledby','tab-'+panel.id);});select('guide-modele');
 }
