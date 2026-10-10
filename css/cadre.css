@@ -427,3 +427,9 @@
 #cadre .jeu .jeu-capa b,#cadre .jeu .jeu-capa small{color:#293742!important}
 #cadre .jeu .jeu-capa{border:1px solid #dfe4e8!important;border-left:3px solid #35597a!important;box-shadow:none!important}
 #cadre .jeu .jeu-capa.pris{background:#f4f6f8!important;background-color:#f4f6f8!important;border-color:#35597a!important;box-shadow:inset 0 0 0 1px #35597a!important}
+
+
+/* Fond continu : le cadre reste sur une surface blanche, sans panneau flottant. */
+#cadre{background:#fff!important;color:#293742!important}
+#cadre .cad-cadre-if,#cadre .cad-blanc,#cadre .jeu-carte{background:#fff!important;border-radius:0!important;box-shadow:none!important}
+#cadre,#cadre *{font-family:Inter,Arial,sans-serif!important}
