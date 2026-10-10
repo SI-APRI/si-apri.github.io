@@ -148,7 +148,7 @@ export default async function render(el, apri){
   <div class="jeu-total" title="${t('Bonnes réponses','Correct answers')}"><b>${total}</b><span>${t('points','points')}</span></div>
  </div>`));
 
- const scene = apri.h(`<div class="jeu-scene"></div>`); racine.append(scene);
+ const scene = apri.h(`<div class="jeu-scene"></div>`); racine.append(scene); const navigation = apri.h(`<nav class="jeu-chemin" aria-label="${t('Choisir une étape','Choose a step')}">${ETAPES.map((x,i)=>`<button type="button" class="${J.etape===i?'ici':''}"><i>${i+1}</i><span>${e(t(x.fr,x.en))}</span></button>`).join('')}</nav>`); navigation.querySelectorAll('button').forEach((b,i)=>b.onclick=()=>{J.etape=i;J.finale=false;render(el,apri)}); racine.insertBefore(navigation,scene);
 
  function suivant(i){
   J.fini[i] = true;
@@ -175,7 +175,7 @@ export default async function render(el, apri){
  /* ---------- 1. three capacities (multi-select) ---------- */
  function etape1(s){
   const N = J.e1, n = N.cartes.length;
-  s.append(consigne(0, t("APRI mesure la résilience au travers de trois capacités. Reliez la situation à la ou aux capacités qu'elle illustre : plusieurs réponses sont parfois justes.","APRI measures resilience through three capacities. Match the situation to the capacity, or capacities, it shows: sometimes several answers are right.")));
+  s.append(consigne(0, t("Trois capacités aident une communauté à faire face. À vous de repérer lesquelles dans cette situation.","Resilient communities anticipate, absorb and adapt. Which capacities do you spot here?")));
   if(N.i>=n) return bilan(s, 0, n, ()=>{ J.e1={cartes:melanger(SITUATIONS).slice(0,6),i:0,sel:[],valide:false}; J.points[0]=0; J.fini[0]=false; render(el,apri); });
   const c = N.cartes[N.i], bon = new Set(c.a);
   const carte = apri.h(`<div class="jeu-carte"><div class="jeu-situation">« ${e(t(c.fr,c.en))} »</div><div class="jeu-choix jeu-choix-multi"></div><div class="jeu-retour" aria-live="polite"></div></div>`);
