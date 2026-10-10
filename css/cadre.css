@@ -433,3 +433,11 @@
 #cadre{background:#fff!important;color:#293742!important}
 #cadre .cad-cadre-if,#cadre .cad-blanc,#cadre .jeu-carte{background:#fff!important;border-radius:0!important;box-shadow:none!important}
 #cadre,#cadre *{font-family:Inter,Arial,sans-serif!important}
+
+
+/* Navigation libre : la même teinte bleue pour les cinq étapes. */
+#cadre .jeu-chemin button.ici,#cadre .jeu-chemin button.fait{background:#35597a!important;border-color:#35597a!important;color:#fff!important;box-shadow:none!important}
+#cadre .jeu-chemin button.ici i,#cadre .jeu-chemin button.fait i{background:#fff!important;border-color:#fff!important;color:#35597a!important}
+#cadre .jeu-chemin button:not(.ici):not(.fait){background:#fff!important;border-color:#dfe4e8!important;color:#53616d!important;box-shadow:none!important}
+#cadre .jeu-chemin button:not(.ici):not(.fait) i{background:#f4f6f8!important;border-color:#dfe4e8!important;color:#35597a!important}
+#cadre .jeu-chemin button:hover{transform:none!important;box-shadow:none!important;border-color:#35597a!important}
