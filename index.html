@@ -38,13 +38,20 @@
  </div>
  <a class="fleche" href="#territoire"><span class="fleche-label" data-t="vers-territoire">Territoire</span><span class="fleche-trait" aria-hidden="true"></span></a>
 </section>
-<section id="territoire" class="page"><div class="carte-page" id="contenu-territoire"><div class="chargement" data-t="charge">Chargement…</div></div></section>
-<section id="cadre" class="page"><div class="carte-page" id="contenu-cadre"><div class="chargement" data-t="charge">Chargement…</div></div></section>
-<section id="resultats" class="page"><div class="carte-page" id="contenu-resultats"><div class="chargement" data-t="charge">Chargement…</div></div></section>
-<section id="boucles" class="page"><div class="carte-page" id="contenu-boucles"><div class="chargement" data-t="charge">Chargement…</div></div></section>
-<section id="fiches" class="page"><div class="carte-page" id="contenu-fiches"><div class="chargement" data-t="charge">Chargement…</div></div></section>
-<section id="ressources" class="page"><div class="carte-page" id="contenu-ressources"><div class="chargement" data-t="charge">Chargement…</div></div></section>
-<section id="apropos" class="page"><div class="carte-page" id="contenu-apropos"><div class="chargement" data-t="charge">Chargement…</div></div></section>
+<section id="territoire" class="page"><div class="carte-page" id="contenu-territoire"><div class="chargement" data-t="charge">Chargement…</div></div>
+ <a class="fleche suivant" href="#cadre"><span class="fleche-sur" data-t="a-suivre">À suivre</span><span class="fleche-label" data-t="vers-cadre">Cadre de résilience</span><span class="fleche-trait" aria-hidden="true"></span></a></section>
+<section id="cadre" class="page"><div class="carte-page" id="contenu-cadre"><div class="chargement" data-t="charge">Chargement…</div></div>
+ <a class="fleche suivant" href="#resultats"><span class="fleche-sur" data-t="a-suivre">À suivre</span><span class="fleche-label" data-t="vers-resultats">Résultats</span><span class="fleche-trait" aria-hidden="true"></span></a></section>
+<section id="resultats" class="page"><div class="carte-page" id="contenu-resultats"><div class="chargement" data-t="charge">Chargement…</div></div>
+ <a class="fleche suivant" href="#boucles"><span class="fleche-sur" data-t="a-suivre">À suivre</span><span class="fleche-label" data-t="vers-boucles">Boucles de rétroaction</span><span class="fleche-trait" aria-hidden="true"></span></a></section>
+<section id="boucles" class="page"><div class="carte-page" id="contenu-boucles"><div class="chargement" data-t="charge">Chargement…</div></div>
+ <a class="fleche suivant" href="#fiches"><span class="fleche-sur" data-t="a-suivre">À suivre</span><span class="fleche-label" data-t="vers-fiches">Fiches d'intervention</span><span class="fleche-trait" aria-hidden="true"></span></a></section>
+<section id="fiches" class="page"><div class="carte-page" id="contenu-fiches"><div class="chargement" data-t="charge">Chargement…</div></div>
+ <a class="fleche suivant" href="#ressources"><span class="fleche-sur" data-t="a-suivre">À suivre</span><span class="fleche-label" data-t="vers-ressources">Ressources</span><span class="fleche-trait" aria-hidden="true"></span></a></section>
+<section id="ressources" class="page"><div class="carte-page" id="contenu-ressources"><div class="chargement" data-t="charge">Chargement…</div></div>
+ <a class="fleche suivant" href="#apropos"><span class="fleche-sur" data-t="a-suivre">À suivre</span><span class="fleche-label" data-t="vers-apropos">À propos</span><span class="fleche-trait" aria-hidden="true"></span></a></section>
+<section id="apropos" class="page"><div class="carte-page" id="contenu-apropos"><div class="chargement" data-t="charge">Chargement…</div></div>
+ <a class="fleche suivant" href="#contact"><span class="fleche-sur" data-t="a-suivre">À suivre</span><span class="fleche-label" data-t="vers-contact">Contact</span><span class="fleche-trait" aria-hidden="true"></span></a></section>
 <section id="contact" class="page"><div class="carte-page" id="contenu-contact"><div class="chargement" data-t="charge">Chargement…</div></div></section>
 </main>
 
@@ -58,12 +65,15 @@ import {apri, SECTIONS, charger, changerLangue, appliquerHash, menus} from './js
 
 const TXT = {en:{saut:'Skip to content',sous:'Information System (IS)',titre:'Resilience Observatory',accroche:'The APRI information system for landscape resilience.',
  cta:'Explore the results','vers-territoire':'Territory',charge:'Loading…',
+ 'a-suivre':'Up next','vers-cadre':'Resilience Framework','vers-resultats':'Results','vers-boucles':'Feedback Loops','vers-fiches':'Intervention Profiles','vers-ressources':'Resources','vers-apropos':'About','vers-contact':'Contact',
  pied:'© UNEP Haiti · APRI, Integrated Resilient Landscape Approach.',f_apropos:'About',f_contact:'Contact',accueil:'Home'},
  es:{saut:'Saltar al contenido',sous:'Sistema de información (SI)',titre:'Observatorio de la resiliencia',accroche:'El sistema de información APRI sobre la resiliencia de los paisajes.',
  cta:'Explorar los resultados','vers-territoire':'Territorio',charge:'Cargando…',
+ 'a-suivre':'A continuación','vers-cadre':'Marco de resiliencia','vers-resultats':'Resultados','vers-boucles':'Bucles de retroalimentación','vers-fiches':'Fichas de intervención','vers-ressources':'Recursos','vers-apropos':'Acerca de','vers-contact':'Contacto',
  pied:'© PNUMA Haití · APRI, Enfoque integrado de paisajes resilientes.',f_apropos:'Acerca de',f_contact:'Contacto',accueil:'Inicio'},
  ht:{saut:'Ale nan kontni an',sous:'Sistèm enfòmasyon (SI)',titre:'Obsèvatwa rezilyans',accroche:'Sistèm enfòmasyon APRI sou rezilyans peyizaj yo.',
  cta:'Eksplore rezilta yo','vers-territoire':'Teritwa a',charge:'Chajman…',
+ 'a-suivre':'Apre sa','vers-cadre':'Kad rezilyans','vers-resultats':'Rezilta yo','vers-boucles':'Bouk retwoaksyon','vers-fiches':'Fich entèvansyon','vers-ressources':'Resous','vers-apropos':'Konsènan','vers-contact':'Kontak',
  pied:'© PNUE Ayiti · APRI, Apwòch entegre pou peyizaj ki rezilyan.',f_apropos:'Konsènan',f_contact:'Kontak',accueil:'Akèy'}};
 const FR = {accueil:'Accueil'}; document.querySelectorAll('[data-t]').forEach(e=>FR[e.dataset.t]=e.textContent); TXT.fr=FR;
 
