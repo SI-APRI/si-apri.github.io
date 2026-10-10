@@ -441,3 +441,9 @@
 #cadre .jeu-chemin button:not(.ici):not(.fait){background:#fff!important;border-color:#dfe4e8!important;color:#53616d!important;box-shadow:none!important}
 #cadre .jeu-chemin button:not(.ici):not(.fait) i{background:#f4f6f8!important;border-color:#dfe4e8!important;color:#35597a!important}
 #cadre .jeu-chemin button:hover{transform:none!important;box-shadow:none!important;border-color:#35597a!important}
+/* Fond gris continu : seules les couleurs de l’échelle APRI restent codées. */
+#cadre{background:#f2f4f5!important;color:#293742!important}
+#cadre .cad-cadre-if,#cadre .cad-blanc,#cadre .jeu-carte,#cadre .jeu-situation,#cadre .jeu-capa,#cadre .jeu-src,#cadre .jeu-attr,#cadre .jeu-dimscore,#cadre .jeu-curseur,#cadre .jeu-palier,#cadre .jeu-dim,#cadre .jeu-note{background:#f2f4f5!important;background-image:none!important;box-shadow:none!important}
+#cadre [role=tablist]{background:#f2f4f5!important}
+#cadre .jeu-chemin button:not(.ici):not(.fait){background:#f2f4f5!important;box-shadow:none!important}
+#cadre .jeu-palier b{background:var(--c)!important;color:var(--i)!important}
