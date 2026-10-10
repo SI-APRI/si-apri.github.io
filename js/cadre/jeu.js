@@ -61,16 +61,24 @@ export default async function render(el, apri){
 
  const sm=section('modele',t('Un modèle de résilience de type capital-based','A capital-based resilience model'),'');
  sm.querySelector('.guide-heading p').remove();
- sm.querySelector('h3').style.cssText='font-size:clamp(24px,2.5vw,32px);line-height:1.25;margin-bottom:20px';
+ sm.querySelector('h3').style.cssText='font-size:clamp(24px,2.5vw,32px);line-height:1.25;margin-bottom:24px';
  const modelCopy=apri.h('<div class="guide-model-copy"></div>');sm.append(modelCopy);
- const modelParagraphs=[
-  [t('APRI est un modèle de résilience de type capital-based, fondé sur les capitaux du système socioécologique.','APRI is a capital-based resilience model, grounded in the capitals of the socio-ecological system.'),true],
-  [t('Il mobilise des indicateurs comme proxys des attributs de la résilience, pour évaluer dans quelle mesure les ressources d’un territoire lui permettent d’anticiper les perturbations, d’en absorber les effets et de s’adapter durablement.','It uses indicators as proxies for resilience attributes to assess the extent to which a territory’s resources enable it to anticipate disturbances, absorb their effects and adapt sustainably.'),true],
-  [t('Ces capitaux comprennent les infrastructures, les institutions, les écosystèmes, les moyens d’existence, les relations sociales, les ressources humaines et les ressources culturelles.','These capitals include infrastructure, institutions, ecosystems, livelihoods, social relationships, human resources and cultural resources.'),false],
-  [t('Les valeurs de ces indicateurs sont ensuite normalisées sur des échelles de résilience de 0 à 10, afin de rendre les indicateurs comparables entre eux.','The values of these indicators are then normalized on resilience scales from 0 to 10, so that the indicators can be compared with one another.'),true]
+ const modelStyle=document.createElement('style');modelStyle.textContent=`
+ #cadre .model-group{display:grid;grid-template-columns:150px minmax(0,1fr);gap:24px;padding:22px 0;border-top:1px solid #d7e0e5}
+ #cadre .model-group:last-child{padding-bottom:0}
+ #cadre .model-group h4{margin:5px 0 0;font-size:13px;line-height:1.5;letter-spacing:.08em;text-transform:uppercase;color:#587081;font-weight:600}
+ #cadre .model-group p{margin:0;font-size:clamp(19px,1.85vw,24px);line-height:1.5;color:#293742;max-width:65ch;font-weight:400}
+ #cadre .model-group strong{font-weight:650}
+ #cadre .model-group .model-detail{margin-top:10px;font-size:16px;line-height:1.6;color:#587081}
+ @media(max-width:640px){#cadre .model-group{grid-template-columns:1fr;gap:8px;padding:18px 0}}
+ `;modelCopy.append(modelStyle);
+ const modelGroups=[
+  [t('Les capitaux','The capitals'),t('APRI est un modèle de résilience <strong>de type capital-based</strong>, fondé sur les capitaux du système socioécologique.','APRI is a <strong>capital-based resilience model</strong>, grounded in the capitals of the socio-ecological system.'),t('Infrastructures, institutions, écosystèmes, moyens d’existence, relations sociales, ressources humaines et ressources culturelles.','Infrastructure, institutions, ecosystems, livelihoods, social relationships, human resources and cultural resources.')],
+  [t('Les indicateurs','The indicators'),t('Des indicateurs servent de <strong>proxys des attributs de la résilience</strong> : ils permettent d’évaluer dans quelle mesure les ressources d’un territoire lui permettent d’<strong>anticiper</strong> les perturbations, d’en <strong>absorber</strong> les effets et de <strong>s’adapter durablement</strong>.','Indicators serve as <strong>proxies for resilience attributes</strong>: they assess the extent to which a territory’s resources enable it to <strong>anticipate</strong> disturbances, <strong>absorb</strong> their effects and <strong>adapt sustainably</strong>.')],
+  [t('Une échelle commune','A common scale'),t('Leurs valeurs sont ensuite <strong>normalisées sur des échelles de résilience de 0 à 10</strong>, afin de rendre les indicateurs comparables entre eux.','Their values are then <strong>normalized on resilience scales from 0 to 10</strong>, so that the indicators can be compared with one another.')]
  ];
- modelParagraphs.forEach(([text,bold],i)=>{const p=document.createElement('p');p.style.cssText='font-size:clamp(20px,2vw,26px);line-height:1.55;color:#293742;max-width:75ch;margin:0 0 '+(i===modelParagraphs.length-1?'0':'20px');if(bold){const strong=document.createElement('strong');strong.textContent=text;p.append(strong);}else p.textContent=text;modelCopy.append(p);});
-
+ modelGroups.forEach(([label,body,detail])=>modelCopy.append(apri.h('<div class="model-group"><h4>'+e(label)+'</h4><div><p>'+body+'</p>'+(detail?'<p class="model-detail">'+e(detail)+'</p>':'')+'</div></div>')));
+ const revealModel=()=>{modelCopy.querySelectorAll('.model-group').forEach((group,i)=>{group.getAnimations().forEach(a=>a.cancel());if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches)group.animate([{opacity:0,transform:'translateY(12px)'},{opacity:1,transform:'translateY(0)'}],{duration:600,delay:i*160,easing:'cubic-bezier(.2,.7,.2,1)',fill:'backwards'});});};
  const sc=section('capacites',t('Trois capacités','Three capacities'),t('Les capacités décrivent la manière dont un système anticipe les perturbations, en absorbe les effets et se transforme lorsque les conditions changent.','Capacities describe how a system anticipates disruption, absorbs its effects and transforms when conditions change.'));
  const caps=apri.h('<div class="guide-capacites"></div>');sc.append(caps);
  ATTR.forEach(a=>{const card=apri.h('<article class="guide-capacite" data-capacite="'+a.id+'"><span class="guide-label">'+t('CAPACITÉ','CAPACITY')+'</span><h4>'+t(a.fr,a.en)+'</h4><p>'+e(T('cad_'+a.id))+'</p></article>');caps.append(card);});
@@ -115,7 +123,7 @@ export default async function render(el, apri){
 
  const buttons=[...nav.querySelectorAll('button')],panels=[...sections.querySelectorAll('.guide-section')];
  nav.setAttribute('role','tablist');
- const select=id=>{buttons.forEach(b=>{const active=b.dataset.cible===id;b.classList.toggle('ici',active);b.setAttribute('aria-selected',String(active));b.tabIndex=active?0:-1;});panels.forEach(panel=>panel.hidden=panel.id!==id);};
+ const select=id=>{buttons.forEach(b=>{const active=b.dataset.cible===id;b.classList.toggle('ici',active);b.setAttribute('aria-selected',String(active));b.tabIndex=active?0:-1;});panels.forEach(panel=>panel.hidden=panel.id!==id);if(id==='guide-modele')revealModel();};
  buttons.forEach((b,i)=>{b.id='tab-'+b.dataset.cible;b.setAttribute('role','tab');b.onclick=()=>select(b.dataset.cible);b.onkeydown=ev=>{let n;if(ev.key==='ArrowRight')n=(i+1)%buttons.length;else if(ev.key==='ArrowLeft')n=(i+buttons.length-1)%buttons.length;else if(ev.key==='Home')n=0;else if(ev.key==='End')n=buttons.length-1;else return;ev.preventDefault();select(buttons[n].dataset.cible);buttons[n].focus();};});
  panels.forEach(panel=>{panel.setAttribute('role','tabpanel');panel.setAttribute('aria-labelledby','tab-'+panel.id);});select('guide-modele');
 }
