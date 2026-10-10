@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="preload" as="image" href="img/fond.jpg">
-<link rel="stylesheet" href="css/commun.css?v=202610092045">
+<link rel="stylesheet" href="css/commun.css?v=202610101400">
 </head>
 <body>
 <a class="saut-contenu" href="#contenu-principal" data-t="saut">Aller au contenu</a>
@@ -34,22 +34,24 @@
  <div>
   <h1 data-t="titre">Observatoire de la résilience</h1>
   <p data-t="accroche">Le système d'information APRI sur la résilience des paysages.</p>
-  <a class="cta" href="#territoire" data-t="cta">Explorer le territoire</a>
-  <div class="chiffres">
-   <div><strong>1 200+</strong><span data-t="k1">ménages enquêtés</span></div>
-   <div><strong>10</strong><span data-t="k2">sections communales</span></div>
-   <div><strong>2</strong><span data-t="k3">paysages, Sud et Grand'Anse</span></div>
-  </div>
+  <a class="cta" href="#resultats" data-t="cta">Explorer les résultats</a>
  </div>
- <a class="fleche" href="#territoire"><span class="fleche-label" data-t="vers-territoire">Territoire</span><svg class="fleche-icone" aria-hidden="true" viewBox="0 0 24 16" focusable="false"><path d="m3 3 9 9 9-9"/></svg></a>
+ <a class="fleche" href="#territoire"><span class="fleche-label" data-t="vers-territoire">Territoire</span><span class="fleche-trait" aria-hidden="true"></span></a>
 </section>
-<section id="territoire" class="page"><div class="carte-page" id="contenu-territoire"><div class="chargement" data-t="charge">Chargement…</div></div></section>
-<section id="cadre" class="page"><div class="carte-page" id="contenu-cadre"><div class="chargement" data-t="charge">Chargement…</div></div></section>
-<section id="resultats" class="page"><div class="carte-page" id="contenu-resultats"><div class="chargement" data-t="charge">Chargement…</div></div></section>
-<section id="boucles" class="page"><div class="carte-page" id="contenu-boucles"><div class="chargement" data-t="charge">Chargement…</div></div></section>
-<section id="fiches" class="page"><div class="carte-page" id="contenu-fiches"><div class="chargement" data-t="charge">Chargement…</div></div></section>
-<section id="ressources" class="page"><div class="carte-page" id="contenu-ressources"><div class="chargement" data-t="charge">Chargement…</div></div></section>
-<section id="apropos" class="page"><div class="carte-page" id="contenu-apropos"><div class="chargement" data-t="charge">Chargement…</div></div></section>
+<section id="territoire" class="page"><div class="carte-page" id="contenu-territoire"><div class="chargement" data-t="charge">Chargement…</div></div>
+ <a class="fleche suivant" href="#cadre"><span class="fleche-sur" data-t="a-suivre">À suivre</span><span class="fleche-label" data-t="vers-cadre">Cadre de résilience</span><span class="fleche-trait" aria-hidden="true"></span></a></section>
+<section id="cadre" class="page"><div class="carte-page" id="contenu-cadre"><div class="chargement" data-t="charge">Chargement…</div></div>
+ <a class="fleche suivant" href="#resultats"><span class="fleche-sur" data-t="a-suivre">À suivre</span><span class="fleche-label" data-t="vers-resultats">Résultats</span><span class="fleche-trait" aria-hidden="true"></span></a></section>
+<section id="resultats" class="page"><div class="carte-page" id="contenu-resultats"><div class="chargement" data-t="charge">Chargement…</div></div>
+ <a class="fleche suivant" href="#boucles"><span class="fleche-sur" data-t="a-suivre">À suivre</span><span class="fleche-label" data-t="vers-boucles">Boucles de rétroaction</span><span class="fleche-trait" aria-hidden="true"></span></a></section>
+<section id="boucles" class="page"><div class="carte-page" id="contenu-boucles"><div class="chargement" data-t="charge">Chargement…</div></div>
+ <a class="fleche suivant" href="#fiches"><span class="fleche-sur" data-t="a-suivre">À suivre</span><span class="fleche-label" data-t="vers-fiches">Fiches d'intervention</span><span class="fleche-trait" aria-hidden="true"></span></a></section>
+<section id="fiches" class="page"><div class="carte-page" id="contenu-fiches"><div class="chargement" data-t="charge">Chargement…</div></div>
+ <a class="fleche suivant" href="#ressources"><span class="fleche-sur" data-t="a-suivre">À suivre</span><span class="fleche-label" data-t="vers-ressources">Ressources</span><span class="fleche-trait" aria-hidden="true"></span></a></section>
+<section id="ressources" class="page"><div class="carte-page" id="contenu-ressources"><div class="chargement" data-t="charge">Chargement…</div></div>
+ <a class="fleche suivant" href="#apropos"><span class="fleche-sur" data-t="a-suivre">À suivre</span><span class="fleche-label" data-t="vers-apropos">À propos</span><span class="fleche-trait" aria-hidden="true"></span></a></section>
+<section id="apropos" class="page"><div class="carte-page" id="contenu-apropos"><div class="chargement" data-t="charge">Chargement…</div></div>
+ <a class="fleche suivant" href="#contact"><span class="fleche-sur" data-t="a-suivre">À suivre</span><span class="fleche-label" data-t="vers-contact">Contact</span><span class="fleche-trait" aria-hidden="true"></span></a></section>
 <section id="contact" class="page"><div class="carte-page" id="contenu-contact"><div class="chargement" data-t="charge">Chargement…</div></div></section>
 </main>
 
@@ -62,13 +64,16 @@
 import {apri, SECTIONS, charger, changerLangue, appliquerHash, menus} from './js/apri.js';
 
 const TXT = {en:{saut:'Skip to content',sous:'Information System (IS)',titre:'Resilience Observatory',accroche:'The APRI information system for landscape resilience.',
- cta:'Explore the territory','vers-territoire':'Territory',k1:'households surveyed',k2:'communal sections',k3:"landscapes, Sud and Grand'Anse",charge:'Loading…',
+ cta:'Explore the results','vers-territoire':'Territory',charge:'Loading…',
+ 'a-suivre':'Up next','vers-cadre':'Resilience Framework','vers-resultats':'Results','vers-boucles':'Feedback Loops','vers-fiches':'Intervention Profiles','vers-ressources':'Resources','vers-apropos':'About','vers-contact':'Contact',
  pied:'© UNEP Haiti · APRI, Integrated Resilient Landscape Approach.',f_apropos:'About',f_contact:'Contact',accueil:'Home'},
  es:{saut:'Saltar al contenido',sous:'Sistema de información (SI)',titre:'Observatorio de la resiliencia',accroche:'El sistema de información APRI sobre la resiliencia de los paisajes.',
- cta:'Explorar el territorio','vers-territoire':'Territorio',k1:'hogares encuestados',k2:'secciones comunales',k3:"paisajes, Sud y Grand'Anse",charge:'Cargando…',
+ cta:'Explorar los resultados','vers-territoire':'Territorio',charge:'Cargando…',
+ 'a-suivre':'A continuación','vers-cadre':'Marco de resiliencia','vers-resultats':'Resultados','vers-boucles':'Bucles de retroalimentación','vers-fiches':'Fichas de intervención','vers-ressources':'Recursos','vers-apropos':'Acerca de','vers-contact':'Contacto',
  pied:'© PNUMA Haití · APRI, Enfoque integrado de paisajes resilientes.',f_apropos:'Acerca de',f_contact:'Contacto',accueil:'Inicio'},
  ht:{saut:'Ale nan kontni an',sous:'Sistèm enfòmasyon (SI)',titre:'Obsèvatwa rezilyans',accroche:'Sistèm enfòmasyon APRI sou rezilyans peyizaj yo.',
- cta:'Eksplore teritwa a','vers-territoire':'Teritwa a',k1:'fwaye ki reponn ankèt la',k2:'seksyon kominal',k3:"peyizaj, Sid ak Grandans",charge:'Chajman…',
+ cta:'Eksplore rezilta yo','vers-territoire':'Teritwa a',charge:'Chajman…',
+ 'a-suivre':'Apre sa','vers-cadre':'Kad rezilyans','vers-resultats':'Rezilta yo','vers-boucles':'Bouk retwoaksyon','vers-fiches':'Fich entèvansyon','vers-ressources':'Resous','vers-apropos':'Konsènan','vers-contact':'Kontak',
  pied:'© PNUE Ayiti · APRI, Apwòch entegre pou peyizaj ki rezilyan.',f_apropos:'Konsènan',f_contact:'Kontak',accueil:'Akèy'}};
 const FR = {accueil:'Accueil'}; document.querySelectorAll('[data-t]').forEach(e=>FR[e.dataset.t]=e.textContent); TXT.fr=FR;
 
