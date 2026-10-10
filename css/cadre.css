@@ -402,3 +402,21 @@
 #cadre .jeu-total b{display:inline!important;font-size:21px!important}
 #cadre .jeu-total span{font-size:9px!important}
 @media(max-width:600px){#cadre .jeu-tete-nue{top:0!important}#cadre .jeu-total{min-height:32px!important}}
+
+
+/* Direction sobre : une police, un accent bleu, un fond unique */
+#cadre,#cadre *{font-family:Inter,Arial,sans-serif!important}
+#cadre{--bleu:#35597a;--bleu-clair:#f4f6f8;--bleu-pale:#f4f6f8;--nuit:#35597a;--vert:#35597a;--ambre:#35597a;--rouge:#35597a;--c:#35597a;--i:#fff}
+#cadre .jeu,#cadre .jeu *{--c:#35597a!important;--vert:#35597a!important;--ambre:#35597a!important;--rouge:#35597a!important;--bleu:#35597a!important;--nuit:#35597a!important;--bleu-pale:#f4f6f8!important;--bleu-clair:#e8edf2!important}
+#cadre .cad-cadre-if,#cadre .cad-blanc,#cadre .jeu-carte,#cadre .jeu-situation,#cadre .jeu-capa,#cadre .jeu-src,#cadre .jeu-attr,#cadre .jeu-dimscore,#cadre .jeu-curseur,#cadre .jeu-ch-e,#cadre .cad-ch-e,#cadre .cad-info,#cadre .cad-nrm>div,#cadre .cad-nrm-p,#cadre .cad-ch-r{background:#fff!important}
+#cadre [role=tablist]{background:#fff!important;border-bottom:1px solid #dfe4e8!important;border-radius:0!important;padding:0 0 8px!important}
+#cadre [role=tablist] [role=tab]{font-family:Inter,Arial,sans-serif!important;color:#52616d!important;border-color:transparent!important;background:#fff!important;box-shadow:none!important;border-radius:6px!important}
+#cadre [role=tablist] [role=tab][aria-selected=true]{background:#35597a!important;color:#fff!important;border-color:#35597a!important}
+#cadre .jeu-carte{border:1px solid #dfe4e8!important;border-radius:12px!important;box-shadow:none!important}
+#cadre .jeu-situation{border:1px solid #dfe4e8!important;border-left:3px solid #35597a!important;border-radius:8px!important;color:#293742!important}
+#cadre .jeu-capa{border:1px solid #dfe4e8!important;border-left:3px solid #35597a!important;border-radius:8px!important;box-shadow:none!important;color:#293742!important}
+#cadre .jeu-capa b,#cadre .jeu-capa small{color:#293742!important}
+#cadre .jeu-capa.pris{background:#f4f6f8!important;border-color:#35597a!important;box-shadow:inset 0 0 0 1px #35597a!important}
+#cadre .jeu-total,#cadre .jeu-bouton{background:#35597a!important;color:#fff!important;box-shadow:none!important}
+#cadre .jeu-bouton:hover:not(:disabled){background:#294965!important}
+#cadre .cad-ex-t,#cadre .cad-ch-t,#cadre .cad-nrm-t,#cadre .cad-log-t{color:#35597a!important}
