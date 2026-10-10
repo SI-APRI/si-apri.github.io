@@ -584,3 +584,8 @@
 #cadre .guide-scale-row b{display:grid;place-items:center;height:26px;border-radius:7px;font-size:13px}
 #cadre .guide-scale-row.courant{border-color:var(--palier);transform:translateX(-5px)}
 @media(max-width:760px){#cadre [role="tablist"] [role="tab"],#cadre .guide-tabs button{flex:1 0 125px!important;font-size:13px!important}#cadre .guide-scale-layout{grid-template-columns:1fr;gap:20px}#cadre .guide-section{padding:16px!important}}
+
+/* Même hauteur et même traitement sur les deux niveaux de navigation. */
+#cadre #contenu-cadre [role="tablist"] [role="tab"]{height:56px!important;min-height:56px!important;box-sizing:border-box!important}
+#cadre #contenu-cadre [role="tablist"] [role="tab"]:not([aria-selected="true"]){background:transparent!important;border-color:transparent!important}
+#cadre #contenu-cadre [role="tablist"] [role="tab"]:hover:not([aria-selected="true"]){background:#e8edf2!important;border-color:#d6dfe5!important}
