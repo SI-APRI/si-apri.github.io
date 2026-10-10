@@ -394,3 +394,11 @@
 #cadre .jeu-situation{font-size:clamp(18px,1.8vw,22px)!important;line-height:1.4!important;font-weight:600!important;color:#263f35!important}
 #cadre .jeu-bouton:disabled{opacity:.48!important;box-shadow:none!important}
 @media(max-width:600px){#cadre .jeu-tete-nue{top:18px!important}#cadre .jeu-tete h2,#cadre .jeu>h2{padding-right:84px!important;font-size:20px!important}#cadre .jeu-total{min-width:68px!important}}
+
+
+/* Badge de points compact, aligne sur le titre du jeu */
+#cadre .jeu-tete-nue{top:0!important}
+#cadre .jeu-total{display:flex!important;align-items:baseline!important;justify-content:center!important;gap:6px;min-width:0!important;min-height:34px!important;padding:5px 10px!important}
+#cadre .jeu-total b{display:inline!important;font-size:21px!important}
+#cadre .jeu-total span{font-size:9px!important}
+@media(max-width:600px){#cadre .jeu-tete-nue{top:0!important}#cadre .jeu-total{min-height:32px!important}}
