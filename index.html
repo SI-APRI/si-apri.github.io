@@ -41,7 +41,7 @@
    <div><strong>2</strong><span data-t="k3">paysages, Sud et Grand'Anse</span></div>
   </div>
  </div>
- <a class="fleche" href="#territoire" aria-label="Aller à la section Territoire">⌄</a>
+ <a class="fleche" href="#territoire" aria-label="Aller à la section Territoire"><span class="fleche-label" data-t="vers-territoire">Territoire</span><span aria-hidden="true">⌄</span></a>
 </section>
 <section id="territoire" class="page"><div class="carte-page" id="contenu-territoire"><div class="chargement" data-t="charge">Chargement…</div></div></section>
 <section id="cadre" class="page"><div class="carte-page" id="contenu-cadre"><div class="chargement" data-t="charge">Chargement…</div></div></section>
@@ -62,13 +62,13 @@
 import {apri, SECTIONS, charger, changerLangue, appliquerHash, menus} from './js/apri.js';
 
 const TXT = {en:{saut:'Skip to content',sous:'Information System (IS)',titre:'Resilience Observatory',accroche:'The APRI information system for landscape resilience.',
- cta:'Explore the territory',k1:'households surveyed',k2:'communal sections',k3:"landscapes, Sud and Grand'Anse",charge:'Loading…',
+ cta:'Explore the territory',vers-territoire:'Territory',k1:'households surveyed',k2:'communal sections',k3:"landscapes, Sud and Grand'Anse",charge:'Loading…',
  pied:'© UNEP Haiti · APRI, Integrated Resilient Landscape Approach.',f_apropos:'About',f_contact:'Contact',accueil:'Home'},
  es:{saut:'Saltar al contenido',sous:'Sistema de información (SI)',titre:'Observatorio de la resiliencia',accroche:'El sistema de información APRI sobre la resiliencia de los paisajes.',
- cta:'Explorar el territorio',k1:'hogares encuestados',k2:'secciones comunales',k3:"paisajes, Sud y Grand'Anse",charge:'Cargando…',
+ cta:'Explorar el territorio',vers-territoire:'Territorio',k1:'hogares encuestados',k2:'secciones comunales',k3:"paisajes, Sud y Grand'Anse",charge:'Cargando…',
  pied:'© PNUMA Haití · APRI, Enfoque integrado de paisajes resilientes.',f_apropos:'Acerca de',f_contact:'Contacto',accueil:'Inicio'},
  ht:{saut:'Ale nan kontni an',sous:'Sistèm enfòmasyon (SI)',titre:'Obsèvatwa rezilyans',accroche:'Sistèm enfòmasyon APRI sou rezilyans peyizaj yo.',
- cta:'Eksplore teritwa a',k1:'fwaye ki reponn ankèt la',k2:'seksyon kominal',k3:"peyizaj, Sid ak Grandans",charge:'Chajman…',
+ cta:'Eksplore teritwa a',vers-territoire:'Teritwa a',k1:'fwaye ki reponn ankèt la',k2:'seksyon kominal',k3:"peyizaj, Sid ak Grandans",charge:'Chajman…',
  pied:'© PNUE Ayiti · APRI, Apwòch entegre pou peyizaj ki rezilyan.',f_apropos:'Konsènan',f_contact:'Kontak',accueil:'Akèy'}};
 const FR = {accueil:'Accueil'}; document.querySelectorAll('[data-t]').forEach(e=>FR[e.dataset.t]=e.textContent); TXT.fr=FR;
 
