@@ -1,79 +1,27 @@
-/* "Le cadre en bref": the resilience framework presented in five interactive steps.
-   1 the three capacities, 2 sorting resilience indicators and counterexamples, 3 where the data come from,
-   4 from a raw value to a 0-10 score, 5 how indicators make a dimension score.
-   Framework data comes from cadre.json. Steps 1 and 2 also use explicit teaching examples.
-   The situations of step 1 are written as
-   teaching examples from the framework's definitions. */
+/* Présentation pédagogique du cadre APRI : un parcours libre, sans jeu ni score de quiz. */
 import {css, donnees, teinte, encre, fmt} from './commun.js';
-import {nouvelleMancheDimensions, afficherTriDimensions} from './tri-dimensions.js';
 
-const DIM_COUL = {dim1:'#4f7ea8', dim2:'#7a5ea8', dim3:'#2f7a5b', dim4:'#c98a1b', dim5:'#c0603f', dim6:'#3f9a9a', dim7:'#9a5a7a'};
 const ATTR = [
  {id:'a1', fr:'Anticiper', en:'Anticipate', c:'#397fa3'},
  {id:'a2', fr:'Absorber', en:'Absorb', c:'#c98a1b'},
  {id:'a3', fr:"S'adapter", en:'Adapt', c:'#2f7a5b'},
 ];
-// a = the capacity (or capacities) a situation illustrates; several can be right
 const SITUATIONS = [
  {a:['a1'], fr:"Le comité local diffuse l'alerte cyclone deux jours avant l'arrivée de la tempête.", en:'The local committee spreads the hurricane warning two days before the storm arrives.'},
  {a:['a1'], fr:"Chaque famille connaît son plan d'évacuation et sait où se trouve l'abri le plus proche.", en:'Every family knows its evacuation plan and where the nearest shelter is.'},
- {a:['a1'], fr:"Les agriculteurs suivent le bulletin des pluies et retardent les semis quand la sécheresse s'annonce.", en:'Farmers follow the rainfall bulletin and delay sowing when a drought is forecast.'},
  {a:['a2'], fr:"Après une récolte perdue, la famille vit sur son stock de grains et sur l'argent envoyé par un proche.", en:'After a lost harvest, the family lives on its grain stock and on money sent by a relative.'},
- {a:['a2'], fr:"La maison, solidement construite, reste debout pendant l'ouragan.", en:'The well built house stays standing during the hurricane.'},
- {a:['a2'], fr:"Le lendemain du choc, les voisins s'entraident pour dégager la route et soigner les blessés.", en:'The day after the shock, neighbours help each other clear the road and care for the injured.'},
- {a:['a3'], fr:"Après trois sécheresses, la coopérative remplace le maïs par des cultures qui supportent le manque d'eau.", en:'After three droughts, the cooperative replaces maize with crops that tolerate water shortage.'},
- {a:['a1','a3'], fr:"La commune replante la mangrove et interdit de reconstruire dans la zone inondable.", en:'The municipality replants the mangrove and bans rebuilding in the flood zone.'},
- {a:['a1','a3'], fr:"Les pêcheurs ferment ensemble les zones de frai et développent l'apiculture pour diversifier leurs revenus.", en:'Fishers jointly close spawning grounds and take up beekeeping to diversify their income.'},
+ {a:['a2'], fr:'La maison, solidement construite, reste debout pendant l’ouragan.', en:'The well-built house stays standing during the hurricane.'},
+ {a:['a3'], fr:'Après trois sécheresses, la coopérative remplace le maïs par des cultures qui supportent le manque d’eau.', en:'After three droughts, the cooperative replaces maize with crops that tolerate water shortage.'},
+ {a:['a1','a3'], fr:'La commune replante la mangrove et interdit de reconstruire dans la zone inondable.', en:'The municipality replants mangroves and bans rebuilding in the flood zone.'},
 ];
-// the four data sources of the framework (texts cad_so1..4 in cadre.json)
 const SOURCES = [
- {id:'menage', k:'cad_so1', c:'#397fa3', ic:'🏠'},
- {id:'geo', k:'cad_so2', c:'#2f7a5b', ic:'🛰'},
- {id:'bio', k:'cad_so3', c:'#7a5ea8', ic:'🦋'},
- {id:'inst', k:'cad_so4', c:'#c98a1b', ic:'🏛'},
-];
-const BIO = /richesse sp|shannon|simpson|phylog|abondance relative|diversit[ée] fonctionnelle/i;
-const ETAPES = [
- {fr:'Trois capacités', en:'Three capacities'},
- {fr:'Sept dimensions', en:'Seven dimensions'},
- {fr:'Avec quelles données ?', en:'With what data?'},
- {fr:'De la mesure au score', en:'From measure to score'},
- {fr:'Le poids des indicateurs', en:'Weighting the indicators'},
+ {id:'menage', k:'cad_so1', ic:'01'},
+ {id:'geo', k:'cad_so2', ic:'02'},
+ {id:'bio', k:'cad_so3', ic:'03'},
+ {id:'inst', k:'cad_so4', ic:'04'},
 ];
 const DIMS = ['dim1','dim2','dim3','dim4','dim5','dim6','dim7'];
-const classePoids = p => Math.max(1, Math.min(5, Math.round(p)));
-const MOTS_POIDS = [
- {fr:'secondaire', en:'secondary'},
- {fr:'utile', en:'useful'},
- {fr:'important', en:'important'},
- {fr:'majeur', en:'major'},
- {fr:'essentiel', en:'essential'},
-];
-const N_ET = ETAPES.length;
-
-let J = null;   // state kept for the visit (language changes, tab switches)
-const melanger = a => { a = a.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; };
-
-/* published scales: text bands -> numeric intervals */
-function nombre(s){ return parseFloat(s.replace(/[   ]/g,'').replace(',', '.')); }
-function intervalles(bandes){
- const out = [];
- for(const [sc, txt] of bandes){
-  const t = String(txt).replace(/[()]/g,'').trim();
-  const ns = (t.match(/-?\d[\d   ]*(?:,\d+)?/g) || []).map(nombre);
-  let lo, hi;
-  if(/[≤<]/.test(t)){ lo=-Infinity; hi=ns[0]; }
-  else if(/[≥>]/.test(t)){ lo=ns[0]; hi=Infinity; }
-  else if(ns.length===2){ [lo,hi]=ns; }
-  else return null;
-  if(lo==null || hi==null || isNaN(lo) || isNaN(hi)) return null;
-  out.push({sc, txt:t, lo, hi});
- }
- return out;
-}
-function scorePour(iv, v){ const h = iv.filter(b=>v>=b.lo && v<=b.hi); return h.length ? h[0].sc : null; }
-
-/* which of the four sources feeds an indicator */
+const BIO = /richesse sp|shannon|simpson|phylog|abondance relative|diversit[ée] fonctionnelle/i;
 function sourceDe(x){
  if(x.source==='satellite' || x.source==='geospatial') return 'geo';
  if(x.source==='OCB') return 'inst';
@@ -81,265 +29,70 @@ function sourceDe(x){
  if(x.source==='menage_regle' || (x.etat!=='absent' && x.calcule)) return 'menage';
  return null;
 }
-
-function preparer(d){
- const I = d.indicateurs;
- const mesures = I.filter(x=>{
-  if(x.valeur==null || x.score==null || !x.bandes || x.bandes.length!==11 || x.ec?.unite!=='pct') return false;
-  if(x.valeur<0 || x.valeur>100) return false;
-  const iv = intervalles(x.bandes); if(!iv) return false;
-  x._iv = iv;
-  return iv.filter(b=>x.valeur>=b.lo && x.valeur<=b.hi).some(b=>b.sc===x.score);
- });
- const parSource = {};
- for(const x of I){ const s = sourceDe(x); if(s) (parSource[s] ||= []).push(x); }
- const poidsDim = Object.fromEntries(Object.entries(d.stats.dims).map(([k,v])=>[k, v.poids]));
- const indsDim = I.filter(x=>DIMS.includes(x.dim) && (x.nom_fr||x.nom));
- const indsPoids = I.filter(x=>x.poids!=null && (x.nom_fr||x.nom));
- return {I, mesures, parSource, poidsDim, indsDim, indsPoids};
-}
-
-function pairesDims(P){
- // pairs of dimensions whose weights differ clearly (at least 4 points)
- const ks = Object.keys(P.poidsDim), out = [];
- for(let i=0;i<ks.length;i++) for(let j=i+1;j<ks.length;j++)
-  if(Math.abs(P.poidsDim[ks[i]]-P.poidsDim[ks[j]])>=4) out.push(melanger([ks[i],ks[j]]));
- return melanger(out).slice(0,5);
-}
-function cartesSources(P){
- // two indicators from each source the data really has, shuffled
- return melanger(SOURCES.flatMap(s=>melanger(P.parSource[s.id]||[]).slice(0,2)));
-}
-function duelsDimension(P, dim){
- // pairs of scored indicators of one dimension with clearly different weights
- const xs = P.I.filter(x=>x.dim===dim && x.score!=null && x.score<=8);
- const out = [];
- for(let i=0;i<xs.length;i++) for(let j=i+1;j<xs.length;j++)
-  if(Math.abs(xs[i].poids-xs[j].poids)>=0.8) out.push(melanger([xs[i],xs[j]]));
- return melanger(out).slice(0,3);
-}
-
-function nouvellePartie(P){
- return {
-  etape:0, points:Array(N_ET).fill(0), fini:Array(N_ET).fill(false), finale:false,
-  e1:{cartes: melanger(SITUATIONS).slice(0,6), i:0, sel:[], valide:false},
-  e2:nouvelleMancheDimensions(),
-  e3:{cartes: cartesSources(P), i:0, rep:null},
-  e4:{cartes: melanger(P.mesures).slice(0,3), i:0, choix:null, valeur:null},
-  e5:{cartes: melanger(P.indsPoids).slice(0,6), i:0, note:null},
- };
+function preparations(d){
+ const I=d.indicateurs||[], parSource={};
+ for(const x of I){const s=sourceDe(x);if(s)(parSource[s] ||= []).push(x);}
+ return {I, parSource, mesure:I.find(x=>x.valeur!=null&&x.score!=null), pondere:I.find(x=>x.poids!=null&&(x.nom_fr||x.nom))};
 }
 
 export default async function render(el, apri){
  css();
- const d = await donnees(apri);
- const P = preparer(d);
- if(!J) J = nouvellePartie(P);
- const t = apri.t, e = apri.esc;
- const T = k => (d.textes[apri.lang]||d.textes.fr)[k] ?? d.textes.fr[k] ?? k;
- const nomDim = k => T(k);
- const nomInd = x => apri.lang==='en' ? (x.nom || x.nom_fr) : (x.nom_fr || x.nom);
- const pctTxt = v => fmt(v,1)+(apri.lang==='en'?'%':' %');
+ const d=await donnees(apri), P=preparations(d), t=apri.t, e=apri.esc;
+ const T=k=>(d.textes[apri.lang]||d.textes.fr)[k]??d.textes.fr[k]??k;
+ const nomInd=x=>apri.lang==='en'?(x.nom||x.nom_fr):(x.nom_fr||x.nom);
+ const tabs=[
+  {id:'modele',fr:'Le modèle',en:'The model'},
+  {id:'capacites',fr:'Trois capacités',en:'Three capacities'},
+  {id:'dimensions',fr:'Sept dimensions',en:'Seven dimensions'},
+  {id:'donnees',fr:'Sources de données',en:'Data sources'},
+  {id:'normalisation',fr:'Mesure et score',en:'Measure and score'},
+  {id:'indicateurs',fr:'Indicateurs',en:'Indicators'},
+ ];
+ el.innerHTML='';
+ const root=apri.h('<div class="jeu jeu-cadre-guide"></div>');el.append(root);
+ const nav=apri.h('<nav class="jeu-chemin guide-tabs" aria-label="'+t('Parcourir le cadre','Explore the framework')+'"></nav>');
+ nav.innerHTML=tabs.map((x,i)=>'<button type="button" aria-controls="guide-'+x.id+'" data-cible="guide-'+x.id+'"><span>'+e(t(x.fr,x.en))+'</span></button>').join('');
+ root.append(nav);
+ const intro=apri.h('<header class="guide-intro"><p class="guide-surtitre">APRI · '+t('CADRE DE RÉSILIENCE','RESILIENCE FRAMEWORK')+'</p><h2>'+t('Comment APRI mesure la résilience','How APRI measures resilience')+'</h2><p>'+t('Un modèle fondé sur les capitaux du système socio-écologique : leurs attributs sont renseignés par des indicateurs, puis organisés en capacités et en dimensions.','A model grounded in the capitals of the socio-ecological system: their attributes are informed by indicators, then organized into capacities and dimensions.')+'</p></header>');
+ root.append(intro);
+ const sections=apri.h('<div class="guide-sections"></div>');root.append(sections);
+ const section=(id,title,lead)=>{const s=apri.h('<section class="guide-section" id="guide-'+id+'" aria-labelledby="guide-'+id+'-title"><div class="guide-heading"><h3 id="guide-'+id+'-title">'+title+'</h3><p>'+lead+'</p></div></section>');sections.append(s);return s;};
 
- el.innerHTML = '';
- const racine = apri.h(`<div class="jeu"></div>`); el.append(racine);
- const total = J.points.reduce((a,b)=>a+b,0);
- racine.append(apri.h(`<div class="jeu-tete jeu-tete-nue">
-  <div class="jeu-total" title="${t('Bonnes réponses','Correct answers')}"><b>${total}</b><span>${t('points','points')}</span></div>
- </div>`));
+ const sm=section('modele',t('Un modèle fondé sur les capitaux','A capitals-based model'),t('APRI évalue la résilience en observant les attributs du système socio-écologique. Les indicateurs mesurent ces attributs et alimentent une lecture commune de la résilience.','APRI assesses resilience by observing the attributes of the socio-ecological system. Indicators measure these attributes and feed a shared reading of resilience.'));
+ sm.append(apri.h('<div class="guide-flow" aria-label="'+t('Capitaux, attributs, indicateurs, capacités et dimensions','Capitals, attributes, indicators, capacities and dimensions')+'"><span>'+t('Capitaux','Capitals')+'</span><i>→</i><span>'+t('Attributs observés','Observed attributes')+'</span><i>→</i><span>'+t('Indicateurs','Indicators')+'</span><i>→</i><span>'+t('Capacités et dimensions','Capacities and dimensions')+'</span></div>'));
 
- const scene = apri.h(`<div class="jeu-scene"></div>`); racine.append(scene); const navigation = apri.h(`<nav class="jeu-chemin" aria-label="${t('Choisir une étape','Choose a step')}">${ETAPES.map((x,i)=>`<button type="button" class="${J.etape===i?'ici':''}"><i>${i+1}</i><span>${e(t(x.fr,x.en))}</span></button>`).join('')}</nav>`); navigation.querySelectorAll('button').forEach((b,i)=>b.onclick=()=>{J.etape=i;J.finale=false;render(el,apri)}); racine.insertBefore(navigation,scene);
+ const sc=section('capacites',t('Trois capacités','Three capacities'),t('Les capacités décrivent la manière dont un système anticipe les perturbations, en absorbe les effets et se transforme lorsque les conditions changent.','Capacities describe how a system anticipates disruption, absorbs its effects and transforms when conditions change.'));
+ const caps=apri.h('<div class="guide-capacites"></div>');sc.append(caps);
+ ATTR.forEach(a=>{const card=apri.h('<article class="guide-capacite" data-capacite="'+a.id+'"><span class="guide-label">'+t('CAPACITÉ','CAPACITY')+'</span><h4>'+t(a.fr,a.en)+'</h4><p>'+e(T('cad_'+a.id))+'</p></article>');caps.append(card);});
+ const ex=apri.h('<div class="guide-exemple"><div class="guide-exemple-meta"><span class="guide-label">'+t('EXEMPLE ILLUSTRATIF','ILLUSTRATIVE EXAMPLE')+'</span><span class="guide-exemple-compteur" aria-hidden="true"></span></div><blockquote class="guide-exemple-phrase" aria-live="polite"></blockquote><div class="guide-exemple-note">'+t('L’exemple est relié à une ou plusieurs capacités pour rendre le modèle concret. Ce n’est pas une question à résoudre.','The example is linked to one or more capacities to make the model concrete. It is not a question to solve.')+'</div></div>');sc.append(ex);
+ let ix=0;const phrase=ex.querySelector('.guide-exemple-phrase');
+ const showSituation=()=>{if(!root.isConnected)return;const x=SITUATIONS[ix];phrase.classList.add('guide-sortie');caps.querySelectorAll('.guide-capacite').forEach(c=>c.classList.toggle('actif',x.a.includes(c.dataset.capacite)));window.setTimeout(()=>{if(!root.isConnected)return;phrase.textContent='« '+t(x.fr,x.en)+' »';phrase.classList.remove('guide-sortie');ex.querySelector('.guide-exemple-compteur').textContent=String(ix+1).padStart(2,'0')+' / '+String(SITUATIONS.length).padStart(2,'0');ix=(ix+1)%SITUATIONS.length;},180);};
+ showSituation();const timer=window.setInterval(showSituation,4300);root._guideTimer=timer;
 
- function suivant(i){
-  J.fini[i] = true;
-  if(J.fini.every(Boolean)) J.finale = true; else J.etape = Math.min(i+1, N_ET-1);
-  render(el, apri);
-  el.closest('section')?.scrollIntoView({behavior:'smooth'});
- }
- const barre = (i,n)=>`<div class="jeu-barre"><i style="width:${Math.round(100*i/n)}%"></i></div><div class="note">${i<n?(i+1)+' / '+n:''}</div>`;
- const consigne = (i, txt) => apri.h(`<div class="jeu-consigne"><h3>${i+1} · ${e(t(ETAPES[i].fr,ETAPES[i].en))}</h3><p>${txt}</p></div>`);
- function suite(ret, dernier, avancer){
-  const b = apri.h(`<button type="button" class="bouton primaire">${dernier?t('Terminer cette étape','Finish this step'):t('Suivant','Next')} →</button>`);
-  b.onclick = avancer; ret.append(b);
- }
- function bilan(s, i, max, rejouer){
-  const r = J.points[i]/max, etoiles = r>=0.99?3:r>=0.6?2:1;
-  const b = apri.h(`<div class="jeu-carte jeu-bilan"><div class="jeu-etoiles">${'★'.repeat(etoiles)}<span>${'☆'.repeat(3-etoiles)}</span></div>
-   <p>${t(`${J.points[i]} sur ${max}`,`${J.points[i]} out of ${max}`)}</p>
-   <div class="pastilles"><button type="button" class="bouton">${t('Recommencer','Start again')}</button><button type="button" class="bouton primaire">${i<N_ET-1?t('Étape suivante','Next step'):t('Terminer','Finish')} →</button></div></div>`);
-  b.querySelectorAll('button')[0].onclick = rejouer;
-  b.querySelectorAll('button')[1].onclick = ()=>suivant(i);
-  s.append(b);
- }
+ const sd=section('dimensions',t('Sept dimensions','Seven dimensions'),t('Les sept dimensions regroupent les attributs et indicateurs qui composent le diagnostic APRI.','The seven dimensions group the attributes and indicators that make up the APRI assessment.'));
+ const dimgrid=apri.h('<div class="guide-dimensions"></div>');sd.append(dimgrid);
+ DIMS.forEach((k,i)=>dimgrid.append(apri.h('<article class="guide-dimension"><span>'+String(i+1).padStart(2,'0')+'</span><h4>'+e(T(k))+'</h4></article>')));
 
- /* ---------- 1. three capacities: visual explanation ---------- */
- function etape1(s){
-  racine.classList.add('jeu-intro-capacites');
-  s.append(consigne(0,t("APRI mesure la résilience à travers trois capacités.","APRI measures resilience through three capacities.")));
-  const exemples=[SITUATIONS[0],SITUATIONS[3],SITUATIONS[6],SITUATIONS[7]];
-  const carte=apri.h('<div class="jeu-carte jeu-capacites-visuel"><div class="jeu-situation jeu-situation-capacites"><span class="etiquette"></span><blockquote class="jeu-phrase"></blockquote><div class="jeu-capacites-flux"><span></span><b>→</b><span></span><b>→</b><span></span></div></div><div class="jeu-choix-multi"></div><p class="jeu-capacites-note"></p></div>');
-  const etiquette=carte.querySelector('.etiquette');
-  etiquette.textContent=t('EXEMPLE DE SITUATION','EXAMPLE SITUATION');
-  const phrase=carte.querySelector('.jeu-phrase');
-  const flux=carte.querySelectorAll('.jeu-capacites-flux span');
-  flux[0].textContent=t('Situation observée','Observed situation');
-  flux[1].textContent=t('Attributs APRI','APRI attributes');
-  flux[2].textContent=t('Capacités de résilience','Resilience capacities');
-  const liste=carte.querySelector('.jeu-choix-multi');
-  ATTR.forEach(a=>{
-   const bloc=document.createElement('article');
-   bloc.className='jeu-capacite-visuelle';
-   bloc.dataset.capacite=a.id;
-   bloc.innerHTML='<span class="jeu-capacite-type"></span><b></b><small></small>';
-   bloc.querySelector('.jeu-capacite-type').textContent=t('CAPACITÉ','CAPACITY');
-   bloc.querySelector('b').textContent=t(a.fr,a.en);
-   bloc.querySelector('small').textContent=T('cad_'+a.id);
-   liste.append(bloc);
-  });
-  carte.querySelector('.jeu-capacites-note').textContent=t('Les phrases sont des exemples illustratifs. Dans le calcul APRI, les indicateurs renseignent les attributs et contribuent aux scores. Une situation peut éclairer plusieurs capacités.','These are illustrative examples. In APRI calculations, indicators inform attributes and contribute to scores. One situation can help explain several capacities.');
-  phrase.textContent='« '+t(exemples[0].fr,exemples[0].en)+' »';
-  liste.querySelectorAll('.jeu-capacite-visuelle').forEach(b=>b.classList.toggle('active',exemples[0].a.includes(b.dataset.capacite)));
-  let i=1;
-  function montrer(){
-   if(!phrase.isConnected)return;
-   const x=exemples[i];
-   phrase.classList.add('sortie');
-   liste.querySelectorAll('.jeu-capacite-visuelle').forEach(b=>b.classList.toggle('active',x.a.includes(b.dataset.capacite)));
-   window.setTimeout(()=>{
-    if(!phrase.isConnected)return;
-    phrase.textContent='« '+t(x.fr,x.en)+' »';
-    phrase.classList.remove('sortie');
-    i=(i+1)%exemples.length;
-    window.setTimeout(montrer,3800);
-   },220);
-  }
-  s.append(carte);
-  if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches) window.setTimeout(montrer,4000);
- }
+ const ss=section('donnees',t('Des sources aux indicateurs','From data sources to indicators'),t('Les sources documentent des indicateurs différents. Chaque indicateur est ensuite rattaché à une dimension du cadre.','Different sources document different indicators. Each indicator is then assigned to a framework dimension.'));
+ const srcgrid=apri.h('<div class="guide-sources"></div>');ss.append(srcgrid);
+ SOURCES.forEach(so=>srcgrid.append(apri.h('<article class="guide-source" data-source="'+so.id+'"><span class="guide-source-index">'+so.ic+'</span><b>'+e(T(so.k+'_t'))+'</b></article>')));
+ const flux=apri.h('<div class="guide-source-flux"><div class="guide-source-exemple"><span class="guide-label">'+t('EXEMPLE DE DONNÉE','DATA EXAMPLE')+'</span><b class="guide-source-nom"></b></div><span class="guide-flèche" aria-hidden="true">→</span><div class="guide-source-indicateur"><span class="guide-label">'+t('INDICATEUR','INDICATOR')+'</span><b class="guide-ind-nom"></b><small class="guide-dim-nom"></small></div></div>');ss.append(flux);
+ let is=0;const srcNom=flux.querySelector('.guide-source-nom'),indNom=flux.querySelector('.guide-ind-nom'),dimNom=flux.querySelector('.guide-dim-nom');
+ const sourcesDispo=SOURCES.map(s=>({source:s,indicateur:(P.parSource[s.id]||[]).find(x=>x.dim)})).filter(x=>x.indicateur);
+ const showSource=()=>{if(!root.isConnected||!sourcesDispo.length)return;const z=sourcesDispo[is],x=z.indicateur;srcgrid.querySelectorAll('.guide-source').forEach(c=>c.classList.toggle('actif',c.dataset.source===z.source.id));flux.classList.add('guide-sortie');window.setTimeout(()=>{if(!root.isConnected)return;srcNom.textContent=T(z.source.k+'_t');indNom.textContent=nomInd(x);dimNom.textContent=T(x.dim);flux.classList.remove('guide-sortie');is=(is+1)%sourcesDispo.length;},180);};showSource();const timer2=window.setInterval(showSource,4500);root._guideTimer2=timer2;
 
- /* ---------- 2. capacities versus exposure, vulnerability and context ---------- */
- function etape2(s){
-  const N=J.e2,n=N.cartes.length;
-  s.append(consigne(1,t("Classez chaque indicateur dans l’une des sept dimensions s’il renseigne un attribut de résilience, ou dans « Ne mesure pas directement la résilience ». Un point par carte bien classée au premier essai.","Sort each indicator into one of the seven dimensions if it captures a resilience attribute, or into ‘Does not directly measure resilience’. One point per card correctly sorted on the first attempt.")));
-  if(N.termine) return bilan(s,1,n,()=>{J.e2=nouvelleMancheDimensions();J.points[1]=0;J.fini[1]=false;render(el,apri);});
-  const zone=document.createElement('div');s.append(zone);
-  afficherTriDimensions(zone,apri,N,nomDim,{
-   onPoint:()=>{J.points[1]++;racine.querySelector('.jeu-total b').textContent=J.points.reduce((a,b)=>a+b,0);},
-   onTerminer:()=>render(el,apri)
-  });
- }
+ const sn=section('normalisation',t('De la mesure brute au score','From raw measure to score'),t('Une valeur observée est convertie en score ordinal de 0 à 10 selon la méthode de référence disponible pour l’indicateur.','An observed value is converted into an ordinal score from 0 to 10, using the reference method available for that indicator.'));
+ const chain=apri.h('<div class="guide-mesure"><div class="guide-mesure-etape"><span>01</span><b>'+t('Donnée brute','Raw data')+'</b><small>'+t('Enquête ou donnée spatiale','Survey or spatial data')+'</small></div><i>→</i><div class="guide-mesure-etape"><span>02</span><b>'+t('Normalisation','Normalization')+'</b><small>'+t('Référence statistique ou seuils locaux','Statistical reference or local thresholds')+'</small></div><i>→</i><div class="guide-score-carte"><span class="guide-label">'+t('SCORE DE RÉSILIENCE','RESILIENCE SCORE')+'</span><b class="guide-score-valeur"></b><small class="guide-score-nom"></small></div></div>');sn.append(chain);
+ const methodes=apri.h('<div class="guide-methodes"><article><span>01</span><h4>'+t('Discrétisation par quantiles','Quantile discretization')+'</h4><p>'+t('Quand une distribution empirique internationale ou régionale fiable existe, le score situe la valeur observée dans cette distribution cumulative.','When a reliable international or regional empirical distribution exists, the score places the observed value within that cumulative distribution.')+'</p></article><article><span>02</span><h4>'+t('Repère normatif local','Local normative reference')+'</h4><p>'+t('Quand il n’existe pas de référence comparative robuste, deux scénarios définis localement — optimal et critique — bornent onze scénarios ordinaux.','When no robust comparative reference exists, two locally defined scenarios—optimal and critical—bound eleven ordinal scenarios.')+'</p></article></div>');sn.append(methodes);
+ const scoreX=P.mesure, scoreCard=chain.querySelector('.guide-score-carte');
+ if(scoreX){const couleur=teinte((scoreX.score??0)/10);scoreCard.style.setProperty('--score-couleur',couleur);chain.querySelector('.guide-score-valeur').textContent=(scoreX.score??'—')+' / 10';chain.querySelector('.guide-score-nom').textContent=nomInd(scoreX);}else{chain.querySelector('.guide-score-valeur').textContent='0–10';chain.querySelector('.guide-score-nom').textContent=t('Échelle APRI','APRI scale');}
+ sn.append(apri.h('<p class="guide-renvoi">'+t('Les barèmes et les seuils de chaque indicateur sont détaillés dans l’onglet','Indicator-specific scales and thresholds are detailed in the tab')+' <b>'+t('Calcul des scores','Score calculations')+'</b>.</p>'));
 
- /* ---------- 3. with what data ---------- */
- function etape3(s){
-  const N = J.e3, n = N.cartes.length;
-  s.append(consigne(2, t("Pour renseigner les indicateurs, APRI croise quatre sources. D'où vient cette mesure ?","To fill in the indicators, APRI combines four sources. Where does this measure come from?")));
-  if(N.i>=n) return bilan(s, 2, n, ()=>{ J.e3={cartes:cartesSources(P),i:0,rep:null}; J.points[2]=0; J.fini[2]=false; render(el,apri); });
-  const x = N.cartes[N.i], bonne = sourceDe(x);
-  const metr = apri.lang==='en' ? (x.metrique_en||x.metrique) : (x.metrique_fr||x.metrique);
-  const carte = apri.h(`<div class="jeu-carte"><div class="etiquette">${t('Indicateur','Indicator')}</div>
-   <div class="jeu-indic">${e(nomInd(x))}</div>${metr?`<p class="note jeu-metr">${e(metr.length>200?metr.slice(0,200)+'…':metr)}</p>`:''}
-   <div class="jeu-choix"></div><div class="jeu-retour" aria-live="polite"></div></div>`);
-  const zone = carte.querySelector('.jeu-choix');
-  SOURCES.forEach(so=>{
-   const b = apri.h(`<button type="button" class="jeu-bouton" style="--c:${so.c}">${so.ic} ${e(T(so.k+'_t'))}</button>`);
-   if(N.rep){ b.disabled=true; if(so.id===bonne) b.classList.add('bon'); else if(so.id===N.rep) b.classList.add('faux'); }
-   b.onclick = ()=>{ N.rep=so.id; if(so.id===bonne) J.points[2]++; render(el,apri); };
-   zone.append(b);
-  });
-  if(N.rep){
-   const so = SOURCES.find(z=>z.id===bonne), ret = carte.querySelector('.jeu-retour');
-   const detail = x.src && x.etat!=='absent' ? (apri.lang==='en'?x.src.en:x.src.fr) : '';
-   ret.innerHTML = `<p class="${N.rep===bonne?'oui':'non'}">${N.rep===bonne?t('Exact.','Correct.'):t('Non.','No.')} ${t('Source','Source')} : <b>${e(T(so.k+'_t'))}</b>${detail?` · <span class="note">${e(detail.length>140?detail.slice(0,140)+'…':detail)}</span>`:''}</p>`
-    + (x.etat==='absent'?`<p class="note">${t("Cet indicateur est prévu : ses données seront collectées lors d'une prochaine campagne.","This indicator is planned: its data will be collected in a future round.")}</p>`:'');
-   suite(ret, N.i+1>=n, ()=>{ N.i++; N.rep=null; render(el,apri); });
-  }
-  s.append(carte); s.append(apri.h(barre(N.i,n)));
- }
+ const si=section('indicateurs',t('Des indicateurs pondérés','Weighted indicators'),t('La pondération exprime l’importance relative des indicateurs dans le calcul d’une dimension. Elle s’appuie sur l’évaluation d’experts.','Weighting expresses the relative importance of indicators when calculating a dimension. It is based on expert assessment.'));
+ if(P.pondere){const mot=nomInd(P.pondere);const poids=fmt(P.pondere.poids,1);si.append(apri.h('<div class="guide-poids"><div><span class="guide-label">'+t('EXEMPLE D’INDICATEUR','INDICATOR EXAMPLE')+'</span><h4>'+e(mot)+'</h4><small>'+e(T(P.pondere.dim))+'</small></div><div class="guide-poids-val"><b>'+e(poids)+'</b><span>'+t('poids expert','expert weight')+'</span></div></div>'));}
+ si.append(apri.h('<p class="guide-fin">'+t('Le parcours se poursuit dans « Calcul des scores », puis dans « Boucles de rétroaction ». L’exemple interactif de test y permet de suivre pas à pas l’effet des seuils sur le passage d’une dynamique négative à une dynamique positive.','Continue with “Score calculations”, then “Feedback loops”. The interactive test example lets you follow step by step how thresholds affect the shift from a negative to a positive dynamic.')+'</p>'));
 
- /* ---------- 4. raw value -> score ---------- */
- function etape4(s){
-  const N = J.e4, n = N.cartes.length;
-  s.append(consigne(3, t("L'enquête donne une valeur brute, par exemple un pourcentage de ménages. Un barème publié la range sur une échelle de 0 à 10. Sur quel palier tombe cette valeur ?","The survey gives a raw value, for instance a share of households. A published scale places it on a 0 to 10 scale. Which step does this value fall on?")));
-  if(N.i>=n) return bilan(s, 3, 3*n, ()=>{ J.e4={cartes:melanger(P.mesures).slice(0,3),i:0,choix:null,valeur:null}; J.points[3]=0; J.fini[3]=false; render(el,apri); });
-  const x = N.cartes[N.i], inv = x.ec?.sens==='inv';
-  const v = N.valeur ?? x.valeur, sc = scorePour(x._iv, v);
-  const carte = apri.h(`<div class="jeu-carte jeu-n3">
-   <div class="jeu-n3-g">
-    <div class="etiquette">${t('Indicateur','Indicator')} · ${e(nomDim(x.dim))}</div>
-    <div class="jeu-indic">${e(nomInd(x))}</div>
-    <div class="jeu-brute"><span>${t('Valeur mesurée','Measured value')}</span><b>${pctTxt(x.valeur)}</b></div>
-    <p class="note">${inv?t('Ici, plus la valeur est haute, plus la situation est critique : le barème est inversé.','Here, the higher the value, the more critical the situation: the scale is reversed.'):t('Ici, plus la valeur est haute, mieux c\'est.','Here, the higher the value, the better.')}</p>
-    <div class="jeu-retour" aria-live="polite"></div>
-   </div>
-   <div class="jeu-echelle" role="group" aria-label="${t('Barème','Scale')}"></div>
-  </div>`);
-  const ech = carte.querySelector('.jeu-echelle');
-  [...x._iv].reverse().forEach(b=>{
-   const c = teinte(b.sc/10);
-   const r = apri.h(`<button type="button" class="jeu-palier" style="--c:${c}!important;--i:${encre(c)}!important"><b>${b.sc}</b><span>${e(b.txt)}</span></button>`);
-   if(N.choix!=null){ r.disabled = true; if(b.sc===x.score) r.classList.add('bon'); else if(b.sc===N.choix) r.classList.add('faux'); if(b.sc===sc) r.classList.add('courant'); }
-   r.onclick = ()=>{ N.choix=b.sc; const ec=Math.abs(b.sc-x.score); J.points[3]+= ec===0?3:ec===1?1:0; render(el,apri); };
-   ech.append(r);
-  });
-  const ret = carte.querySelector('.jeu-retour');
-  if(N.choix==null){
-   ret.innerHTML = `<p class="jeu-astuce">${t('Cliquez sur le palier du barème.','Click the step of the scale.')}</p>`;
-  } else {
-   const ec = Math.abs(N.choix-x.score);
-   ret.innerHTML = `<p class="${ec===0?'oui':'non'}">${ec===0?t('Exact, +3.','Exact, +3.'):ec===1?t('Presque, +1.','Close, +1.'):t('Raté.','Missed.')} ${t('Le score est','The score is')} <b>${x.score} / 10</b>.</p>
-    <div class="jeu-curseur"><label>${t('Faites varier la valeur :','Move the value:')} <b>${pctTxt(v)}</b> → <span class="jeu-pastille" style="background:${teinte((sc??0)/10)};color:${encre(teinte((sc??0)/10))}">${sc??'–'} / 10</span></label>
-    <input type="range" min="0" max="100" step="0.1" value="${v}" aria-label="${t('Valeur','Value')}"></div>`;
-   const curs = ret.querySelector('input');
-   curs.oninput = ()=>{
-    N.valeur = parseFloat(curs.value);
-    const s2 = scorePour(x._iv, N.valeur), c2 = teinte((s2??0)/10);
-    ret.querySelector('label b').textContent = pctTxt(N.valeur);
-    const p = ret.querySelector('.jeu-pastille'); p.textContent=(s2??'–')+' / 10'; p.style.background=c2; p.style.color=encre(c2);
-    ech.querySelectorAll('.jeu-palier').forEach(r=>r.classList.toggle('courant', Number(r.querySelector('b').textContent)===s2));
-   };
-   suite(ret, N.i+1>=n, ()=>{ N.i++; N.choix=null; N.valeur=null; render(el,apri); });
-  }
-  s.append(carte); s.append(apri.h(barre(N.i,n)));
- }
-
- /* ---------- 5. weighting: rate an indicator 1 to 5 ---------- */
- function etape5(s){
-  const N = J.e5, n = N.cartes.length;
-  s.append(consigne(4, t("Chaque indicateur est pondéré par un groupe d'experts. Notez son importance pour la résilience et le fonctionnement de la société, de 1 (secondaire) à 5 (essentiel).","Each indicator is weighted by an expert panel. Rate its importance for resilience and for how society functions, from 1 (secondary) to 5 (essential).")));
-  if(N.i>=n) return bilan(s, 4, 3*n, ()=>{ J.e5={cartes:melanger(P.indsPoids).slice(0,6),i:0,note:null}; J.points[4]=0; J.fini[4]=false; render(el,apri); });
-  const x = N.cartes[N.i], vrai = classePoids(x.poids);
-  const mot = k => t(MOTS_POIDS[k-1].fr, MOTS_POIDS[k-1].en);
-  const carte = apri.h(`<div class="jeu-carte">
-   <div class="etiquette">${t('Indicateur','Indicator')} · ${e(nomDim(x.dim))}</div>
-   <div class="jeu-indic">${e(nomInd(x))}</div>
-   <div class="jeu-notes" role="group" aria-label="${t('Importance','Importance')}"></div>
-   <div class="jeu-retour" aria-live="polite"></div></div>`);
-  const zone = carte.querySelector('.jeu-notes');
-  for(let k=1;k<=5;k++){
-   const b = apri.h(`<button type="button" class="jeu-note" style="--c:${teinte((k-0.5)/5)}"><b>${k}</b><small>${e(mot(k))}</small></button>`);
-   if(N.note!=null){ b.disabled=true; if(k===vrai) b.classList.add('bon'); else if(k===N.note) b.classList.add('faux'); }
-   b.onclick = ()=>{ N.note=k; const ec=Math.abs(k-vrai); J.points[4]+= ec===0?3:ec===1?1:0; render(el,apri); };
-   zone.append(b);
-  }
-  const ret = carte.querySelector('.jeu-retour');
-  if(N.note==null){
-   ret.innerHTML = `<p class="jeu-astuce">${t('Donnez une note de 1 à 5.','Give a rating from 1 to 5.')}</p>`;
-  } else {
-   const ec = Math.abs(N.note-vrai);
-   ret.innerHTML = `<p class="${ec===0?'oui':'non'}">${ec===0?t('Exact, +3.','Exact, +3.'):ec===1?t('Presque, +1.','Close, +1.'):t('Raté.','Missed.')} ${t("Note des experts :",'Expert rating:')} <b>${vrai} / 5</b> (${e(mot(vrai))}).</p>`;
-   suite(ret, N.i+1>=n, ()=>{ N.i++; N.note=null; render(el,apri); });
-  }
-  s.append(carte); s.append(apri.h(barre(N.i,n)));
- }
-
- function finale(s){
-  const tot = J.points.reduce((a,b)=>a+b,0);
-  const b = apri.h(`<div class="jeu-carte jeu-bilan"><div class="jeu-etoiles">★★★</div>
-   <h3>${t(`Bravo, ${tot} points !`,`Well done, ${tot} points!`)}</h3>
-   <div class="pastilles" style="justify-content:center"><button type="button" class="bouton">${t('Recommencer depuis le début','Start again from the beginning')}</button></div></div>`);
-  b.querySelector('button').onclick = ()=>{ J = nouvellePartie(P); render(el,apri); };
-  s.append(b);
- }
-
- (J.finale ? finale : [etape1, etape2, etape3, etape4, etape5][J.etape])(scene);
+ nav.querySelectorAll('button').forEach(b=>b.onclick=()=>{const target=root.querySelector('#'+b.dataset.cible);target?.scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});});
+ const observer='IntersectionObserver' in window?new IntersectionObserver(entries=>{const visible=entries.filter(x=>x.isIntersecting).sort((a,b)=>b.intersectionRatio-a.intersectionRatio)[0];if(visible)nav.querySelectorAll('button').forEach(b=>b.classList.toggle('ici',b.dataset.cible===visible.target.id));},{rootMargin:'-15% 0px -65% 0px',threshold:[0,.2,.5]}):null;
+ if(observer)sections.querySelectorAll('.guide-section').forEach(s=>observer.observe(s));
 }
