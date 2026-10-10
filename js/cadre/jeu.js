@@ -172,34 +172,49 @@ export default async function render(el, apri){
   s.append(b);
  }
 
- /* ---------- 1. three capacities (multi-select) ---------- */
+ /* ---------- 1. three capacities: visual explanation ---------- */
  function etape1(s){
-  const N = J.e1, n = N.cartes.length;
-  s.append(consigne(0, t("Trois capacités aident une communauté à faire face. À vous de repérer lesquelles dans cette situation.","Resilient communities anticipate, absorb and adapt. Which capacities do you spot here?")));
-  if(N.i>=n) return bilan(s, 0, n, ()=>{ J.e1={cartes:melanger(SITUATIONS).slice(0,6),i:0,sel:[],valide:false}; J.points[0]=0; J.fini[0]=false; render(el,apri); });
-  const c = N.cartes[N.i], bon = new Set(c.a);
-  const carte = apri.h(`<div class="jeu-carte"><div class="jeu-situation">« ${e(t(c.fr,c.en))} »</div><div class="jeu-choix jeu-choix-multi"></div><div class="jeu-retour" aria-live="polite"></div></div>`);
-  const zone = carte.querySelector('.jeu-choix');
+  racine.querySelector('.jeu-total').hidden=true;
+  s.append(consigne(0,t("APRI mesure la résilience à travers trois capacités.","APRI measures resilience through three capacities.")));
+  const exemples=[SITUATIONS[0],SITUATIONS[3],SITUATIONS[6],SITUATIONS[7]];
+  const carte=apri.h('<div class="jeu-carte jeu-capacites-visuel"><div class="jeu-situation jeu-situation-capacites"><span class="etiquette"></span><blockquote class="jeu-phrase"></blockquote><div class="jeu-capacites-flux"><span></span><b>→</b><span></span><b>→</b><span></span></div></div><div class="jeu-choix-multi"></div><p class="jeu-capacites-note"></p></div>');
+  const etiquette=carte.querySelector('.etiquette');
+  etiquette.textContent=t('EXEMPLE DE SITUATION','EXAMPLE SITUATION');
+  const phrase=carte.querySelector('.jeu-phrase');
+  const flux=carte.querySelectorAll('.jeu-capacites-flux span');
+  flux[0].textContent=t('Situation observée','Observed situation');
+  flux[1].textContent=t('Attributs APRI','APRI attributes');
+  flux[2].textContent=t('Capacités de résilience','Resilience capacities');
+  const liste=carte.querySelector('.jeu-choix-multi');
   ATTR.forEach(a=>{
-   const choisi = N.sel.includes(a.id);
-   const b = apri.h(`<button type="button" class="jeu-bouton jeu-capa${choisi?' pris':''}" style="--c:${a.c}" aria-pressed="${choisi}"><b>${e(t(a.fr,a.en))}</b><small>${e(T('cad_'+a.id))}</small></button>`);
-   if(N.valide){ b.disabled=true; const doit=bon.has(a.id); if(doit&&choisi) b.classList.add('bon'); else if(!doit&&choisi) b.classList.add('faux'); else if(doit&&!choisi) b.classList.add('manque'); }
-   else b.onclick = ()=>{ N.sel = choisi ? N.sel.filter(y=>y!==a.id) : [...N.sel, a.id]; render(el,apri); };
-   zone.append(b);
+   const bloc=document.createElement('article');
+   bloc.className='jeu-capacite-visuelle';
+   bloc.dataset.capacite=a.id;
+   bloc.innerHTML='<span class="jeu-capacite-type"></span><b></b><small></small>';
+   bloc.querySelector('.jeu-capacite-type').textContent=t('CAPACITÉ','CAPACITY');
+   bloc.querySelector('b').textContent=t(a.fr,a.en);
+   bloc.querySelector('small').textContent=T('cad_'+a.id);
+   liste.append(bloc);
   });
-  const ret = carte.querySelector('.jeu-retour');
-  if(!N.valide){
-   const v = apri.h(`<button type="button" class="bouton primaire"${N.sel.length?'':' disabled'}>${t('Vérifier','Check')} →</button>`);
-   v.onclick = ()=>{ N.valide=true; if(N.sel.length===bon.size && N.sel.every(y=>bon.has(y))) J.points[0]++; render(el,apri); };
-   ret.append(v);
-  } else {
-   const juste = N.sel.length===bon.size && N.sel.every(y=>bon.has(y));
-   const noms = [...bon].map(id=>{const a=ATTR.find(x=>x.id===id);return t(a.fr,a.en);});
-   const liste = noms.length>1 ? noms.slice(0,-1).join(', ')+t(' et ',' and ')+noms.slice(-1) : noms[0];
-   ret.innerHTML = `<p class="${juste?'oui':'non'}">${juste?t('Bien vu.','Well spotted.'):t('Pas tout à fait.','Not quite.')} ${bon.size>1?t('Deux capacités jouent ici :','Two capacities are at work here:'):t('La bonne réponse :','The right answer:')} <b>${e(liste)}</b>.</p>`;
-   suite(ret, N.i+1>=n, ()=>{ N.i++; N.sel=[]; N.valide=false; render(el,apri); });
+  carte.querySelector('.jeu-capacites-note').textContent=t('Les phrases sont des exemples illustratifs. Dans le calcul APRI, les indicateurs renseignent les attributs et contribuent aux scores. Une situation peut éclairer plusieurs capacités.','These are illustrative examples. In APRI calculations, indicators inform attributes and contribute to scores. One situation can help explain several capacities.');
+  phrase.textContent='« '+t(exemples[0].fr,exemples[0].en)+' »';
+  liste.querySelectorAll('.jeu-capacite-visuelle').forEach(b=>b.classList.toggle('active',exemples[0].a.includes(b.dataset.capacite)));
+  let i=1;
+  function montrer(){
+   if(!phrase.isConnected)return;
+   const x=exemples[i];
+   phrase.classList.add('sortie');
+   liste.querySelectorAll('.jeu-capacite-visuelle').forEach(b=>b.classList.toggle('active',x.a.includes(b.dataset.capacite)));
+   window.setTimeout(()=>{
+    if(!phrase.isConnected)return;
+    phrase.textContent='« '+t(x.fr,x.en)+' »';
+    phrase.classList.remove('sortie');
+    i=(i+1)%exemples.length;
+    window.setTimeout(montrer,3800);
+   },220);
   }
-  s.append(carte); s.append(apri.h(barre(N.i,n)));
+  s.append(carte);
+  if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches) window.setTimeout(montrer,4000);
  }
 
  /* ---------- 2. capacities versus exposure, vulnerability and context ---------- */
