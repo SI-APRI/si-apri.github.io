@@ -19,8 +19,8 @@
   <span class="filet"></span>
   <img class="unep" src="img/unep.png" alt="UNEP">
  </a>
- <button class="menu" aria-label="Menu">☰</button>
- <nav class="principal" aria-label="Navigation"></nav>
+ <button class="menu" aria-label="Menu" aria-controls="navigation-principale" aria-expanded="false">☰</button>
+ <nav id="navigation-principale" class="principal" aria-label="Navigation"></nav>
  <div class="langue" role="group" aria-label="Langue">
   <button data-l="fr" aria-pressed="true" title="Français">FR</button><button data-l="en" aria-pressed="false" title="English">EN</button><button data-l="es" aria-pressed="false" title="Español">ES</button><button data-l="ht" aria-pressed="false" title="Kreyòl ayisyen">KR</button>
  </div>
@@ -40,7 +40,7 @@
    <div><strong>2</strong><span data-t="k3">paysages, Sud et Grand'Anse</span></div>
   </div>
  </div>
- <a class="fleche" href="#territoire" aria-label="↓">⌄</a>
+ <a class="fleche" href="#territoire" aria-label="Aller à la section Territoire">⌄</a>
 </section>
 <section id="territoire" class="page"><div class="carte-page" id="contenu-territoire"><div class="chargement" data-t="charge">Chargement…</div></div></section>
 <section id="cadre" class="page"><div class="carte-page" id="contenu-cadre"><div class="chargement" data-t="charge">Chargement…</div></div></section>
@@ -86,10 +86,10 @@ function construireNav(){
    (sous.length?`<div class="sous">${sous.map(x=>`<a href="${x.href}">${apri.esc(x.t)}${x.d?`<small>${apri.esc(x.d)}</small>`:''}</a>`).join('')}</div>`:'');
   nav.append(div);
  }
- nav.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>nav.classList.remove('ouvert')));
+ nav.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{nav.classList.remove('ouvert');document.querySelector('.menu').setAttribute('aria-expanded','false');}));
  marquer(courant);
 }
-document.querySelector('.menu').onclick=()=>nav.classList.toggle('ouvert');
+document.querySelector('.menu').onclick=()=>{const ouvert=nav.classList.toggle('ouvert');document.querySelector('.menu').setAttribute('aria-expanded',String(ouvert));};
 
 // dots on the right
 const points = document.getElementById('points');
