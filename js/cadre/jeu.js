@@ -64,6 +64,14 @@ export default async function render(el, apri){
  sm.querySelector('h3').style.cssText='font-size:clamp(24px,2.5vw,32px);line-height:1.25;margin-bottom:24px';
  const modelCopy=apri.h('<div class="guide-model-copy"></div>');sm.append(modelCopy);
  const modelStyle=document.createElement('style');modelStyle.textContent=`
+
+ #cadre .guide-capacites{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:12px!important}
+ #cadre .guide-capacites .guide-capacite{min-height:0!important;height:auto!important;padding:14px 19px!important;background:#fff!important;border:1px solid #d4e2ec!important;border-left:5px solid var(--capacity-color)!important;border-bottom-color:var(--capacity-color)!important;border-radius:15px!important;box-shadow:none!important;transform:none!important;transition:box-shadow .3s ease!important}
+ #cadre .guide-capacites .guide-capacite::before,#cadre .guide-capacites .guide-capacite::after{display:none!important}
+ #cadre .guide-capacites .guide-capacite h4{margin:0 0 4px!important;font-size:18px!important;line-height:1.3!important;color:#294352!important}
+ #cadre .guide-capacites .guide-capacite p{margin:0!important;font-size:14px!important;line-height:1.45!important;color:#59758a!important}
+ #cadre .guide-capacites .guide-capacite.actif{box-shadow:0 0 0 2px var(--capacity-color)!important}
+ @media(max-width:640px){#cadre .guide-capacites{grid-template-columns:1fr!important}}
  #cadre .model-group{display:grid;grid-template-columns:150px minmax(0,1fr);gap:24px;padding:22px 0;border-top:1px solid #d7e0e5}
  #cadre .model-group:last-child{padding-bottom:0}
  #cadre .model-group h4{margin:5px 0 0;font-size:13px;line-height:1.5;letter-spacing:.08em;text-transform:uppercase;color:#587081;font-weight:600}
@@ -81,7 +89,7 @@ export default async function render(el, apri){
  const revealModel=()=>{modelCopy.querySelectorAll('.model-group').forEach((group,i)=>{group.getAnimations().forEach(a=>a.cancel());if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches)group.animate([{opacity:0,transform:'translateY(12px)'},{opacity:1,transform:'translateY(0)'}],{duration:600,delay:i*160,easing:'cubic-bezier(.2,.7,.2,1)',fill:'backwards'});});};
  const sc=section('capacites',t('Trois capacités','Three capacities'),t('Les capacités décrivent la manière dont un système anticipe les perturbations, en absorbe les effets et se transforme lorsque les conditions changent.','Capacities describe how a system anticipates disruption, absorbs its effects and transforms when conditions change.'));
  const caps=apri.h('<div class="guide-capacites"></div>');sc.append(caps);
- ATTR.forEach(a=>{const card=apri.h('<article class="guide-capacite" data-capacite="'+a.id+'"><span class="guide-label">'+t('CAPACITÉ','CAPACITY')+'</span><h4>'+t(a.fr,a.en)+'</h4><p>'+e(T('cad_'+a.id))+'</p></article>');caps.append(card);});
+ ATTR.forEach(a=>{const card=apri.h('<article class="guide-capacite" data-capacite="'+a.id+'" style="--capacity-color:'+a.c+'"><h4>'+t(a.fr,a.en)+'</h4><p>'+e(T('cad_'+a.id))+'</p></article>');caps.append(card);});
  const ex=apri.h('<div class="guide-exemple"><div class="guide-exemple-meta"><span class="guide-label">'+t('EXEMPLE ILLUSTRATIF','ILLUSTRATIVE EXAMPLE')+'</span><span class="guide-exemple-compteur" aria-hidden="true"></span></div><blockquote class="guide-exemple-phrase" aria-live="polite"></blockquote><div class="guide-exemple-note">'+t('L’exemple est relié à une ou plusieurs capacités pour rendre le modèle concret. Ce n’est pas une question à résoudre.','The example is linked to one or more capacities to make the model concrete. It is not a question to solve.')+'</div></div>');sc.append(ex);
  let ix=0;const phrase=ex.querySelector('.guide-exemple-phrase');
  const showSituation=()=>{if(!root.isConnected)return;const x=SITUATIONS[ix];phrase.classList.add('guide-sortie');caps.querySelectorAll('.guide-capacite').forEach(c=>c.classList.toggle('actif',x.a.includes(c.dataset.capacite)));window.setTimeout(()=>{if(!root.isConnected)return;phrase.textContent='« '+t(x.fr,x.en)+' »';phrase.classList.remove('guide-sortie');ex.querySelector('.guide-exemple-compteur').textContent=String(ix+1).padStart(2,'0')+' / '+String(SITUATIONS.length).padStart(2,'0');ix=(ix+1)%SITUATIONS.length;},180);};
