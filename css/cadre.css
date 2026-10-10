@@ -455,3 +455,21 @@
 #cadre .jeu-palier b{background:var(--c)!important;color:var(--i)!important}
 /* Les pastilles de l’échelle héritent de leur teinte propre, même dans le thème sobre. */
 #cadre .jeu .jeu-palier b{--c:inherit!important;--i:inherit!important;background:var(--c)!important;color:var(--i)!important}
+/* Présentation animée des capacités, sans interaction de quiz. */
+#cadre .jeu-capacites-visuel{background:#f2f4f5!important;border:0!important;border-radius:0!important;padding:0!important;box-shadow:none!important}
+#cadre .jeu-situation-capacites{background:transparent!important;border:0!important;border-radius:0!important;padding:14px 0 18px!important;margin:0!important}
+#cadre .jeu-capacites-visuel .etiquette{color:#6b7a84!important;font-size:10px!important;letter-spacing:.12em!important}
+#cadre .jeu-phrase{min-height:78px;margin:12px 0 18px;font-size:clamp(19px,2.1vw,24px);font-weight:600;line-height:1.45;color:#293742;transition:opacity .22s,transform .22s}
+#cadre .jeu-phrase.sortie{opacity:0;transform:translateY(7px)}
+#cadre .jeu-capacites-flux{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;color:#53616d;font-size:12px}
+#cadre .jeu-capacites-flux span{padding:7px 12px;border:1px solid #d7e0e5;border-radius:999px;background:#f2f4f5}
+#cadre .jeu-capacites-flux b{color:#35597a;font-size:17px;font-weight:500}
+#cadre .jeu-capacites-visuel .jeu-choix-multi{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+#cadre .jeu-capacite-visuelle{min-height:150px;padding:16px;background:#f2f4f5!important;border:1px solid #d7e0e5!important;border-radius:12px;transition:background .35s,border-color .35s,transform .35s,box-shadow .35s}
+#cadre .jeu-capacite-type{display:block;margin-bottom:10px;color:#71808c;font-size:10px;letter-spacing:.1em}
+#cadre .jeu-capacite-visuelle b{display:block;margin-bottom:8px;color:#293742;font-size:18px}
+#cadre .jeu-capacite-visuelle small{display:block;color:#53616d;font-size:13px;line-height:1.5}
+#cadre .jeu-capacite-visuelle.active{background:#e8edf2!important;border-color:#35597a!important;box-shadow:inset 0 0 0 1px #35597a!important;transform:translateY(-3px)}
+#cadre .jeu-capacites-note{margin:16px 0 0;color:#53616d;font-size:13px;line-height:1.6}
+@media(max-width:760px){#cadre .jeu-capacites-visuel .jeu-choix-multi{grid-template-columns:1fr}#cadre .jeu-capacite-visuelle{min-height:0}}
+@media(prefers-reduced-motion:reduce){#cadre .jeu-phrase,#cadre .jeu-capacite-visuelle{transition:none!important;transform:none!important}}
