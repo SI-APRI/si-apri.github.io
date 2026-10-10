@@ -453,3 +453,5 @@
 #cadre .jeu .jeu-capa,#cadre .jeu .jeu-capa:hover:not(:disabled),#cadre .jeu .jeu-capa.pris{background:#f2f4f5!important;background-color:#f2f4f5!important;box-shadow:none!important}
 #cadre .jeu-carte,#cadre .jeu-situation,#cadre .jeu-src,#cadre .jeu-attr,#cadre .jeu-dimscore,#cadre .jeu-curseur,#cadre .jeu-note,#cadre .jeu-dim{background:#f2f4f5!important;background-color:#f2f4f5!important}
 #cadre .jeu-palier b{background:var(--c)!important;color:var(--i)!important}
+/* Les pastilles de l’échelle héritent de leur teinte propre, même dans le thème sobre. */
+#cadre .jeu .jeu-palier b{--c:inherit!important;--i:inherit!important;background:var(--c)!important;color:var(--i)!important}
