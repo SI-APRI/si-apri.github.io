@@ -64,9 +64,6 @@ section.page{padding:calc(var(--barre) + 24px) 32px 32px}
 #accueil p{font-size:clamp(16px,1.6vw,20px);margin:0 0 30px;opacity:.95}
 .cta{display:inline-block;color:#fff;text-decoration:none;border:1px solid rgba(255,255,255,.8);border-radius:10px;padding:14px 24px;font-weight:500;transition:background .2s,color .2s}
 .cta:hover{background:#fff;color:var(--nuit)}
-.chiffres{display:flex;gap:56px;justify-content:center;margin-top:56px;flex-wrap:wrap}
-.chiffres div{font-size:13px;opacity:.85;max-width:170px}
-.chiffres strong{display:block;font-size:34px;font-weight:700;opacity:1;margin-bottom:4px}
 /* scroll cue to the territory: its own grid row under the hero, on the same centre axis,
    so it can never cover the figures on short screens */
 #accueil{grid-template-rows:1fr auto}
