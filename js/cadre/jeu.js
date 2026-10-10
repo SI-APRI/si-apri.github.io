@@ -56,13 +56,13 @@ export default async function render(el, apri){
  const nav=apri.h('<nav class="jeu-chemin guide-tabs" aria-label="'+t('Parcourir le cadre','Explore the framework')+'"></nav>');
  nav.innerHTML=tabs.map((x,i)=>'<button type="button" aria-controls="guide-'+x.id+'" data-cible="guide-'+x.id+'"><span>'+e(t(x.fr,x.en))+'</span></button>').join('');
  root.append(nav);
- const intro=apri.h('<div class="guide-intro"><p class="guide-surtitre">APRI · '+t('CADRE DE RÉSILIENCE','RESILIENCE FRAMEWORK')+'</p><h2>'+t('Comment APRI mesure la résilience','How APRI measures resilience')+'</h2><p>'+t('Un modèle fondé sur les capitaux du système socio-écologique : leurs attributs sont renseignés par des indicateurs, puis organisés en capacités et en dimensions.','A model grounded in the capitals of the socio-ecological system: their attributes are informed by indicators, then organized into capacities and dimensions.')+'</p></div>');
- root.append(intro);
  const sections=apri.h('<div class="guide-sections"></div>');root.append(sections);
  const section=(id,title,lead)=>{const s=apri.h('<section class="guide-section" id="guide-'+id+'" aria-labelledby="guide-'+id+'-title"><div class="guide-heading"><h3 id="guide-'+id+'-title">'+title+'</h3><p>'+lead+'</p></div></section>');sections.append(s);return s;};
 
- const sm=section('modele',t('Un modèle fondé sur les capitaux','A capitals-based model'),t('APRI évalue la résilience en observant les attributs du système socio-écologique. Les indicateurs mesurent ces attributs et alimentent une lecture commune de la résilience.','APRI assesses resilience by observing the attributes of the socio-ecological system. Indicators measure these attributes and feed a shared reading of resilience.'));
- sm.append(apri.h('<div class="guide-flow" aria-label="'+t('Capitaux, attributs, indicateurs, capacités et dimensions','Capitals, attributes, indicators, capacities and dimensions')+'"><span>'+t('Capitaux','Capitals')+'</span><i>→</i><span>'+t('Attributs observés','Observed attributes')+'</span><i>→</i><span>'+t('Indicateurs','Indicators')+'</span><i>→</i><span>'+t('Capacités et dimensions','Capacities and dimensions')+'</span></div>'));
+ const sm=section('modele',t('Un modèle de résilience de type capital-based','A capital-based resilience model'),'');
+ sm.querySelector('.guide-heading p').remove();
+ sm.querySelector('h3').style.cssText='font-size:clamp(24px,2.5vw,32px);line-height:1.25;margin-bottom:20px';
+ sm.append(apri.h('<p style="font-size:clamp(22px,2.3vw,29px);line-height:1.5;color:#293742;margin:0 0 24px;max-width:65ch"><strong>'+t('APRI mesure dans quelle mesure les ressources d’un territoire lui permettent d’anticiper les perturbations, d’en absorber les effets et de s’adapter durablement.','APRI measures the extent to which a territory’s resources enable it to anticipate disturbances, absorb their effects and adapt sustainably.')+'</strong></p><p style="font-size:clamp(19px,1.9vw,24px);line-height:1.65;color:#3f5361;margin:0;max-width:75ch">'+t('C’est une approche <strong>fondée sur les capitaux du système socioécologique</strong> : les infrastructures, les institutions, les écosystèmes, les moyens d’existence, les relations sociales, les ressources humaines et les ressources culturelles.','It is an approach <strong>based on the capitals of the socio-ecological system</strong>: infrastructure, institutions, ecosystems, livelihoods, social relationships, human resources and cultural resources.')+'</p>'));
 
  const sc=section('capacites',t('Trois capacités','Three capacities'),t('Les capacités décrivent la manière dont un système anticipe les perturbations, en absorbe les effets et se transforme lorsque les conditions changent.','Capacities describe how a system anticipates disruption, absorbs its effects and transforms when conditions change.'));
  const caps=apri.h('<div class="guide-capacites"></div>');sc.append(caps);
@@ -108,7 +108,7 @@ export default async function render(el, apri){
 
  const buttons=[...nav.querySelectorAll('button')],panels=[...sections.querySelectorAll('.guide-section')];
  nav.setAttribute('role','tablist');
- const select=id=>{buttons.forEach(b=>{const active=b.dataset.cible===id;b.classList.toggle('ici',active);b.setAttribute('aria-selected',String(active));b.tabIndex=active?0:-1;});panels.forEach(panel=>panel.hidden=panel.id!==id);intro.hidden=id!=='guide-modele';};
+ const select=id=>{buttons.forEach(b=>{const active=b.dataset.cible===id;b.classList.toggle('ici',active);b.setAttribute('aria-selected',String(active));b.tabIndex=active?0:-1;});panels.forEach(panel=>panel.hidden=panel.id!==id);};
  buttons.forEach((b,i)=>{b.id='tab-'+b.dataset.cible;b.setAttribute('role','tab');b.onclick=()=>select(b.dataset.cible);b.onkeydown=ev=>{let n;if(ev.key==='ArrowRight')n=(i+1)%buttons.length;else if(ev.key==='ArrowLeft')n=(i+buttons.length-1)%buttons.length;else if(ev.key==='Home')n=0;else if(ev.key==='End')n=buttons.length-1;else return;ev.preventDefault();select(buttons[n].dataset.cible);buttons[n].focus();};});
  panels.forEach(panel=>{panel.setAttribute('role','tabpanel');panel.setAttribute('aria-labelledby','tab-'+panel.id);});select('guide-modele');
 }
