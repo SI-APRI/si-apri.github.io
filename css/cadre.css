@@ -447,3 +447,9 @@
 #cadre [role=tablist]{background:#f2f4f5!important}
 #cadre .jeu-chemin button:not(.ici):not(.fait){background:#f2f4f5!important;box-shadow:none!important}
 #cadre .jeu-palier b{background:var(--c)!important;color:var(--i)!important}
+/* Dernière passe : supprimer les panneaux blancs qui rompent le fond gris. */
+#contenu-cadre,#contenu-cadre>div,#cadre,#cadre .cad-cadre-if,#cadre .cad-blanc{background:#f2f4f5!important;border-color:#dfe4e8!important;border-radius:0!important;box-shadow:none!important}
+#cadre [role=tablist] [role=tab]:not([aria-selected=true]){background:#f2f4f5!important}
+#cadre .jeu .jeu-capa,#cadre .jeu .jeu-capa:hover:not(:disabled),#cadre .jeu .jeu-capa.pris{background:#f2f4f5!important;background-color:#f2f4f5!important;box-shadow:none!important}
+#cadre .jeu-carte,#cadre .jeu-situation,#cadre .jeu-src,#cadre .jeu-attr,#cadre .jeu-dimscore,#cadre .jeu-curseur,#cadre .jeu-note,#cadre .jeu-dim{background:#f2f4f5!important;background-color:#f2f4f5!important}
+#cadre .jeu-palier b{background:var(--c)!important;color:var(--i)!important}
