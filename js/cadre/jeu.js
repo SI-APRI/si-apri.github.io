@@ -29,10 +29,13 @@ function sourceDe(x){
  if(x.source==='menage_regle' || (x.etat!=='absent' && x.calcule)) return 'menage';
  return null;
 }
+function nombre(s){return parseFloat(s.replace(/[   ]/g,'').replace(',','.'));}
+function intervalles(bandes){const out=[];for(const [sc,txt] of bandes){const t=String(txt).replace(/[()]/g,'').trim(),ns=(t.match(/-?\d[\d   ]*(?:,\d+)?/g)||[]).map(nombre);let lo,hi;if(/[≤<]/.test(t)){lo=-Infinity;hi=ns[0];}else if(/[≥>]/.test(t)){lo=ns[0];hi=Infinity;}else if(ns.length===2){[lo,hi]=ns;}else return null;if(lo==null||hi==null||isNaN(lo)||isNaN(hi))return null;out.push({sc,txt:t,lo,hi});}return out;}
+function scorePour(iv,v){return iv.find(b=>v>=b.lo&&v<=b.hi)?.sc??null;}
 function preparations(d){
  const I=d.indicateurs||[], parSource={};
  for(const x of I){const s=sourceDe(x);if(s)(parSource[s] ||= []).push(x);}
- return {I, parSource, mesure:I.find(x=>x.valeur!=null&&x.score!=null), pondere:I.find(x=>x.poids!=null&&(x.nom_fr||x.nom))};
+ return {I, parSource, mesure:I.find(x=>x.valeur!=null&&x.score!=null&&x.ec?.unite==='pct'&&x.valeur>=0&&x.valeur<=100&&x.bandes?.length===11&&intervalles(x.bandes)?.some(b=>x.valeur>=b.lo&&x.valeur<=b.hi&&b.sc===x.score)), pondere:I.find(x=>x.poids!=null&&(x.nom_fr||x.nom))};
 }
 
 export default async function render(el, apri){
@@ -53,7 +56,7 @@ export default async function render(el, apri){
  const nav=apri.h('<nav class="jeu-chemin guide-tabs" aria-label="'+t('Parcourir le cadre','Explore the framework')+'"></nav>');
  nav.innerHTML=tabs.map((x,i)=>'<button type="button" aria-controls="guide-'+x.id+'" data-cible="guide-'+x.id+'"><span>'+e(t(x.fr,x.en))+'</span></button>').join('');
  root.append(nav);
- const intro=apri.h('<header class="guide-intro"><p class="guide-surtitre">APRI · '+t('CADRE DE RÉSILIENCE','RESILIENCE FRAMEWORK')+'</p><h2>'+t('Comment APRI mesure la résilience','How APRI measures resilience')+'</h2><p>'+t('Un modèle fondé sur les capitaux du système socio-écologique : leurs attributs sont renseignés par des indicateurs, puis organisés en capacités et en dimensions.','A model grounded in the capitals of the socio-ecological system: their attributes are informed by indicators, then organized into capacities and dimensions.')+'</p></header>');
+ const intro=apri.h('<div class="guide-intro"><p class="guide-surtitre">APRI · '+t('CADRE DE RÉSILIENCE','RESILIENCE FRAMEWORK')+'</p><h2>'+t('Comment APRI mesure la résilience','How APRI measures resilience')+'</h2><p>'+t('Un modèle fondé sur les capitaux du système socio-écologique : leurs attributs sont renseignés par des indicateurs, puis organisés en capacités et en dimensions.','A model grounded in the capitals of the socio-ecological system: their attributes are informed by indicators, then organized into capacities and dimensions.')+'</p></div>');
  root.append(intro);
  const sections=apri.h('<div class="guide-sections"></div>');root.append(sections);
  const section=(id,title,lead)=>{const s=apri.h('<section class="guide-section" id="guide-'+id+'" aria-labelledby="guide-'+id+'-title"><div class="guide-heading"><h3 id="guide-'+id+'-title">'+title+'</h3><p>'+lead+'</p></div></section>');sections.append(s);return s;};
@@ -86,13 +89,26 @@ export default async function render(el, apri){
  const methodes=apri.h('<div class="guide-methodes"><article><span>01</span><h4>'+t('Discrétisation par quantiles','Quantile discretization')+'</h4><p>'+t('Quand une distribution empirique internationale ou régionale fiable existe, le score situe la valeur observée dans cette distribution cumulative.','When a reliable international or regional empirical distribution exists, the score places the observed value within that cumulative distribution.')+'</p></article><article><span>02</span><h4>'+t('Repère normatif local','Local normative reference')+'</h4><p>'+t('Quand il n’existe pas de référence comparative robuste, deux scénarios définis localement — optimal et critique — bornent onze scénarios ordinaux.','When no robust comparative reference exists, two locally defined scenarios—optimal and critical—bound eleven ordinal scenarios.')+'</p></article></div>');sn.append(methodes);
  const scoreX=P.mesure, scoreCard=chain.querySelector('.guide-score-carte');
  if(scoreX){const couleur=teinte((scoreX.score??0)/10);scoreCard.style.setProperty('--score-couleur',couleur);chain.querySelector('.guide-score-valeur').textContent=(scoreX.score??'—')+' / 10';chain.querySelector('.guide-score-nom').textContent=nomInd(scoreX);}else{chain.querySelector('.guide-score-valeur').textContent='0–10';chain.querySelector('.guide-score-nom').textContent=t('Échelle APRI','APRI scale');}
+
+ if(scoreX){
+  chain.hidden=true;
+  const iv=intervalles(scoreX.bandes),pct=v=>fmt(v,1)+(apri.lang==='en'?'%':' %');
+  const scale=apri.h('<div class="guide-scale-layout"><div class="guide-scale-detail"><span class="guide-label">'+e(T(scoreX.dim))+'</span><h4>'+e(nomInd(scoreX))+'</h4><div class="guide-scale-measured"><span>'+t('Valeur mesurée','Measured value')+'</span><b>'+e(pct(scoreX.valeur))+'</b></div><p>'+t('Déplacez le curseur pour voir comment la valeur se situe dans le barème.','Move the slider to see where the value falls on the scale.')+'</p><label class="guide-scale-control">'+t('Valeur explorée','Explored value')+' <output></output><input type="range" min="0" max="100" step="0.1" value="'+scoreX.valeur+'" aria-label="'+t('Valeur explorée','Explored value')+'"></label><div class="guide-score-carte"><span class="guide-label">'+t('SCORE DE RÉSILIENCE','RESILIENCE SCORE')+'</span><b class="guide-score-valeur"></b></div></div><div class="guide-scale-bands" role="group" aria-label="'+t('Barème de résilience','Resilience scale')+'"></div></div>');
+  const bands=scale.querySelector('.guide-scale-bands');
+  [...iv].reverse().forEach(b=>{const c=teinte(b.sc/10);bands.append(apri.h('<div class="guide-scale-row" data-score="'+b.sc+'" style="--palier:'+c+'"><b style="background:'+c+';color:'+encre(c)+'">'+b.sc+'</b><span>'+e(b.txt)+'</span></div>'));});
+  const input=scale.querySelector('input'),card=scale.querySelector('.guide-score-carte');
+  const update=()=>{const v=Number(input.value),score=scorePour(iv,v),c=teinte((score??0)/10);scale.querySelector('output').textContent=pct(v);card.style.setProperty('--score-couleur',c);card.querySelector('b').textContent=(score??'—')+' / 10';bands.querySelectorAll('.guide-scale-row').forEach(row=>{const active=Number(row.dataset.score)===score;row.classList.toggle('courant',active);if(active)row.setAttribute('aria-current','true');else row.removeAttribute('aria-current');});};
+  input.oninput=update;update();sn.insertBefore(scale,methodes);
+ }
  sn.append(apri.h('<p class="guide-renvoi">'+t('Les barèmes et les seuils de chaque indicateur sont détaillés dans l’onglet','Indicator-specific scales and thresholds are detailed in the tab')+' <b>'+t('Calcul des scores','Score calculations')+'</b>.</p>'));
 
  const si=section('indicateurs',t('Des indicateurs pondérés','Weighted indicators'),t('La pondération exprime l’importance relative des indicateurs dans le calcul d’une dimension. Elle s’appuie sur l’évaluation d’experts.','Weighting expresses the relative importance of indicators when calculating a dimension. It is based on expert assessment.'));
  if(P.pondere){const mot=nomInd(P.pondere);const poids=fmt(P.pondere.poids,1);si.append(apri.h('<div class="guide-poids"><div><span class="guide-label">'+t('EXEMPLE D’INDICATEUR','INDICATOR EXAMPLE')+'</span><h4>'+e(mot)+'</h4><small>'+e(T(P.pondere.dim))+'</small></div><div class="guide-poids-val"><b>'+e(poids)+'</b><span>'+t('poids expert','expert weight')+'</span></div></div>'));}
  si.append(apri.h('<p class="guide-fin">'+t('Le parcours se poursuit dans « Calcul des scores », puis dans « Boucles de rétroaction ». L’exemple interactif de test y permet de suivre pas à pas l’effet des seuils sur le passage d’une dynamique négative à une dynamique positive.','Continue with “Score calculations”, then “Feedback loops”. The interactive test example lets you follow step by step how thresholds affect the shift from a negative to a positive dynamic.')+'</p>'));
 
- nav.querySelectorAll('button').forEach(b=>b.onclick=()=>{const target=root.querySelector('#'+b.dataset.cible);target?.scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});});
- const observer='IntersectionObserver' in window?new IntersectionObserver(entries=>{const visible=entries.filter(x=>x.isIntersecting).sort((a,b)=>b.intersectionRatio-a.intersectionRatio)[0];if(visible)nav.querySelectorAll('button').forEach(b=>b.classList.toggle('ici',b.dataset.cible===visible.target.id));},{rootMargin:'-15% 0px -65% 0px',threshold:[0,.2,.5]}):null;
- if(observer)sections.querySelectorAll('.guide-section').forEach(s=>observer.observe(s));
+ const buttons=[...nav.querySelectorAll('button')],panels=[...sections.querySelectorAll('.guide-section')];
+ nav.setAttribute('role','tablist');
+ const select=id=>{buttons.forEach(b=>{const active=b.dataset.cible===id;b.classList.toggle('ici',active);b.setAttribute('aria-selected',String(active));b.tabIndex=active?0:-1;});panels.forEach(panel=>panel.hidden=panel.id!==id);intro.hidden=id!=='guide-modele';};
+ buttons.forEach((b,i)=>{b.id='tab-'+b.dataset.cible;b.setAttribute('role','tab');b.onclick=()=>select(b.dataset.cible);b.onkeydown=ev=>{let n;if(ev.key==='ArrowRight')n=(i+1)%buttons.length;else if(ev.key==='ArrowLeft')n=(i+buttons.length-1)%buttons.length;else if(ev.key==='Home')n=0;else if(ev.key==='End')n=buttons.length-1;else return;ev.preventDefault();select(buttons[n].dataset.cible);buttons[n].focus();};});
+ panels.forEach(panel=>{panel.setAttribute('role','tabpanel');panel.setAttribute('aria-labelledby','tab-'+panel.id);});select('guide-modele');
 }
