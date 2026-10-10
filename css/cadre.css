@@ -377,3 +377,20 @@
 #cadre .jeu-bouton:hover:not(:disabled){background:#226449!important;transform:translateY(-1px)}
 @media(max-width:760px){#cadre [role="tablist"]{grid-template-columns:repeat(2,minmax(0,1fr))}#cadre [role="tablist"] [role="tab"]:last-child{grid-column:1/-1}#cadre .jeu-tete{grid-template-columns:1fr auto}}
 @media(max-width:500px){#cadre [role="tablist"] [role="tab"]{min-height:42px!important;padding:8px 9px!important;font-size:13px!important}#cadre .jeu-situation{padding:15px 16px!important;font-size:18px!important}#cadre .jeu-capa{min-height:72px}}
+
+
+/* Finition : cartes claires, score aligné sur le titre, rythme vertical resserré */
+#cadre .jeu{position:relative!important}
+#cadre .jeu-tete-nue{position:absolute!important;top:22px!important;right:0!important;z-index:2;margin:0!important;padding:0!important;height:auto!important;min-height:0!important}
+#cadre .jeu-total{min-width:74px!important;padding:7px 10px!important;border-radius:13px!important;background:#174936!important;color:#fff!important}
+#cadre .jeu-tete h2,#cadre .jeu>h2{margin:0!important;padding-right:92px!important;font-size:clamp(21px,2vw,25px)!important;line-height:1.25!important}
+#cadre .jeu-capa{background:#fff!important;color:#263f35!important;border:1px solid #dce7df!important;border-left:4px solid var(--c)!important;border-radius:14px!important;box-shadow:0 3px 12px rgba(25,63,46,.05)!important}
+#cadre .jeu-capa b{color:#263f35!important;font-weight:700!important}
+#cadre .jeu-capa small{color:#52685d!important;font-weight:500!important}
+#cadre .jeu-capa:hover:not(:disabled){background:#f6faf7!important;border-color:#c4d8cb!important;transform:translateY(-1px)}
+#cadre .jeu-capa.pris{background:#eaf4ed!important;border-color:#8fb49c!important;box-shadow:inset 0 0 0 1px #8fb49c!important}
+#cadre .jeu-capa.pris b,#cadre .jeu-capa.pris small{color:#174936!important}
+#cadre .jeu-tete-nue+.jeu-tete{margin-top:0!important}
+#cadre .jeu-situation{font-size:clamp(18px,1.8vw,22px)!important;line-height:1.4!important;font-weight:600!important;color:#263f35!important}
+#cadre .jeu-bouton:disabled{opacity:.48!important;box-shadow:none!important}
+@media(max-width:600px){#cadre .jeu-tete-nue{top:18px!important}#cadre .jeu-tete h2,#cadre .jeu>h2{padding-right:84px!important;font-size:20px!important}#cadre .jeu-total{min-width:68px!important}}
