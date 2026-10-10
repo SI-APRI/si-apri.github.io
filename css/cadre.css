@@ -331,3 +331,29 @@
 #cadre .jeu-note.bon{opacity:1;border-color:var(--vert);background:#eef8f2}
 #cadre .jeu-note.faux{opacity:1;border-color:var(--rouge);background:#fbefed}
 @media(max-width:600px){#cadre .jeu-note small{display:none}#cadre .jeu-notes{gap:6px}}
+
+
+/* Cadre de résilience : parcours pédagogique et onglets plus lisibles */
+#cadre [role="tablist"]{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(min(100%,155px),1fr));gap:8px!important;width:100%;margin:0 0 20px;overflow:visible!important}
+#cadre [role="tablist"] [role="tab"]{display:flex;align-items:center;justify-content:center;min-width:0;min-height:50px;width:100%;padding:10px 12px;border:1px solid #d7e2db;border-radius:14px;background:#fff;color:#44574d;font:600 14px/1.35 Inter,Arial,sans-serif;text-align:center;white-space:normal;transition:background .16s,border-color .16s,box-shadow .16s,transform .16s}
+#cadre [role="tablist"] [role="tab"][aria-selected="true"]{background:#174936!important;color:#fff!important;border-color:#174936!important;box-shadow:0 6px 18px rgba(23,73,54,.15)}
+#cadre [role="tablist"] [role="tab"]:hover:not([aria-selected="true"]){background:#f2f7f3;border-color:#98b5a3;transform:translateY(-1px)}
+#cadre [role="tablist"] [role="tab"]:focus-visible,#cadre .jeu-chemin button:focus-visible,#cadre .jeu-bouton:focus-visible,#cadre .jeu-dim:focus-visible,#cadre .jeu-note:focus-visible{outline:3px solid rgba(40,116,92,.32);outline-offset:2px}
+#cadre .jeu{max-width:1160px}
+#cadre .jeu-tete{align-items:center;margin-bottom:20px}
+#cadre .jeu-tete h2{font-size:clamp(22px,2.6vw,30px);line-height:1.2;letter-spacing:-.02em}
+#cadre .jeu-total{background:#174936;border-radius:14px;box-shadow:0 8px 22px rgba(23,73,54,.15)}
+#cadre .jeu-chemin{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:16px 0 22px}
+#cadre .jeu-chemin button{min-width:0;min-height:58px;justify-content:flex-start;gap:10px;padding:9px 14px 9px 9px;border-radius:16px;background:#fff;border-color:#d9e4dd;box-shadow:0 3px 12px rgba(25,63,46,.04);transition:background .16s,border-color .16s,box-shadow .16s,transform .16s}
+#cadre .jeu-chemin button i{width:36px;height:36px;flex:0 0 36px;border-radius:12px;background:#edf4ef;border-color:#d5e2d9;color:#174936;font-size:13px}
+#cadre .jeu-chemin button:hover{border-color:#8fb19d;box-shadow:0 8px 20px rgba(25,63,46,.09);transform:translateY(-1px)}
+#cadre .jeu-chemin button.fait{background:#f1f7f3;border-color:#c4d8cb;color:#245f49}
+#cadre .jeu-chemin button.fait i{background:#286d50;border-color:#286d50;color:#fff}
+#cadre .jeu-chemin button.ici{background:#174936;border-color:#174936;color:#fff;box-shadow:0 10px 24px rgba(20,77,55,.18)}
+#cadre .jeu-chemin button.ici i{background:#dbece2;border-color:#dbece2;color:#174936}
+#cadre .jeu-carte{padding:clamp(18px,3vw,34px);border:1px solid #dfe8e2;border-radius:22px;background:linear-gradient(155deg,#fff 0%,#fcfdfb 100%);box-shadow:0 16px 42px rgba(17,53,39,.08)}
+#cadre .jeu-situation{padding:16px 18px;border-left:4px solid #28745c;border-radius:0 14px 14px 0;background:#f5f8f5;margin:4px 0 20px}
+#cadre .jeu-bouton:hover:not(:disabled),#cadre .jeu-dim:hover:not(:disabled),#cadre .jeu-note:hover:not(:disabled){box-shadow:0 8px 20px rgba(25,63,46,.08)}
+@media(max-width:760px){#cadre .jeu-chemin{grid-template-columns:repeat(2,minmax(0,1fr))}#cadre [role="tablist"]{grid-template-columns:repeat(2,minmax(0,1fr))}#cadre [role="tablist"] [role="tab"]:last-child{grid-column:1/-1}}
+@media(max-width:420px){#cadre .jeu-chemin{grid-template-columns:1fr}#cadre .jeu-chemin button{min-height:52px}#cadre [role="tablist"] [role="tab"]{font-size:13px}}
+@media(prefers-reduced-motion:reduce){#cadre .jeu-chemin button,#cadre .jeu-carte{transition:none;animation:none}}
