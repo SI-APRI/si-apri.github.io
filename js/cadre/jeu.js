@@ -72,6 +72,14 @@ export default async function render(el, apri){
  #cadre .guide-capacites .guide-capacite p{margin:0!important;font-size:14px!important;line-height:1.45!important;color:#59758a!important}
  #cadre .guide-capacites .guide-capacite.actif{box-shadow:0 0 0 2px var(--capacity-color)!important}
  @media(max-width:640px){#cadre .guide-capacites{grid-template-columns:1fr!important}}
+
+ #cadre .guide-dimensions .guide-dimension,#cadre .guide-sources .guide-source,#cadre .guide-source-flux .guide-source-exemple,#cadre .guide-source-flux .guide-source-indicateur{min-height:0!important;height:auto!important;padding:14px 19px!important;background:#fff!important;border:1px solid #d4e2ec!important;border-left:5px solid #397fa3!important;border-bottom-color:#397fa3!important;border-radius:15px!important;box-shadow:none!important;transform:none!important;transition:box-shadow .3s ease!important}
+ #cadre .guide-dimensions .guide-dimension::before,#cadre .guide-dimensions .guide-dimension::after,#cadre .guide-sources .guide-source::before,#cadre .guide-sources .guide-source::after{display:none!important}
+ #cadre .guide-dimensions .guide-dimension>span,#cadre .guide-sources .guide-source-index{display:none!important}
+ #cadre .guide-dimensions .guide-dimension h4,#cadre .guide-sources .guide-source b{margin:0!important;font-size:18px!important;line-height:1.4!important;color:#294352!important}
+ #cadre .guide-dimensions .guide-dimension,#cadre .guide-sources .guide-source{display:flex!important;align-items:center!important;gap:0!important}
+ #cadre .guide-sources .guide-source.actif{box-shadow:0 0 0 2px #397fa3!important}
+ #cadre .guide-dimensions,#cadre .guide-sources{gap:12px!important}
  #cadre .model-group{display:grid;grid-template-columns:150px minmax(0,1fr);gap:24px;padding:22px 0;border-top:1px solid #d7e0e5}
  #cadre .model-group:last-child{padding-bottom:0}
  #cadre .model-group h4{margin:5px 0 0;font-size:13px;line-height:1.5;letter-spacing:.08em;text-transform:uppercase;color:#587081;font-weight:600}
