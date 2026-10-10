@@ -261,7 +261,7 @@ export default async function render(el, apri){
   const ech = carte.querySelector('.jeu-echelle');
   [...x._iv].reverse().forEach(b=>{
    const c = teinte(b.sc/10);
-   const r = apri.h(`<button type="button" class="jeu-palier" style="--c:${c};--i:${encre(c)}"><b>${b.sc}</b><span>${e(b.txt)}</span></button>`);
+   const r = apri.h(`<button type="button" class="jeu-palier" style="--c:${c}!important;--i:${encre(c)}!important"><b>${b.sc}</b><span>${e(b.txt)}</span></button>`);
    if(N.choix!=null){ r.disabled = true; if(b.sc===x.score) r.classList.add('bon'); else if(b.sc===N.choix) r.classList.add('faux'); if(b.sc===sc) r.classList.add('courant'); }
    r.onclick = ()=>{ N.choix=b.sc; const ec=Math.abs(b.sc-x.score); J.points[3]+= ec===0?3:ec===1?1:0; render(el,apri); };
    ech.append(r);
