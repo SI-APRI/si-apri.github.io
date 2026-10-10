@@ -67,8 +67,8 @@ section.page{padding:calc(var(--barre) + 24px) 32px 32px}
 .chiffres{display:flex;gap:56px;justify-content:center;margin-top:56px;flex-wrap:wrap}
 .chiffres div{font-size:13px;opacity:.85;max-width:170px}
 .chiffres strong{display:block;font-size:34px;font-weight:700;opacity:1;margin-bottom:4px}
-.fleche{position:absolute;bottom:26px;left:50%;transform:translateX(-50%);color:#fff;opacity:.7;font-size:22px;text-decoration:none;animation:flotte 2.4s ease-in-out infinite}
-@keyframes flotte{50%{transform:translate(-50%,8px)}}
+.fleche{position:absolute;bottom:30px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:7px;color:#fff;text-decoration:none;opacity:.88;z-index:2}.fleche-label{font-size:11px;line-height:1;text-transform:uppercase;letter-spacing:.14em;font-weight:600;text-shadow:0 1px 8px rgba(0,0,0,.65)}.fleche-icone{display:block;width:18px;height:12px;overflow:visible;animation:flotte-chev 1.8s ease-in-out infinite}.fleche-icone path{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+@keyframes flotte-chev{50%{transform:translateY(4px)}}
 
 /* the white card holding a section */
 .carte-page{background:var(--carte);color:var(--texte);border-radius:var(--rayon);box-shadow:0 20px 60px rgba(0,0,0,.22);padding:28px 32px;max-width:1500px;margin:0 auto;min-height:calc(100dvh - var(--barre) - 56px)}
