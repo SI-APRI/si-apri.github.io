@@ -174,7 +174,7 @@ export default async function render(el, apri){
 
  /* ---------- 1. three capacities: visual explanation ---------- */
  function etape1(s){
-  racine.querySelector('.jeu-total').hidden=true;
+  racine.classList.add('jeu-intro-capacites');
   s.append(consigne(0,t("APRI mesure la résilience à travers trois capacités.","APRI measures resilience through three capacities.")));
   const exemples=[SITUATIONS[0],SITUATIONS[3],SITUATIONS[6],SITUATIONS[7]];
   const carte=apri.h('<div class="jeu-carte jeu-capacites-visuel"><div class="jeu-situation jeu-situation-capacites"><span class="etiquette"></span><blockquote class="jeu-phrase"></blockquote><div class="jeu-capacites-flux"><span></span><b>→</b><span></span><b>→</b><span></span></div></div><div class="jeu-choix-multi"></div><p class="jeu-capacites-note"></p></div>');
