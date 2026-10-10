@@ -473,3 +473,6 @@
 #cadre .jeu-capacites-note{margin:16px 0 0;color:#53616d;font-size:13px;line-height:1.6}
 @media(max-width:760px){#cadre .jeu-capacites-visuel .jeu-choix-multi{grid-template-columns:1fr}#cadre .jeu-capacite-visuelle{min-height:0}}
 @media(prefers-reduced-motion:reduce){#cadre .jeu-phrase,#cadre .jeu-capacite-visuelle{transition:none!important;transform:none!important}}
+
+/* L’introduction des capacités est une explication, sans compteur de jeu. */
+#cadre .jeu-intro-capacites .jeu-total{display:none!important}
