@@ -86,7 +86,7 @@ function construireNav(){
    (sous.length?`<div class="sous">${sous.map(x=>`<a href="${x.href}">${apri.esc(x.t)}${x.d?`<small>${apri.esc(x.d)}</small>`:''}</a>`).join('')}</div>`:'');
   nav.append(div);
  }
- nav.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>nav.classList.remove('ouvert')));
+ nav.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{nav.classList.remove('ouvert');document.querySelector('.menu').setAttribute('aria-expanded','false');}));
  marquer(courant);
 }
 document.querySelector('.menu').onclick=()=>{const ouvert=nav.classList.toggle('ouvert');document.querySelector('.menu').setAttribute('aria-expanded',String(ouvert));};
