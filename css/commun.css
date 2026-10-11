@@ -54,16 +54,16 @@ body.defile nav.principal .sous{background:rgba(10,34,46,.82)}
 body.serre header{gap:14px;padding:0 20px}
 body.serre nav.principal .item>a{padding:10px 7px;font-size:12.5px}
 body.serre .langue{margin-left:6px}
-/* Preserve the same horizontal layout in every language. */
+/* Fixed navigation slots across languages, with centered two-line labels. */
 @media(min-width:1101px){
- header,body.serre header{gap:14px;padding:0 20px}
- nav.principal{flex:1 1 0;min-width:0;margin-left:auto}
- nav.principal .item{flex:1 1 0;min-width:0}
- nav.principal .item:has(>a.nav-pictogramme){flex:0 0 44px}
- nav.principal .item>a,body.serre nav.principal .item>a{display:block;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:10px 7px;font-size:12.5px}
- nav.principal .item.a-sous>a{padding-right:20px}
- nav.principal .item.a-sous>a::after{position:absolute;right:7px;top:17px;margin:0}
- .langue,body.serre .langue{flex:none;margin-left:6px}
+ header,body.serre header{gap:24px;padding:0 20px}
+ .marque{width:292px;gap:10px}.marque>span:not(.filet){width:160px}
+ nav.principal{display:grid;grid-template-columns:40px .85fr 1.1fr 1.1fr 1.3fr 1.1fr .8fr 40px;gap:4px;flex:1 1 0;min-width:0;margin-left:0;align-items:center}
+ nav.principal .item{min-width:0;width:100%}
+ nav.principal .item>a,body.serre nav.principal .item>a{display:flex;align-items:center;justify-content:center;min-width:0;min-height:48px;padding:6px 9px;white-space:normal;text-align:center;line-height:1.3;font-size:12px;overflow:visible;text-overflow:clip;overflow-wrap:normal}
+ nav.principal .item.a-sous>a::after{position:absolute;right:0;top:21px;margin:0;width:4px;height:4px}
+ nav.principal .item>a.nav-pictogramme{min-width:40px;padding-inline:8px}
+ .langue,body.serre .langue{flex:0 0 144px;width:144px;margin-left:0;display:flex;justify-content:center}
  .menu,body.tres-serre .menu{display:none}
 }
 
