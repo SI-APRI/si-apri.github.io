@@ -1,13 +1,12 @@
 export const onglets = [
  {id:'modele',fr:'Le modèle',en:'The model'},
- {id:'normalisation',fr:'Mesure et score',en:'Measure and score'},
  {id:'ponderation',fr:'Indicateurs et échelles',en:'Indicators and scales'},
  {id:'indicateurs',fr:'Calcul des scores',en:'Score calculation'},
  {id:'boucles',fr:'Boucles de rétroaction',en:'Feedback loops'},
  {id:'tester',fr:'Tester le concept',en:'Test the concept'},
  {id:'document',fr:'Document complet',en:'Full document'}
 ];
-const guide={modele:'modele',normalisation:'normalisation'};
+const guide={modele:'modele'};
 export default async function render(el,apri,actif){
  actif=actif==='jeu'?'modele':actif;
  if(!onglets.some(o=>o.id===actif))actif='modele';
