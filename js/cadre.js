@@ -1,6 +1,5 @@
 export const onglets = [
  {id:'modele',fr:'Le modèle',en:'The model'},
- {id:'capacites',fr:'Trois capacités',en:'Three capacities'},
  {id:'dimensions',fr:'Sept dimensions',en:'Seven dimensions'},
  {id:'donnees',fr:'Sources de données',en:'Data sources'},
  {id:'normalisation',fr:'Mesure et score',en:'Measure and score'},
@@ -10,7 +9,7 @@ export const onglets = [
  {id:'tester',fr:'Tester le concept',en:'Test the concept'},
  {id:'document',fr:'Document complet',en:'Full document'}
 ];
-const guide={modele:'modele',capacites:'capacites',dimensions:'dimensions',donnees:'donnees',normalisation:'normalisation',ponderation:'indicateurs'};
+const guide={modele:'modele',dimensions:'dimensions',donnees:'donnees',normalisation:'normalisation',ponderation:'indicateurs'};
 export default async function render(el,apri,actif){
  actif=actif==='jeu'?'modele':actif;
  if(!onglets.some(o=>o.id===actif))actif='modele';
