@@ -1,6 +1,6 @@
 export const onglets = [
  {id:'modele',fr:'Modèle de mesure de la résilience',en:'Resilience measurement model'},
- {id:'indicateurs',fr:'Calcul des scores',en:'Score calculation'},
+ {id:'indicateurs',fr:'Indicateurs et échelles de résilience associées',en:'Indicators and associated resilience scales'},
  {id:'paysage',fr:'Résilience des paysages',en:'Landscape resilience'},
  {id:'boucles',fr:'Boucles de rétroaction',en:'Feedback loops'},
  {id:'tester',fr:'Tester le concept',en:'Test the concept'},
