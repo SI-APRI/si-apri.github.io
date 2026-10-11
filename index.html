@@ -92,6 +92,7 @@ function construireNav(){
    (sous.length?`<div class="sous">${sous.map(x=>`<a href="${x.href}">${apri.esc(x.t)}${x.d?`<small>${apri.esc(x.d)}</small>`:''}</a>`).join('')}</div>`:'');
   nav.append(div);
  }
+ const projet=document.createElement('div'); projet.className='item'; projet.innerHTML='<a href="enriquillo.html">'+(l==='fr'?'Projet Enriquillo':l==='es'?'Proyecto Enriquillo':'Enriquillo')+'</a>'; nav.append(projet);
  nav.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{nav.classList.remove('ouvert');document.querySelector('.menu').setAttribute('aria-expanded','false');}));
  marquer(courant);
 }
