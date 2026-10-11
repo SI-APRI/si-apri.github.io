@@ -17,97 +17,39 @@ export default async function render(el, apri){
 
 /** _v_indicateurs, drawn into el */
 export function vueIndicateurs(el, apri, d){
- const T = traducteur(d, apri);
- const esc = apri.esc;
- const tous = d.indicateurs;
- el.innerHTML = '';
- if(!tous.length){ el.innerHTML = `<div class="cad-info">${esc(T('e_absent'))}</div>`; return; }
-
- const ctl = apri.h(`<div class="cad-ctl">
-  <div><label class="libelle" for="cad-i-vue">${esc(apri.t('Vue','View'))}</label>
-   <select class="champ" id="cad-i-vue">${['bareme','meta'].map(c=>`<option value="${c}">${esc(T('cad_iv_'+c))}</option>`).join('')}</select></div>
-  <div><label class="libelle" for="cad-i-dim">${esc(T('cad_ind_dim'))}</label>
-   <select class="champ" id="cad-i-dim"><option value="">${esc(T('cad_ind_all'))}</option>${d.dims.map(c=>`<option value="${c}">${esc(T(c))}</option>`).join('')}</select></div>
-  <div class="plein"><label class="libelle" for="cad-i-ind">${esc(T('cad_ind_ind'))}</label>
-   <div class="cad-combo"><input class="champ" id="cad-i-ind" role="combobox" aria-expanded="false" aria-autocomplete="list" autocomplete="off" placeholder="${esc(T('cad_ind_tous'))}">
-   <button type="button" class="x" aria-label="${esc(apri.t('Effacer','Clear'))}">×</button><ul role="listbox"></ul></div></div>
- </div>`);
- el.append(ctl);
- const zone = document.createElement('div'); el.append(zone);
-
- const selVue = ctl.querySelector('#cad-i-vue'), selDim = ctl.querySelector('#cad-i-dim');
- const combo = ctl.querySelector('.cad-combo'), inp = combo.querySelector('input'), liste = combo.querySelector('ul');
- selVue.value = etat.vue; selDim.value = etat.dim || '';
- const choix = ()=>tous.filter(x=>!etat.dim || x.dim===etat.dim);
- const libelle = x => x.nom + ' · ' + T(x.dim);
- const parCle = ()=>Object.fromEntries(choix().map(x=>[x.ligne,x]));
- const afficherChoix = ()=>{ const x = parCle()[etat.ind]; inp.value = x ? libelle(x) : ''; combo.classList.toggle('rempli', !!x); };
-
- // the selection does not survive a dimension change that excludes it
- if(etat.ind!=null && !parCle()[etat.ind]) etat.ind = null;
- afficherChoix();
-
- selVue.onchange = ()=>{ etat.vue = selVue.value; contenu(); };
- selDim.onchange = ()=>{ etat.dim = selDim.value || null; if(!parCle()[etat.ind]) etat.ind = null; afficherChoix(); contenu(); };
-
- let actif = -1, vus = [];
- function ouvrir(filtre){
-  const q = apri.plier(filtre||'');
-  vus = choix().filter(x=>!q || apri.plier(libelle(x)).includes(q));
-  actif = vus.findIndex(x=>x.ligne===etat.ind);
-  liste.innerHTML = vus.length ? vus.map((x,i)=>`<li role="option" data-i="${i}" class="${i===actif?'actif':''}">${esc(libelle(x))}</li>`).join('')
-   : `<li class="vide">${esc(apri.t('Aucun résultat','No results'))}</li>`;
-  combo.classList.add('ouvert'); inp.setAttribute('aria-expanded','true');
-  liste.querySelector('.actif')?.scrollIntoView({block:'nearest'});
+ const T=traducteur(d,apri),esc=apri.esc,t=(f,e)=>apri.t(f,e),fr=apri.lang!=='en';
+ const name=x=>fr?(x.nom_fr||x.nom):x.nom;
+ const measure=x=>(fr?x.metrique_fr:x.metrique_en)||x.metrique||'';
+ const missing=t('Non renseigné','Not recorded');
+ const method=x=>x.normalisation||x.methode_normalisation||t('Méthode de construction non renseignée dans le référentiel.','Scale construction method not recorded in the framework.');
+ el.replaceChildren();el.classList.add('indicator-browser');
+ const style=document.createElement('style');style.textContent= '#cadre .indicator-browser{color:#344e59}#cadre .ib-intro{display:flex;justify-content:space-between;align-items:center;gap:24px;margin:24px 0 32px}#cadre .ib-intro p{font-size:18px;margin:0}#cadre .ib-search{background:transparent;border:0;border-bottom:1px solid #aebdc4;padding:12px 4px;font:inherit;color:inherit;width:280px;max-width:100%}#cadre .ib-group{margin:32px 0}#cadre .ib-group h3{font-size:17px;font-weight:600;margin:0 0 14px}#cadre .ib-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0 26px}#cadre .ib-item{font:inherit;color:inherit;background:transparent;border:0;border-bottom:1px solid #d4dde1;text-align:left;padding:17px 8px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:14px;line-height:1.5;transition:background .2s,transform .2s}#cadre .ib-item:hover,#cadre .ib-item[aria-pressed=true]{background:#e5eaed;transform:translateX(3px)}#cadre .ib-item:focus-visible,#cadre .ib-action:focus-visible{outline:2px solid #415861;outline-offset:4px}#cadre .ib-item span:last-child{font-size:20px}#cadre .ib-detail{border-top:1px solid #aebdc4;border-bottom:1px solid #aebdc4;padding:28px 0;margin:16px 0 40px;scroll-margin-top:95px}#cadre .ib-detail[hidden]{display:none}#cadre .ib-top{display:flex;justify-content:space-between;gap:20px;align-items:flex-start}#cadre .ib-detail h3{font-size:clamp(23px,2.4vw,32px);font-weight:500;margin:8px 0 18px;line-height:1.3}#cadre .ib-kicker{font-size:13px;color:#657880}#cadre .ib-action{font:inherit;border:1px solid #aebdc4;background:transparent;color:inherit;padding:10px 16px;border-radius:5px;cursor:pointer;white-space:nowrap}#cadre .ib-facts{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin:26px 0}#cadre .ib-facts dt{font-size:13px;color:#657880;margin-bottom:9px}#cadre .ib-facts dd{font-size:26px;margin:0;font-weight:500}#cadre .ib-facts small{font-size:12px;display:block;line-height:1.5;margin-top:8px}#cadre .ib-scale{max-width:850px;margin:26px 0 8px}#cadre .ib-scale h4{font-size:17px;margin:0 0 12px}#cadre .ib-scale .irla-scale{width:100%}#cadre .ib-count{font-size:13px;color:#657880}.ib-paper-dialog{position:fixed;inset:0 0 0 auto;margin:0;width:min(640px,92vw);height:100dvh;max-height:100dvh;max-width:92vw;box-sizing:border-box;border:0;padding:30px 24px 30px 34px;background:transparent;overflow:auto;color:#344e59;font-family:inherit}.ib-paper-dialog::backdrop{background:rgba(26,42,49,.25);backdrop-filter:blur(2px)}.ib-paper{position:relative;min-height:calc(100dvh - 90px);box-sizing:border-box;padding:30px 30px 36px 44px;background:#faf9f5;border:1px solid #d8d8d1;border-radius:3px;box-shadow:-18px 16px 48px rgba(22,37,44,.25),5px 5px 0 #e6e5df,8px 8px 0 #cecfcb;transform:rotate(-.5deg);background-image:linear-gradient(90deg,transparent 26px,#d5c6c2 26px,#d5c6c2 27px,transparent 27px)}.ib-paper h2{font-size:25px;font-weight:500;line-height:1.35;margin:18px 0 26px}.ib-paper header{display:flex;align-items:center;justify-content:space-between;gap:15px;font-size:12px;letter-spacing:.08em;text-transform:uppercase}.ib-paper button{font:inherit;font-size:24px;background:transparent;border:0;color:inherit;cursor:pointer;padding:5px 10px}.ib-paper section{padding:17px 0;border-top:1px solid #dce0df}.ib-paper h3{font-size:12px;text-transform:uppercase;letter-spacing:.06em;margin:0 0 9px}.ib-paper p,.ib-paper li{font-size:15px;line-height:1.7;margin:0 0 8px}.ib-paper a{color:inherit;overflow-wrap:anywhere}.ib-paper ul{padding-left:18px}.ib-paper-dialog[open]{animation:ib-sheet-in .4s ease-out}@keyframes ib-sheet-in{from{opacity:0;transform:translateX(55px) rotate(2deg)}to{opacity:1;transform:translateX(0) rotate(0)}}@media(max-width:760px){#cadre .ib-grid{grid-template-columns:1fr}#cadre .ib-intro{align-items:stretch;flex-direction:column}#cadre .ib-search{width:100%}#cadre .ib-facts{gap:12px}#cadre .ib-facts dd{font-size:21px}#cadre .ib-top{flex-direction:column}.ib-paper-dialog{padding:20px 18px 20px 14px}.ib-paper{padding:24px 18px 28px 36px}}@media(prefers-reduced-motion:reduce){.ib-paper-dialog[open]{animation:none}#cadre .ib-item{transition:none}}';el.append(style);
+ const head=apri.h('<div class="ib-intro"><p>'+esc(t('Choisissez un indicateur pour explorer sa mesure et son échelle.','Choose an indicator to explore its measurement and scale.'))+'</p><input class="ib-search" type="search" aria-label="'+esc(t('Rechercher un indicateur','Find an indicator'))+'" placeholder="'+esc(t('Rechercher un indicateur…','Find an indicator…'))+'"></div>');el.append(head);
+ const detail=document.createElement('section');detail.className='ib-detail';detail.hidden=true;detail.tabIndex=-1;el.append(detail);
+ const count=document.createElement('p');count.className='ib-count';count.setAttribute('aria-live','polite');el.append(count);
+ const list=document.createElement('div');el.append(list);
+ const dialog=document.createElement('dialog');dialog.className='ib-paper-dialog';dialog.setAttribute('aria-labelledby','ib-paper-title');el.append(dialog);
+ let returnFocus=null;
+ dialog.addEventListener('close',()=>returnFocus?.isConnected&&returnFocus.focus());
+ dialog.addEventListener('click',e=>{if(e.target===dialog)dialog.close();});
+ function openMetadata(x,trigger){
+  returnFocus=trigger;const lang=apri.lang,section=(title,html)=>'<section><h3>'+esc(title)+'</h3>'+html+'</section>',p=v=>'<p>'+esc(v||missing)+'</p>';
+  const why=x.pourquoi?.[lang]||x.pourquoi?.fr||[];
+  dialog.innerHTML='<article class="ib-paper"><header><span>'+esc(t('Fiche de métadonnées','Metadata record'))+' · '+esc(String(x.ligne))+'</span><button type="button" aria-label="'+esc(t('Fermer la fiche','Close record'))+'">×</button></header><h2 id="ib-paper-title">'+esc(name(x))+'</h2>'+section(t('Dimension','Dimension'),p(T(x.dim)))+section(t('Ce que mesure l’indicateur','What the indicator measures'),p(measure(x)))+section(t('Lien avec la résilience','Relationship to resilience'),why.length?'<ul>'+why.map(v=>'<li>'+esc(v)+'</li>').join('')+'</ul>':p(''))+section(t('Source et collecte','Source and collection'),p(x.src?.[lang]||x.src?.fr||x.source))+section(t('Questions et modalités','Questions and responses'),p(x.question)+(x.modalites?p(x.modalites):''))+section(t('Normalisation','Normalization'),p(method(x)))+section(t('Poids dans l’agrégation','Weight in aggregation'),p(x.poids==null?missing:fmt(x.poids)))+section(t('Limites et précautions','Limitations'),p((fr?x.note:x.note_en)||x.note))+section(t('Références','References'),x.refs?.[lang]||x.refs?.fr||p(''))+'</article>';
+  dialog.querySelector('button').onclick=()=>dialog.close();dialog.showModal();dialog.scrollTop=0;
  }
- function fermer(){ combo.classList.remove('ouvert'); inp.setAttribute('aria-expanded','false'); }
- function choisir(x){ etat.ind = x ? x.ligne : null; fermer(); afficherChoix(); contenu(); }
- inp.addEventListener('focus', ()=>{ inp.select(); ouvrir(''); });
- inp.addEventListener('input', ()=>ouvrir(inp.value));
- inp.addEventListener('blur', ()=>setTimeout(()=>{ fermer(); afficherChoix(); }, 150));
- inp.addEventListener('keydown', e=>{
-  if(e.key==='ArrowDown'||e.key==='ArrowUp'){
-   e.preventDefault(); if(!combo.classList.contains('ouvert')) ouvrir(inp.value);
-   actif = Math.max(0, Math.min(vus.length-1, actif + (e.key==='ArrowDown'?1:-1)));
-   liste.querySelectorAll('li').forEach((li,i)=>li.classList.toggle('actif', i===actif));
-   liste.querySelector('.actif')?.scrollIntoView({block:'nearest'});
-  } else if(e.key==='Enter'){ e.preventDefault(); if(vus[actif]) choisir(vus[actif]); else if(vus.length===1) choisir(vus[0]); }
-  else if(e.key==='Escape'){ fermer(); afficherChoix(); inp.blur(); }
- });
- liste.addEventListener('mousedown', e=>{ const li = e.target.closest('li[data-i]'); if(li){ e.preventDefault(); choisir(vus[+li.dataset.i]); inp.blur(); } });
- combo.querySelector('.x').onclick = ()=>choisir(null);
-
- function contenu(){
-  zone.innerHTML = '';
-  const x = etat.ind!=null ? parCle()[etat.ind] : null;
-  if(x && [47,48,49].includes(Number(x.ligne))) zone.append(noticeBio(apri, d));
-  if(etat.vue==='meta'){
-   if(!x){ zone.append(apri.h(`<div class="cad-info">${esc(T('cad_ind_vide'))}</div>`)); return; }
-   zone.append(apri.h(fiche(x, apri, d, T)));
-   return;
-  }
-  if(!x){
-   zone.append(apri.h(`<p class="cad-attr-x" style="margin:10px 0 18px">${esc(T('cad_ind_vide'))}</p>`));
-   zone.append(apri.h(`<div><div class="cad-ex-t">${esc(T('cad_ex_gen'))}</div>${chaineGenerique(T,esc)}${normalisations(null, T, esc)}</div>`));
-   return;
-  }
-  const [num, ...r] = T(x.dim).split('. '); const court = r.join('. ');
-  const quoi = ((apri.lang !== 'en' ? x.metrique_fr : x.metrique_en) || x.metrique || '').trim();
-  const aide = quoi ? `<span class="cad-it-q" title="${esc(quoi)}" aria-label="${esc(quoi)}">?</span>` : '';
-  const table = apri.h(`<table class="cad-it"><thead><tr><th>${esc(T('cad_ind_c_nom'))}</th><th>${esc(T('cad_ind_c_ech'))}</th>
-   <th class="n">${esc(T('cad_ind_c_p'))}<span class="cad-it-ech">${esc(T('cad_ind_c_p_ech'))}</span></th></tr></thead><tbody>
-   <tr><td><div class="cad-it-n">${esc(x.nom)}${aide}</div><div class="cad-it-d"><span class="cad-it-r">${esc(num)}</span> ${esc(court)}</div></td>
-   <td class="cad-it-e">${echelleHtml(x, T, esc)}</td>
-   <td class="n" data-l="${esc(T('cad_ind_c_p'))}"><div class="cad-it-p">${fmt(x.poids)}</div></td></tr></tbody></table>`);
-  zone.append(table);
-  reglette(table);
-  zone.append(barreExport(apri, table, true));
-  zone.append(apri.h(`<div><p class="cad-attr-x" style="margin:16px 0 4px">${esc(T('cad_band_x'))}</p>
-   <div class="cad-ex-t">${esc(T('cad_ex_titre'))}</div>${chaineIndicateur(x, d, T, esc, apri)}${normalisations(x, T, esc)}</div>`));
+ function select(x){
+  etat.ind=x.ligne;detail.hidden=false;
+  const unit=x.unite||(String(x.echelle||'').includes('%')?'%':'');
+  const val=x.valeur==null?missing:fmt(x.valeur,2)+(unit?' '+unit:'');
+  detail.innerHTML='<div class="ib-top"><div><span class="ib-kicker">'+esc(T(x.dim))+'</span><h3>'+esc(name(x))+'</h3></div><button class="ib-action" type="button">'+esc(t('Métadonnées','Metadata'))+' ↗</button></div><p>'+esc(measure(x))+'</p><dl class="ib-facts"><div><dt>'+esc(t('Valeur brute · échantillon','Raw value · sample'))+'</dt><dd>'+esc(val)+'</dd><small>'+esc(t('Résultat disponible pour les territoires étudiés.','Available result for the studied territories.'))+'</small></div><div><dt>'+esc(t('Score de résilience','Resilience score'))+'</dt><dd>'+esc(x.score==null?missing:fmt(x.score,1)+' / 10')+'</dd></div><div><dt>'+esc(t('Poids de l’indicateur','Indicator weight'))+'</dt><dd>'+esc(x.poids==null?missing:fmt(x.poids))+'</dd></div></dl><div class="ib-scale"><h4>'+esc(t('Échelle de normalisation','Normalization scale'))+'</h4><p>'+esc(method(x))+'</p>'+(x.bandes?.length?echelleIrla(x.bandes,x.score,esc):'<p>'+esc(x.echelle||missing)+'</p>')+'</div>';
+  const meta=detail.querySelector('button');meta.onclick=()=>openMetadata(x,meta);
+  list.querySelectorAll('[data-row]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.row===String(x.ligne))));
+  detail.scrollIntoView({block:'start',behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});detail.focus({preventScroll:true});
  }
- contenu();
+ function draw(){const q=apri.plier(head.querySelector('input').value),rows=d.indicateurs.filter(x=>!q||apri.plier(name(x)+' '+measure(x)+' '+T(x.dim)).includes(q));count.textContent=rows.length+' '+t('indicateurs','indicators');list.replaceChildren();for(const dim of d.dims){const group=rows.filter(x=>x.dim===dim);if(!group.length)continue;const section=apri.h('<section class="ib-group"><h3>'+esc(T(dim))+'</h3><div class="ib-grid"></div></section>');const grid=section.querySelector('div');for(const x of group){const b=apri.h('<button type="button" class="ib-item" data-row="'+esc(String(x.ligne))+'" aria-pressed="'+String(etat.ind===x.ligne)+'"><span>'+esc(name(x))+'</span><span aria-hidden="true">↗</span></button>');b.onclick=()=>select(x);grid.append(b);}list.append(section);}if(!rows.length)list.textContent=t('Aucun indicateur trouvé.','No indicators found.');}
+ head.querySelector('input').oninput=draw;draw();
 }
-
 /* ---------- the biodiversity notice of indicators 47, 48, 49 ---------- */
 function noticeBio(apri, d){
  const b = (d.langs[apri.lang]||d.langs.fr).bio, esc = apri.esc;
