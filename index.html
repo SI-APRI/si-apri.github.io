@@ -10,7 +10,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="preload" as="image" href="img/fond.jpg">
 <link rel="stylesheet" href="css/commun.css?v=20261011-brand">
-<style>nav.principal .item > a.nav-pictogramme{display:flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;padding-inline:10px}nav.principal .nav-pictogramme svg{display:block;flex-shrink:0}</style>
+<style>nav.principal .item > a.nav-pictogramme{display:flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;padding-inline:10px}nav.principal .nav-pictogramme svg{display:block;flex-shrink:0}@media(min-width:1101px){nav.principal{grid-template-columns:40px .85fr 1.1fr 1.1fr 1.3fr 1.1fr .8fr 100px}}</style>
 </head>
 <body>
 <a class="saut-contenu" href="#contenu-principal" data-t="saut">Aller au contenu</a>
@@ -100,6 +100,7 @@ function construireNav(){
   [projet.querySelector('a'),l==='fr'?'Projet Enriquillo':l==='es'?'Proyecto Enriquillo':'Enriquillo','<path d="m2 18 7-11 5 7 3-4 5 8M3 21h18"/><circle cx="17" cy="5" r="2"/>']
  ];
  iconLinks.forEach(([a,label,shape])=>{a.classList.add('nav-pictogramme');a.setAttribute('aria-label',label);a.title=label;a.innerHTML='<svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">'+shape+'</svg>';});
+ const projectLink=projet.querySelector('a');projectLink.classList.remove('nav-pictogramme');projectLink.textContent='Proyecto Enriquillo';projectLink.title='Proyecto Enriquillo';projectLink.setAttribute('aria-label','Proyecto Enriquillo');
  nav.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{nav.classList.remove('ouvert');document.querySelector('.menu').setAttribute('aria-expanded','false');}));
  marquer(courant);
 }
