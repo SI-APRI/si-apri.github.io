@@ -1,6 +1,7 @@
 export const onglets = [
  {id:'modele',fr:'Modèle de mesure de la résilience',en:'Resilience measurement model'},
  {id:'indicateurs',fr:'Calcul des scores',en:'Score calculation'},
+ {id:'paysage',fr:'Résilience des paysages',en:'Landscape resilience'},
  {id:'boucles',fr:'Boucles de rétroaction',en:'Feedback loops'},
  {id:'tester',fr:'Tester le concept',en:'Test the concept'},
  {id:'document',fr:'Cadre méthodologique et conceptuel complet',en:'Full methodological and conceptual framework'}
@@ -16,7 +17,8 @@ export default async function render(el,apri,actif){
  const zone=document.createElement('div');zone.className='zone-onglet';zone.dataset.onglet=actif;el.append(zone);
  zone.textContent=apri.t('Chargement…','Loading…');
  try{
-  if(actif==='ponderation'){const m=await import('./cadre/indicateurs.js');if(!zone.isConnected)return;zone.textContent='';await m.renderCatalogue(zone,apri);
+  if(actif==='paysage'){const m=await import('./cadre/boucles.js');if(!zone.isConnected)return;zone.textContent='';await m.renderPaysage(zone,apri);
+  }else if(actif==='ponderation'){const m=await import('./cadre/indicateurs.js');if(!zone.isConnected)return;zone.textContent='';await m.renderCatalogue(zone,apri);
   }else if(guide[actif]){
    const m=await import('./cadre/jeu.js?v=690dd0a');if(!zone.isConnected)return;zone.textContent='';await m.default(zone,apri);
    const inner=zone.querySelector('.guide-tabs');const button=inner?.querySelector('[data-cible="guide-'+guide[actif]+'"]');button?.click();inner?.remove();
