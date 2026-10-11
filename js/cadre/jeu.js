@@ -63,7 +63,7 @@ export default async function render(el, apri){
  sm.querySelector('.guide-heading').remove();
  sm.setAttribute('aria-label',t('Le modèle','The model'));
  const modelTexts=[
- t('APRI est un modèle de résilience fondé sur les capitaux du territoire : leur capacité à anticiper, à absorber les perturbations et à s’adapter durablement.','APRI is a capital-based resilience model: it examines territorial resources and their capacity to anticipate, absorb disturbances and adapt sustainably.'),
+ t('APRI est un modèle de résilience de type capital-based, c’est-à-dire fondé sur les capitaux du territoire : leur capacité à anticiper, à absorber les perturbations et à s’adapter durablement.','APRI is a capital-based resilience model: it examines territorial resources and their capacity to anticipate, absorb disturbances and adapt sustainably.'),
  t('Des indicateurs observables servent de proxys pour évaluer les attributs de cette résilience.','Observable indicators serve as proxies to assess the attributes of this resilience.'),
  t('Ces indicateurs sont normalisés sur des échelles de résilience de 0 à 10 pour être comparables entre eux.','These indicators are normalized on resilience scales from 0 to 10 so they can be compared.')
  ];
@@ -72,6 +72,23 @@ export default async function render(el, apri){
  let modelIndex=0,modelElapsed=0,modelLast=performance.now();
  const showModel=()=>{stage.querySelector('p').textContent=modelTexts[modelIndex];stage.getAnimations().forEach(a=>a.cancel());if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches)stage.animate([{opacity:0,transform:'translateY(8px)'},{opacity:1,transform:'translateY(0)'}],{duration:600,easing:'ease-out'});};showModel();
  const modelTimer=setInterval(()=>{const now=performance.now(),delta=now-modelLast;modelLast=now;if(!sm.isConnected){clearInterval(modelTimer);return;}if(sm.hidden||document.hidden)return;modelElapsed+=delta;if(modelElapsed>=5000){modelElapsed=0;modelIndex=(modelIndex+1)%modelTexts.length;showModel();}},100);
+ 
+ // Quiet synthesized woodland ambience; starts only after an explicit click.
+ const soundButton=document.createElement('button');soundButton.type='button';soundButton.className='model-forest-sound';soundButton.setAttribute('aria-pressed','false');sm.append(soundButton);
+ const soundStyle=document.createElement('style');soundStyle.textContent='#cadre #contenu-cadre .model-forest-sound{display:block;margin:0 auto 16px;padding:8px 0;border:0;border-bottom:1px solid #bac4c9;border-radius:0;background:transparent;color:#60717a;font:inherit;font-size:13px;cursor:pointer}';sm.append(soundStyle);
+ let forestContext=null,forestBirdTimer=null;
+ const soundLabel=()=>{soundButton.textContent=forestContext?t('Couper l’ambiance forêt','Turn forest ambience off'):t('Écouter la forêt','Listen to the forest');soundButton.setAttribute('aria-pressed',String(!!forestContext));};soundLabel();
+ const stopForest=()=>{clearTimeout(forestBirdTimer);const old=forestContext;forestContext=null;if(old)old.close().catch(()=>{});soundLabel();};
+ soundButton.onclick=async()=>{if(forestContext){stopForest();return;}try{
+ const Audio=window.AudioContext||window.webkitAudioContext;if(!Audio)throw new Error('Audio unavailable');const ctx=new Audio();forestContext=ctx;await ctx.resume();if(forestContext!==ctx)return;
+ const master=ctx.createGain();master.gain.setValueAtTime(0,ctx.currentTime);master.gain.linearRampToValueAtTime(.15,ctx.currentTime+2);master.connect(ctx.destination);
+ const buffer=ctx.createBuffer(1,ctx.sampleRate*8,ctx.sampleRate),samples=buffer.getChannelData(0);let brown=0;for(let i=0;i<samples.length;i++){brown=(brown+(Math.random()*2-1)*.025)/1.025;samples[i]=brown*3;}
+ const wind=ctx.createBufferSource();wind.buffer=buffer;wind.loop=true;const low=ctx.createBiquadFilter();low.type='lowpass';low.frequency.value=1100;const windGain=ctx.createGain();windGain.gain.value=.45;wind.connect(low);low.connect(windGain);windGain.connect(master);wind.start();
+ const sway=ctx.createOscillator(),depth=ctx.createGain();sway.frequency.value=.13;depth.gain.value=.12;sway.connect(depth);depth.connect(windGain.gain);sway.start();
+ const birds=()=>{if(forestContext!==ctx)return;const base=1800+Math.random()*1200;for(let j=0;j<2+Math.floor(Math.random()*3);j++){const start=ctx.currentTime+j*.19,osc=ctx.createOscillator(),gain=ctx.createGain();osc.type='sine';osc.frequency.setValueAtTime(base,start);osc.frequency.exponentialRampToValueAtTime(base*1.45,start+.075);osc.frequency.exponentialRampToValueAtTime(base*.9,start+.16);gain.gain.setValueAtTime(0,start);gain.gain.linearRampToValueAtTime(.10,start+.025);gain.gain.exponentialRampToValueAtTime(.001,start+.17);osc.connect(gain);gain.connect(master);osc.start(start);osc.stop(start+.18);osc.onended=()=>{osc.disconnect();gain.disconnect();};}forestBirdTimer=setTimeout(birds,2800+Math.random()*4200);};forestBirdTimer=setTimeout(birds,1000);soundLabel();
+ }catch(error){stopForest();soundButton.textContent=t('Son indisponible — réessayer','Sound unavailable — retry');}};
+ const forestCleanup=setInterval(()=>{if(!sm.isConnected){stopForest();clearInterval(forestCleanup);return;}if(sm.hidden||document.hidden)stopForest();},250);
+ 
  const sc=section('capacites',t('Trois capacités','Three capacities'),t('Les ressources d’un territoire lui permettent d’anticiper, d’absorber et de s’adapter.','A territory’s resources enable it to anticipate, absorb and adapt.'));
  const layout=apri.h('<div class="capacity-scene"></div>');sc.append(layout);
  const ex=apri.h('<div class="capacity-situation"><span class="guide-label">'+t('SITUATION','SITUATION')+'</span><p></p></div>');layout.append(ex);
