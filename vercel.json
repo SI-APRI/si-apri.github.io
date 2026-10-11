@@ -1,8 +1,6 @@
 {
-  "rewrites": [
-    {
-      "source": "/data/ressources/:lang/:file",
-      "destination": "/api/apri-download?file=:lang/:file"
-    }
+  "routes": [
+    { "src": "/data/ressources/(fr|en)/([^/]+\\.xlsx)", "dest": "/api/apri-download?file=$1/$2" },
+    { "handle": "filesystem" }
   ]
 }
