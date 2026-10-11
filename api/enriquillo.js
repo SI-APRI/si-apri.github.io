@@ -31,7 +31,7 @@ module.exports=async(req,res)=>{
   res.setHeader('Content-Security-Policy',"default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; base-uri 'none'; form-action 'self'; frame-ancestors 'none'");
   const send=(status,body,type='text/html; charset=utf-8')=>{res.statusCode=status;res.setHeader('Content-Type',type);res.end(req.method==='HEAD'?undefined:body);};
   if(!['GET','HEAD','POST'].includes(req.method)){res.setHeader('Allow','GET, HEAD, POST');return send(405,'Méthode non autorisée.','text/plain');}
-  const key=process.env.ENRIQUILLO_SERVER_KEY||'';
+  const key=(process.env.ENRIQUILLO_SERVER_KEY||'').trim();
   if(!/^[a-f0-9]{64}$/.test(key))return send(503,screen('Accès temporairement indisponible. La configuration privée est en cours.'));
   let data;try{data=unpack(key);}catch{return send(503,screen('Accès temporairement indisponible.'));}
   const url=new URL(req.url,'https://'+req.headers.host);
