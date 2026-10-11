@@ -19,7 +19,7 @@ function valid(req,key) {
   const [expiry,nonce,sig,...rest]=token.split('.');
   return !rest.length && /^\d{13}$/.test(expiry||'') && /^[a-f0-9]{32}$/.test(nonce||'') && /^[a-f0-9]{64}$/.test(sig||'') && Number(expiry)>Date.now() && Number(expiry)<=Date.now()+8*3600000 && equal(sig,mac(expiry+'.'+nonce,key));
 }
-function screen(message='') {return `<!doctype html><html lang="fr"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Projet Enriquillo · Accès privé</title><style>*{box-sizing:border-box}body{margin:0;background:#f2f4f5;color:#243e49;font:16px/1.6 system-ui,sans-serif;min-height:100vh;display:grid;place-items:center;padding:24px}main{width:min(100%,400px)}small{font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:#687d85}h1{font-size:38px;font-weight:500;letter-spacing:-.04em;margin:15px 0}p{color:#657982;font-size:14px}label{display:block;font-size:13px;margin:28px 0 8px}input{width:100%;padding:15px 18px;border:1px solid #c4d0d5;border-radius:14px;background:#e8eef0;font:inherit}button{width:100%;margin-top:16px;border:0;border-radius:14px;background:#243e49;color:#fff;padding:14px;font:inherit;cursor:pointer}a{display:inline-block;color:#657982;font-size:13px;margin-top:28px;text-decoration:none}.error{color:#8e3030}*:focus-visible{outline:3px solid #7796a5;outline-offset:3px}</style><main><small>Espace réservé</small><h1>Projet Enriquillo</h1><p>Saisissez le code d’accès pour consulter le projet.</p>${message?'<p class="error" role="alert">'+message+'</p>':''}<form method="post" action="${ENDPOINT}" autocomplete="off"><label for="code">Code d’accès</label><input id="code" name="code" type="password" autocomplete="current-password" required maxlength="128"><button type="submit">Débloquer le contenu →</button></form><a href="/index.html">← Retour à APRI</a></main></html>`;}
+function screen(message='') {return `<!doctype html><html lang="es"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Proyecto Enriquillo · Acceso privado</title><style>*{box-sizing:border-box}body{margin:0;background:#f2f4f5;color:#243e49;font:16px/1.6 system-ui,sans-serif;min-height:100vh;display:grid;place-items:center;padding:24px}main{width:min(100%,400px)}small{font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:#687d85}h1{font-size:38px;font-weight:500;letter-spacing:-.04em;margin:15px 0}p{color:#657982;font-size:14px}label{display:block;font-size:13px;margin:28px 0 8px}input{width:100%;padding:15px 18px;border:1px solid #c4d0d5;border-radius:14px;background:#e8eef0;font:inherit}button{width:100%;margin-top:16px;border:0;border-radius:14px;background:#243e49;color:#fff;padding:14px;font:inherit;cursor:pointer}a{display:inline-block;color:#657982;font-size:13px;margin-top:28px;text-decoration:none}.error{color:#8e3030}*:focus-visible{outline:3px solid #7796a5;outline-offset:3px}</style><main><small>Espacio reservado</small><h1>Proyecto Enriquillo</h1><p>Introduce el código de acceso para consultar el proyecto.</p>${message?'<p class="error" role="alert">'+message+'</p>':''}<form method="post" action="${ENDPOINT}" autocomplete="off"><label for="code">Código de acceso</label><input id="code" name="code" type="password" autocomplete="current-password" required maxlength="128"><button type="submit">Acceder al proyecto →</button></form><a href="/index.html">← Volver a APRI</a></main></html>`;}
 module.exports=async(req,res)=>{
   res.setHeader('Cache-Control','private, no-store, max-age=0');
   res.setHeader('CDN-Cache-Control','no-store');
@@ -30,27 +30,27 @@ module.exports=async(req,res)=>{
   res.setHeader('X-Frame-Options','DENY');
   res.setHeader('Content-Security-Policy',"default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; base-uri 'none'; form-action 'self'; frame-ancestors 'none'");
   const send=(status,body,type='text/html; charset=utf-8')=>{res.statusCode=status;res.setHeader('Content-Type',type);res.end(req.method==='HEAD'?undefined:body);};
-  if(!['GET','HEAD','POST'].includes(req.method)){res.setHeader('Allow','GET, HEAD, POST');return send(405,'Méthode non autorisée.','text/plain');}
+  if(!['GET','HEAD','POST'].includes(req.method)){res.setHeader('Allow','GET, HEAD, POST');return send(405,'Método no permitido.','text/plain');}
   const key=(process.env.ENRIQUILLO_SERVER_KEY||'').trim();
-  if(!/^[a-f0-9]{64}$/.test(key))return send(503,screen('Accès temporairement indisponible. La configuration privée est en cours.'));
-  let data;try{data=unpack(key);}catch{return send(503,screen('Accès temporairement indisponible.'));}
+  if(!/^[a-f0-9]{64}$/.test(key))return send(503,screen('Acceso temporalmente no disponible. La configuración privada está en curso.'));
+  let data;try{data=unpack(key);}catch{return send(503,screen('Acceso temporalmente no disponible.'));}
   const url=new URL(req.url,'https://'+req.headers.host);
   if(req.method==='POST'){
     let origin;try{origin=new URL(req.headers.origin).host;}catch{}
-    if(origin!==req.headers.host)return send(403,screen('Requête refusée. Veuillez réessayer depuis cette page.'));
+    if(origin!==req.headers.host)return send(403,screen('Solicitud rechazada. Inténtalo de nuevo desde esta página.'));
     if(url.searchParams.has('logout')){res.setHeader('Set-Cookie',COOKIE+'=; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=0');res.statusCode=303;res.setHeader('Location',ENDPOINT);return res.end();}
     const now=Date.now();
     for(const [ip,r]of attempts)if(r.until<now)attempts.delete(ip);
     const ip=String(req.headers['x-real-ip']||req.headers['x-forwarded-for']||req.socket?.remoteAddress||'unknown').split(',')[0].trim();
     let r=attempts.get(ip);if(!r){r={count:0,until:now+900000};attempts.set(ip,r);}
-    if(attempts.size>10000||r.count>=5){res.setHeader('Retry-After','900');return send(429,screen('Trop de tentatives. Réessayez dans 15 minutes.'));}
+    if(attempts.size>10000||r.count>=5){res.setHeader('Retry-After','900');return send(429,screen('Demasiados intentos. Inténtalo de nuevo en 15 minutos.'));}
     r.count++;
     let body=req.body;
     if(body===undefined){const chunks=[];let size=0;for await(const c of req){size+=c.length;if(size>2048)return send(413,screen('Requête trop longue.'));chunks.push(c);}body=Buffer.concat(chunks).toString();}
     const code=typeof body==='string'?new URLSearchParams(body).get('code'):body?.code;
-    if(typeof code!=='string'||code.length>128)return send(400,screen('Code incorrect.'));
+    if(typeof code!=='string'||code.length>128)return send(400,screen('Código incorrecto.'));
     const hash=await new Promise((resolve,reject)=>crypto.scrypt(code,data.salt,32,{N:32768,maxmem:64*1024*1024},(e,k)=>e?reject(e):resolve(k.toString('hex'))));
-    if(!equal(hash,data.hash)){await new Promise(r=>setTimeout(r,700));return send(401,screen('Code incorrect.'))}
+    if(!equal(hash,data.hash)){await new Promise(r=>setTimeout(r,700));return send(401,screen('Código incorrecto.'))}
     attempts.delete(ip);
     const value=String(now+8*3600000)+'.'+crypto.randomBytes(16).toString('hex');
     res.setHeader('Set-Cookie',COOKIE+'='+value+'.'+mac(value,key)+'; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=28800');
