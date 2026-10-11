@@ -4,7 +4,7 @@ export const onglets = [
  {id:'paysage',fr:'Résilience des paysages',en:'Landscape resilience'},
  {id:'boucles',fr:'Boucles de rétroaction',en:'Feedback loops'},
  {id:'tester',fr:'Tester le concept',en:'Test the concept'},
- {id:'document',fr:'Cadre méthodologique et conceptuel complet',en:'Full methodological and conceptual framework'}
+ {id:'document',fr:'Document de référence',en:'Reference document'}
 ];
 const guide={modele:'modele'};
 export default async function render(el,apri,actif){
