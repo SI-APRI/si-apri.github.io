@@ -1,6 +1,6 @@
 /* Ressources: telechargements_page.render() (Streamlit MODE_DONNEES).
    The six workbooks are built by outils/export_ressources.py with the
-   Streamlit functions and served as static files from data/ressources/<lang>/.
+   Streamlit functions and delivered by the authenticated APRI download endpoint.
    The individual household dataset is never published: its request goes by
    e-mail, prefilled with the fields the request asks for. */
 export const onglets = [];
@@ -21,8 +21,8 @@ export default async function render(el, apri){
     ${j.sous?`<div class="dl-s">${e(j.sous)}</div>`:''}
     <div class="dl-m">${e(j.volume)}  ·  <b>${e(j.format)}</b></div>
    </div>
-   <a class="dl-b" href="data/ressources/${apri.lang}/${e(j.fichier)}" download="${e(j.fichier)}"
-      title="${e(R.bouton+' — '+j.titre)}" aria-label="${e(R.bouton+' — '+j.titre+' ('+j.format+')')}">${e(j.format)} ↓</a>
+   <a class="dl-b" href="https://si-aprigithubio.vercel.app/api/apri-download?file=${encodeURIComponent(apri.lang+'/'+j.fichier)}"
+      title="${e(R.bouton+' — '+j.titre)}" aria-label="${e(R.bouton+' — '+j.titre+' ('+j.format+')')}">${e(j.format)} · ${e(apri.t('Code requis','Access code'))} ↓</a>
   </div>`).join('');
 
  const corps = apri.t(
