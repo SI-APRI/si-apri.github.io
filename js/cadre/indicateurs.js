@@ -11,13 +11,6 @@ export default async function render(el, apri){
  css();
  const d = await donnees(apri);
  el.innerHTML = '';
- // "Comprendre le calcul des scores": st.expander holding score_parcours.render()
- const pli = apri.h(`<details class="pli"><summary>${apri.esc(apri.t('Comprendre le calcul des scores','Understand score calculation'))}</summary><div class="cad-blanc"></div></details>`);
- pli.addEventListener('toggle', ()=>{
-  const z = pli.querySelector('.cad-blanc');
-  if(pli.open && !z.firstChild) z.append(cadreHtml((d.langs[apri.lang]||d.langs.fr).score, 400, apri.t('Calcul des scores','Score calculation')));
- });
- el.append(pli);
  const z = document.createElement('div'); el.append(z);
  vueIndicateurs(z, apri, d);
 }
