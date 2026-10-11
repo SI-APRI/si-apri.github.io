@@ -3,7 +3,7 @@ export const onglets = [
  {id:'indicateurs',fr:'Calcul des scores',en:'Score calculation'},
  {id:'boucles',fr:'Boucles de rétroaction',en:'Feedback loops'},
  {id:'tester',fr:'Tester le concept',en:'Test the concept'},
- {id:'document',fr:'Document complet',en:'Full document'}
+ {id:'document',fr:'Cadre méthodologique et conceptuel complet',en:'Full methodological and conceptual framework'}
 ];
 const guide={modele:'modele'};
 export default async function render(el,apri,actif){
