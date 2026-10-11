@@ -65,6 +65,7 @@ export default async function render(el, apri){
  const modelTexts=[
  t('APRI est un modèle de résilience de type capital-based, c’est-à-dire fondé sur les capitaux du territoire.','APRI is a capital-based resilience model, grounded in the territory’s capital assets.'),
  t('Les ressources d’un territoire lui permettent d’anticiper, d’absorber et de s’adapter : trois attributs de la résilience.','A territory’s resources enable it to anticipate, absorb and adapt: three attributes of resilience.'),
+ t('Ces ressources se répartissent en sept dimensions : infrastructures, institutions, écosystèmes, moyens d’existence, relations sociales, ressources humaines et culturelles.','These resources span seven dimensions: infrastructure, institutions, ecosystems, livelihoods, social relationships, human and cultural resources.'),
  t('Des indicateurs observables servent de proxys pour évaluer les attributs de cette résilience.','Observable indicators serve as proxies to assess the attributes of this resilience.'),
  t('Ces indicateurs sont normalisés sur des échelles de résilience de 0 à 10 pour être comparables entre eux.','These indicators are normalized on resilience scales from 0 to 10 so they can be compared.')
  ];
