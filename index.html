@@ -10,6 +10,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="preload" as="image" href="img/fond.jpg">
 <link rel="stylesheet" href="css/commun.css?v=202610101400">
+<style>nav.principal .item > a.nav-pictogramme{display:flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;padding-inline:10px}nav.principal .nav-pictogramme svg{display:block;flex-shrink:0}</style>
 </head>
 <body>
 <a class="saut-contenu" href="#contenu-principal" data-t="saut">Aller au contenu</a>
@@ -93,6 +94,12 @@ function construireNav(){
   nav.append(div);
  }
  const projet=document.createElement('div'); projet.className='item'; projet.innerHTML='<a href="enriquillo.html">'+(l==='fr'?'Projet Enriquillo':l==='es'?'Proyecto Enriquillo':'Enriquillo')+'</a>'; nav.append(projet);
+
+ const iconLinks=[
+  [nav.querySelector('[data-sec="accueil"] > a'),FR.accueil&& (TXT[l]?.accueil||FR.accueil),'<path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/>'],
+  [projet.querySelector('a'),l==='fr'?'Projet Enriquillo':l==='es'?'Proyecto Enriquillo':'Enriquillo','<path d="m2 18 7-11 5 7 3-4 5 8M3 21h18"/><circle cx="17" cy="5" r="2"/>']
+ ];
+ iconLinks.forEach(([a,label,shape])=>{a.classList.add('nav-pictogramme');a.setAttribute('aria-label',label);a.title=label;a.innerHTML='<svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">'+shape+'</svg>';});
  nav.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{nav.classList.remove('ouvert');document.querySelector('.menu').setAttribute('aria-expanded','false');}));
  marquer(courant);
 }
