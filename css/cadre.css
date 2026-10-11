@@ -357,3 +357,235 @@
 @media(max-width:760px){#cadre .jeu-chemin{grid-template-columns:repeat(2,minmax(0,1fr))}#cadre [role="tablist"]{grid-template-columns:repeat(2,minmax(0,1fr))}#cadre [role="tablist"] [role="tab"]:last-child{grid-column:1/-1}}
 @media(max-width:420px){#cadre .jeu-chemin{grid-template-columns:1fr}#cadre .jeu-chemin button{min-height:52px}#cadre [role="tablist"] [role="tab"]{font-size:13px}}
 @media(prefers-reduced-motion:reduce){#cadre .jeu-chemin button,#cadre .jeu-carte{transition:none;animation:none}}
+
+
+/* Cadre : hiérarchie compacte et navigation en onglets */
+#cadre [role="tablist"]{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px!important;padding:7px!important;margin:0 0 18px!important;border:0!important;border-radius:16px!important;background:#f0f5f1!important;overflow:visible!important}
+#cadre [role="tablist"] [role="tab"]{display:flex!important;align-items:center!important;justify-content:center!important;min-width:0!important;min-height:46px!important;width:100%!important;padding:9px 12px!important;border:1px solid transparent!important;border-radius:12px!important;background:transparent!important;color:#53695e!important;font:600 14px/1.3 Inter,Arial,sans-serif!important;text-align:center!important;white-space:normal!important;box-shadow:none!important}
+#cadre [role="tablist"] [role="tab"][aria-selected="true"]{background:#174936!important;color:#fff!important;border-color:#174936!important;box-shadow:0 4px 12px rgba(23,73,54,.14)!important}
+#cadre [role="tablist"] [role="tab"]:hover:not([aria-selected="true"]){background:#fff!important;border-color:#d8e4db!important;color:#174936!important}
+#cadre .jeu{max-width:1120px;margin:0 auto}
+#cadre .jeu-tete{display:grid!important;grid-template-columns:minmax(0,1fr) auto;align-items:center!important;gap:8px 16px!important;margin:10px 0 12px!important;min-height:0!important}
+#cadre .jeu-tete h2{grid-column:1;grid-row:1;margin:0!important;font-size:clamp(21px,2vw,25px)!important;line-height:1.25!important;letter-spacing:-.015em}
+#cadre .jeu-total{grid-column:2;grid-row:1;justify-self:end;min-width:78px!important;padding:8px 12px!important;border-radius:14px!important;background:#174936!important;box-shadow:0 5px 14px rgba(23,73,54,.12)!important}
+#cadre .jeu-chemin:empty{display:none!important}
+#cadre .jeu-carte{padding:clamp(20px,2.5vw,28px)!important;border:1px solid #dfe8e2!important;border-radius:20px!important;background:#fff!important;box-shadow:0 10px 28px rgba(17,53,39,.06)!important}
+#cadre .jeu-situation{padding:18px 22px!important;margin:0 0 18px!important;border:1px solid #e3ebe5!important;border-left:4px solid #28745c!important;border-radius:14px!important;background:#f5f8f6!important;font-size:clamp(19px,2vw,23px)!important;font-weight:600!important;line-height:1.42!important;color:#263f35!important}
+#cadre .jeu-choix-multi{gap:12px!important}
+#cadre .jeu-capa{min-height:88px;border:1px solid #e0e8e2;border-left:4px solid var(--c);border-radius:14px;background:#fff;box-shadow:0 3px 12px rgba(25,63,46,.04)}
+#cadre .jeu-bouton{min-height:44px;padding:11px 18px!important;border:0!important;border-radius:10px!important;background:#174936!important;color:#fff!important;font-size:15px!important;font-weight:700!important;box-shadow:0 4px 12px rgba(23,73,54,.12)}
+#cadre .jeu-bouton:hover:not(:disabled){background:#226449!important;transform:translateY(-1px)}
+@media(max-width:760px){#cadre [role="tablist"]{grid-template-columns:repeat(2,minmax(0,1fr))}#cadre [role="tablist"] [role="tab"]:last-child{grid-column:1/-1}#cadre .jeu-tete{grid-template-columns:1fr auto}}
+@media(max-width:500px){#cadre [role="tablist"] [role="tab"]{min-height:42px!important;padding:8px 9px!important;font-size:13px!important}#cadre .jeu-situation{padding:15px 16px!important;font-size:18px!important}#cadre .jeu-capa{min-height:72px}}
+
+
+/* Finition : cartes claires, score aligné sur le titre, rythme vertical resserré */
+#cadre .jeu{position:relative!important}
+#cadre .jeu-tete-nue{position:absolute!important;top:22px!important;right:0!important;z-index:2;margin:0!important;padding:0!important;height:auto!important;min-height:0!important}
+#cadre .jeu-total{min-width:74px!important;padding:7px 10px!important;border-radius:13px!important;background:#174936!important;color:#fff!important}
+#cadre .jeu-tete h2,#cadre .jeu>h2{margin:0!important;padding-right:92px!important;font-size:clamp(21px,2vw,25px)!important;line-height:1.25!important}
+#cadre .jeu-capa{background:#fff!important;color:#263f35!important;border:1px solid #dce7df!important;border-left:4px solid var(--c)!important;border-radius:14px!important;box-shadow:0 3px 12px rgba(25,63,46,.05)!important}
+#cadre .jeu-capa b{color:#263f35!important;font-weight:700!important}
+#cadre .jeu-capa small{color:#52685d!important;font-weight:500!important}
+#cadre .jeu-capa:hover:not(:disabled){background:#f6faf7!important;border-color:#c4d8cb!important;transform:translateY(-1px)}
+#cadre .jeu-capa.pris{background:#eaf4ed!important;border-color:#8fb49c!important;box-shadow:inset 0 0 0 1px #8fb49c!important}
+#cadre .jeu-capa.pris b,#cadre .jeu-capa.pris small{color:#174936!important}
+#cadre .jeu-tete-nue+.jeu-tete{margin-top:0!important}
+#cadre .jeu-situation{font-size:clamp(18px,1.8vw,22px)!important;line-height:1.4!important;font-weight:600!important;color:#263f35!important}
+#cadre .jeu-bouton:disabled{opacity:.48!important;box-shadow:none!important}
+@media(max-width:600px){#cadre .jeu-tete-nue{top:18px!important}#cadre .jeu-tete h2,#cadre .jeu>h2{padding-right:84px!important;font-size:20px!important}#cadre .jeu-total{min-width:68px!important}}
+
+
+/* Badge de points compact, aligne sur le titre du jeu */
+#cadre .jeu-tete-nue{top:0!important}
+#cadre .jeu-total{display:flex!important;align-items:baseline!important;justify-content:center!important;gap:6px;min-width:0!important;min-height:34px!important;padding:5px 10px!important}
+#cadre .jeu-total b{display:inline!important;font-size:21px!important}
+#cadre .jeu-total span{font-size:9px!important}
+@media(max-width:600px){#cadre .jeu-tete-nue{top:0!important}#cadre .jeu-total{min-height:32px!important}}
+
+
+/* Direction sobre : une police, un accent bleu, un fond unique */
+#cadre,#cadre *{font-family:Inter,Arial,sans-serif!important}
+#cadre{--bleu:#35597a;--bleu-clair:#f4f6f8;--bleu-pale:#f4f6f8;--nuit:#35597a;--vert:#35597a;--ambre:#35597a;--rouge:#35597a;--c:#35597a;--i:#fff}
+#cadre .jeu,#cadre .jeu *{--c:#35597a!important;--vert:#35597a!important;--ambre:#35597a!important;--rouge:#35597a!important;--bleu:#35597a!important;--nuit:#35597a!important;--bleu-pale:#f4f6f8!important;--bleu-clair:#e8edf2!important}
+#cadre .cad-cadre-if,#cadre .cad-blanc,#cadre .jeu-carte,#cadre .jeu-situation,#cadre .jeu-capa,#cadre .jeu-src,#cadre .jeu-attr,#cadre .jeu-dimscore,#cadre .jeu-curseur,#cadre .jeu-ch-e,#cadre .cad-ch-e,#cadre .cad-info,#cadre .cad-nrm>div,#cadre .cad-nrm-p,#cadre .cad-ch-r{background:#fff!important}
+#cadre [role=tablist]{background:#fff!important;border-bottom:1px solid #dfe4e8!important;border-radius:0!important;padding:0 0 8px!important}
+#cadre [role=tablist] [role=tab]{font-family:Inter,Arial,sans-serif!important;color:#52616d!important;border-color:transparent!important;background:#fff!important;box-shadow:none!important;border-radius:6px!important}
+#cadre [role=tablist] [role=tab][aria-selected=true]{background:#35597a!important;color:#fff!important;border-color:#35597a!important}
+#cadre .jeu-carte{border:1px solid #dfe4e8!important;border-radius:12px!important;box-shadow:none!important}
+#cadre .jeu-situation{border:1px solid #dfe4e8!important;border-left:3px solid #35597a!important;border-radius:8px!important;color:#293742!important}
+#cadre .jeu-capa{border:1px solid #dfe4e8!important;border-left:3px solid #35597a!important;border-radius:8px!important;box-shadow:none!important;color:#293742!important}
+#cadre .jeu-capa b,#cadre .jeu-capa small{color:#293742!important}
+#cadre .jeu-capa.pris{background:#f4f6f8!important;border-color:#35597a!important;box-shadow:inset 0 0 0 1px #35597a!important}
+#cadre .jeu-total,#cadre .jeu-bouton{background:#35597a!important;color:#fff!important;box-shadow:none!important}
+#cadre .jeu-bouton:hover:not(:disabled){background:#294965!important}
+#cadre .cad-ex-t,#cadre .cad-ch-t,#cadre .cad-nrm-t,#cadre .cad-log-t{color:#35597a!important}
+
+
+/* Cartes de capacités : surfaces blanches, texte sombre, accent en liseré */
+#cadre .jeu .jeu-capa,#cadre .jeu .jeu-capa:hover:not(:disabled),#cadre .jeu .jeu-capa.pris{background:#fff!important;background-color:#fff!important;background-image:none!important;color:#293742!important}
+#cadre .jeu .jeu-capa b,#cadre .jeu .jeu-capa small{color:#293742!important}
+#cadre .jeu .jeu-capa{border:1px solid #dfe4e8!important;border-left:3px solid #35597a!important;box-shadow:none!important}
+#cadre .jeu .jeu-capa.pris{background:#f4f6f8!important;background-color:#f4f6f8!important;border-color:#35597a!important;box-shadow:inset 0 0 0 1px #35597a!important}
+
+
+/* Fond continu : le cadre reste sur une surface blanche, sans panneau flottant. */
+#cadre{background:#fff!important;color:#293742!important}
+#cadre .cad-cadre-if,#cadre .cad-blanc,#cadre .jeu-carte{background:#fff!important;border-radius:0!important;box-shadow:none!important}
+#cadre,#cadre *{font-family:Inter,Arial,sans-serif!important}
+
+
+/* Navigation libre : la même teinte bleue pour les cinq étapes. */
+#cadre .jeu-chemin button.ici,#cadre .jeu-chemin button.fait{background:#35597a!important;border-color:#35597a!important;color:#fff!important;box-shadow:none!important}
+#cadre .jeu-chemin button.ici i,#cadre .jeu-chemin button.fait i{background:#fff!important;border-color:#fff!important;color:#35597a!important}
+#cadre .jeu-chemin button:not(.ici):not(.fait){background:#fff!important;border-color:#dfe4e8!important;color:#53616d!important;box-shadow:none!important}
+#cadre .jeu-chemin button:not(.ici):not(.fait) i{background:#f4f6f8!important;border-color:#dfe4e8!important;color:#35597a!important}
+#cadre .jeu-chemin button:hover{transform:none!important;box-shadow:none!important;border-color:#35597a!important}
+/* Fond gris continu : seules les couleurs de l’échelle APRI restent codées. */
+#cadre{background:#f2f4f5!important;color:#293742!important}
+#cadre .cad-cadre-if,#cadre .cad-blanc,#cadre .jeu-carte,#cadre .jeu-situation,#cadre .jeu-capa,#cadre .jeu-src,#cadre .jeu-attr,#cadre .jeu-dimscore,#cadre .jeu-curseur,#cadre .jeu-palier,#cadre .jeu-dim,#cadre .jeu-note{background:#f2f4f5!important;background-image:none!important;box-shadow:none!important}
+#cadre [role=tablist]{background:#f2f4f5!important}
+#cadre .jeu-chemin button:not(.ici):not(.fait){background:#f2f4f5!important;box-shadow:none!important}
+#cadre .jeu-palier b{background:var(--c)!important;color:var(--i)!important}
+/* Dernière passe : supprimer les panneaux blancs qui rompent le fond gris. */
+#contenu-cadre,#contenu-cadre>div,#cadre,#cadre .cad-cadre-if,#cadre .cad-blanc{background:#f2f4f5!important;border-color:#dfe4e8!important;border-radius:0!important;box-shadow:none!important}
+#cadre [role=tablist] [role=tab]:not([aria-selected=true]){background:#f2f4f5!important}
+#cadre .jeu .jeu-capa,#cadre .jeu .jeu-capa:hover:not(:disabled),#cadre .jeu .jeu-capa.pris{background:#f2f4f5!important;background-color:#f2f4f5!important;box-shadow:none!important}
+#cadre .jeu-carte,#cadre .jeu-situation,#cadre .jeu-src,#cadre .jeu-attr,#cadre .jeu-dimscore,#cadre .jeu-curseur,#cadre .jeu-note,#cadre .jeu-dim{background:#f2f4f5!important;background-color:#f2f4f5!important}
+#cadre .jeu-palier b{background:var(--c)!important;color:var(--i)!important}
+/* Les pastilles de l’échelle héritent de leur teinte propre, même dans le thème sobre. */
+#cadre .jeu .jeu-palier b{--c:inherit!important;--i:inherit!important;background:var(--c)!important;color:var(--i)!important}
+/* Présentation animée des capacités, sans interaction de quiz. */
+#cadre .jeu-capacites-visuel{background:#f2f4f5!important;border:0!important;border-radius:0!important;padding:0!important;box-shadow:none!important}
+#cadre .jeu-situation-capacites{background:transparent!important;border:0!important;border-radius:0!important;padding:14px 0 18px!important;margin:0!important}
+#cadre .jeu-capacites-visuel .etiquette{color:#6b7a84!important;font-size:10px!important;letter-spacing:.12em!important}
+#cadre .jeu-phrase{min-height:78px;margin:12px 0 18px;font-size:clamp(19px,2.1vw,24px);font-weight:600;line-height:1.45;color:#293742;transition:opacity .22s,transform .22s}
+#cadre .jeu-phrase.sortie{opacity:0;transform:translateY(7px)}
+#cadre .jeu-capacites-flux{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;color:#53616d;font-size:12px}
+#cadre .jeu-capacites-flux span{padding:7px 12px;border:1px solid #d7e0e5;border-radius:999px;background:#f2f4f5}
+#cadre .jeu-capacites-flux b{color:#35597a;font-size:17px;font-weight:500}
+#cadre .jeu-capacites-visuel .jeu-choix-multi{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+#cadre .jeu-capacite-visuelle{min-height:150px;padding:16px;background:#f2f4f5!important;border:1px solid #d7e0e5!important;border-radius:12px;transition:background .35s,border-color .35s,transform .35s,box-shadow .35s}
+#cadre .jeu-capacite-type{display:block;margin-bottom:10px;color:#71808c;font-size:10px;letter-spacing:.1em}
+#cadre .jeu-capacite-visuelle b{display:block;margin-bottom:8px;color:#293742;font-size:18px}
+#cadre .jeu-capacite-visuelle small{display:block;color:#53616d;font-size:13px;line-height:1.5}
+#cadre .jeu-capacite-visuelle.active{background:#e8edf2!important;border-color:#35597a!important;box-shadow:inset 0 0 0 1px #35597a!important;transform:translateY(-3px)}
+#cadre .jeu-capacites-note{margin:16px 0 0;color:#53616d;font-size:13px;line-height:1.6}
+@media(max-width:760px){#cadre .jeu-capacites-visuel .jeu-choix-multi{grid-template-columns:1fr}#cadre .jeu-capacite-visuelle{min-height:0}}
+@media(prefers-reduced-motion:reduce){#cadre .jeu-phrase,#cadre .jeu-capacite-visuelle{transition:none!important;transform:none!important}}
+
+/* L’introduction des capacités est une explication, sans compteur de jeu. */
+#cadre .jeu-intro-capacites .jeu-total{display:none!important}
+
+
+/* Parcours clair du cadre : fond partagé, typographie héritée, navigation sur deux rangées égales. */
+#cadre .jeu-cadre-guide{background:transparent!important;color:inherit;padding:clamp(10px,1.5vw,22px) 0 8px;margin:0;max-width:none;font:inherit}
+#cadre .guide-tabs{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:0 0 18px;padding:0;border:0;background:transparent}
+#cadre .guide-tabs button{min-width:0;width:100%;min-height:46px;display:flex;justify-content:center;align-items:center;text-align:center;border:1px solid #ccd3d8;border-radius:9px;background:transparent;color:#425463;padding:9px 12px;font:inherit;font-weight:600;line-height:1.25;box-shadow:none}
+#cadre .guide-tabs button:hover,#cadre .guide-tabs button.ici{background:#e7ebee;color:#203643;border-color:#8999a4}
+#cadre .guide-tabs button:focus-visible{outline:2px solid #405764;outline-offset:2px}
+#cadre .guide-tabs button i{display:none!important}
+#cadre .guide-intro{margin:0 0 18px;padding:0 0 16px;border-bottom:1px solid #cfd5da;max-width:100ch}
+#cadre .guide-intro h2{font:inherit;font-size:clamp(22px,2.3vw,30px);font-weight:650;line-height:1.2;margin:5px 0 8px;color:#203643}
+#cadre .guide-intro p:last-child{font-size:16px;line-height:1.55;margin:0;color:#50616c}
+#cadre .guide-surtitre,#cadre .guide-label{font-size:11px;letter-spacing:.075em;font-weight:700;color:#667680}
+#cadre .guide-sections{display:grid;gap:16px}
+#cadre .guide-section{scroll-margin-top:110px;margin:0;padding:clamp(14px,2vw,22px);background:transparent;border:1px solid #d0d6db;border-radius:12px}
+#cadre .guide-heading{margin:0 0 14px;max-width:95ch}
+#cadre .guide-heading h3{font:inherit;font-size:clamp(19px,2vw,24px);font-weight:650;line-height:1.25;color:#263d4a;margin:0 0 5px}
+#cadre .guide-heading p{font-size:15px;line-height:1.5;color:#52636e;margin:0}
+#cadre .guide-flow{display:grid;grid-template-columns:1fr auto 1fr auto 1fr auto 1fr;align-items:center;gap:10px;text-align:center}
+#cadre .guide-flow span,#cadre .guide-flow i{font-style:normal;font-size:14px;font-weight:600;color:#364d5a}
+#cadre .guide-flow span{border:1px solid #d0d6db;border-radius:8px;padding:12px 10px;min-height:48px;display:grid;place-items:center}
+#cadre .guide-capacites{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+#cadre .guide-capacite{background:transparent;border:1px solid #d0d6db;border-radius:10px;padding:14px 15px;min-height:118px;transition:border-color .22s,background-color .22s,transform .22s}
+#cadre .guide-capacite.actif{background:#e7ebee;border-color:#8798a3;transform:translateY(-2px)}
+#cadre .guide-capacite h4,#cadre .guide-dimension h4{font:inherit;font-size:16px;line-height:1.3;font-weight:650;color:#283f4c;margin:5px 0}
+#cadre .guide-capacite p{font-size:14px;line-height:1.45;color:#52636e;margin:0}
+#cadre .guide-exemple{margin:10px 0 0;padding:13px 15px;border:1px solid #d0d6db;border-radius:10px;background:transparent}
+#cadre .guide-exemple-meta{display:flex;justify-content:space-between;align-items:center}
+#cadre .guide-exemple-compteur{font-size:12px;color:#667680;font-variant-numeric:tabular-nums}
+#cadre .guide-exemple-phrase{font-size:clamp(16px,1.7vw,20px);line-height:1.4;font-weight:550;color:#293f4c;margin:9px 0;transition:opacity .18s,transform .18s}
+#cadre .guide-sortie .guide-exemple-phrase,#cadre .guide-sortie .guide-source-exemple,#cadre .guide-sortie .guide-source-indicateur{opacity:.3;transform:translateY(3px)}
+#cadre .guide-exemple-note{font-size:13px;line-height:1.45;color:#64737d}
+#cadre .guide-dimensions{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+#cadre .guide-dimension{min-height:76px;padding:11px 12px;border:1px solid #d0d6db;border-radius:9px;background:transparent}
+#cadre .guide-dimension>span{font-size:11px;letter-spacing:.06em;color:#75838c;font-weight:700}
+#cadre .guide-dimension h4{margin-top:6px}
+#cadre .guide-sources{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+#cadre .guide-source{display:flex;align-items:center;gap:10px;min-height:58px;padding:10px 12px;border:1px solid #d0d6db;border-radius:9px;background:transparent;color:#344a57;transition:border-color .22s,background-color .22s}
+#cadre .guide-source.actif{background:#e7ebee;border-color:#8798a3}
+#cadre .guide-source-index{font-size:11px;font-weight:700;color:#75838c;font-variant-numeric:tabular-nums}
+#cadre .guide-source b{font-size:14px;line-height:1.3}
+#cadre .guide-source-flux{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:14px;margin-top:10px;transition:opacity .18s,transform .18s}
+#cadre .guide-source-exemple,#cadre .guide-source-indicateur{min-height:88px;padding:12px 14px;border:1px solid #d0d6db;border-radius:9px;background:transparent;display:flex;flex-direction:column;justify-content:center;gap:6px;transition:opacity .18s,transform .18s}
+#cadre .guide-source-exemple b,#cadre .guide-source-indicateur b{font-size:15px;line-height:1.4;color:#293f4c}
+#cadre .guide-dim-nom{font-size:13px;color:#687780}
+#cadre .guide-flèche{font-size:20px;color:#5b6d78}
+#cadre .guide-mesure{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;align-items:stretch;gap:10px}
+#cadre .guide-mesure>i{align-self:center;font-style:normal;color:#5b6d78}
+#cadre .guide-mesure-etape,#cadre .guide-score-carte{min-height:105px;padding:13px;border:1px solid #d0d6db;border-radius:9px;background:transparent;display:flex;flex-direction:column;justify-content:center;gap:5px}
+#cadre .guide-mesure-etape>span{font-size:11px;font-weight:700;color:#75838c}
+#cadre .guide-mesure-etape>b{font-size:15px;color:#304653}
+#cadre .guide-mesure-etape>small,#cadre .guide-score-carte>small{font-size:13px;line-height:1.35;color:#63727c}
+#cadre .guide-score-carte{border:2px solid var(--score-couleur,#80909a);background:transparent}
+#cadre .guide-score-valeur{font-size:24px;line-height:1;font-weight:700;color:var(--score-couleur,#304653)}
+#cadre .guide-methodes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:10px}
+#cadre .guide-methodes article{border:1px solid #d0d6db;border-radius:9px;padding:13px 14px;background:transparent}
+#cadre .guide-methodes article>span{font-size:11px;font-weight:700;color:#75838c}
+#cadre .guide-methodes h4{font:inherit;font-size:15px;font-weight:650;color:#304653;margin:5px 0}
+#cadre .guide-methodes p{font-size:14px;line-height:1.5;color:#52636e;margin:0}
+#cadre .guide-renvoi,#cadre .guide-fin{font-size:14px;line-height:1.5;color:#53636d;margin:12px 0 0;max-width:100ch}
+#cadre .guide-poids{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:13px 15px;border:1px solid #d0d6db;border-radius:9px;background:transparent}
+#cadre .guide-poids h4{font:inherit;font-weight:600;color:#304653;margin:5px 0}
+#cadre .guide-poids small,#cadre .guide-poids-val span{font-size:13px;color:#687780}
+#cadre .guide-poids-val{display:flex;align-items:baseline;gap:8px;white-space:nowrap}
+#cadre .guide-poids-val b{font-size:22px;color:#304653}
+@media(max-width:760px){#cadre .guide-flow{grid-template-columns:1fr auto 1fr;}.guide-flow span:nth-of-type(3){grid-column:1}.guide-flow span:nth-of-type(4){grid-column:3}#cadre .guide-dimensions{grid-template-columns:repeat(2,minmax(0,1fr))}#cadre .guide-sources{grid-template-columns:repeat(2,minmax(0,1fr))}#cadre .guide-mesure{grid-template-columns:1fr;gap:7px}#cadre .guide-mesure>i{transform:rotate(90deg);justify-self:center}#cadre .guide-capacites{grid-template-columns:1fr}}
+@media(max-width:520px){#cadre .guide-tabs{grid-template-columns:repeat(2,minmax(0,1fr))}#cadre .guide-methodes{grid-template-columns:1fr}#cadre .guide-source-flux{grid-template-columns:1fr;text-align:left}#cadre .guide-flèche{transform:rotate(90deg);justify-self:center}#cadre .guide-section{padding:13px}#cadre .guide-flow{grid-template-columns:1fr auto 1fr}#cadre .guide-flow span:nth-of-type(4){grid-column:1/-1}}
+@media(prefers-reduced-motion:reduce){#cadre .guide-capacite,#cadre .guide-source,#cadre .guide-exemple-phrase,#cadre .guide-sortie .guide-source-exemple,#cadre .guide-sortie .guide-source-indicateur{transition:none!important;transform:none!important}}
+
+
+/* Guide compact du simulateur de rétroaction, sur le même fond gris que le cadre. */
+#cadre .cad-boucle-guide{margin:0 0 14px;padding:14px 16px;border:1px solid #d0d6db;border-radius:10px;background:transparent;color:#293742}
+#cadre .cad-boucle-guide h3{font:inherit;font-size:18px;font-weight:650;line-height:1.3;color:#263d4a;margin:0 0 5px}
+#cadre .cad-boucle-intro,#cadre .cad-boucle-note{font-size:13px;line-height:1.5;color:#53636d;margin:0 0 10px;max-width:100ch}
+#cadre .cad-boucle-etapes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;list-style:decimal;margin:0;padding-left:22px}
+#cadre .cad-boucle-etapes li{min-width:0;padding:10px 12px;border:1px solid #d0d6db;border-radius:8px;background:transparent;font-size:13px;line-height:1.45;color:#52636e}
+#cadre .cad-boucle-etapes li b{display:block;font-size:14px;line-height:1.3;font-weight:650;color:#304653;margin:0 0 4px}
+#cadre .cad-boucle-etapes li span{display:block}
+#cadre .cad-boucle-note{margin:10px 0 0}
+@media(max-width:600px){#cadre .cad-boucle-guide{padding:12px}#cadre .cad-boucle-etapes{grid-template-columns:1fr}}
+
+/* Deux barres identiques et encadrés ajustés au contenu. */
+#cadre [role="tablist"],#cadre .guide-tabs{display:flex!important;flex-wrap:nowrap!important;gap:6px!important;width:100%!important;margin:0 0 10px!important;padding:0 0 8px!important;border:0!important;border-bottom:1px solid #d6dfe5!important;border-radius:0!important;background:transparent!important;overflow-x:auto!important;box-shadow:none!important}
+#cadre [role="tablist"] [role="tab"],#cadre .guide-tabs button{flex:1 0 0!important;min-width:0!important;min-height:46px!important;width:auto!important;padding:9px 10px!important;display:flex!important;align-items:center!important;justify-content:center!important;border:1px solid transparent!important;border-radius:6px!important;background:transparent!important;color:#52616d!important;font:600 14px/1.3 Inter,Arial,sans-serif!important;text-align:center!important;white-space:normal!important;box-shadow:none!important;transform:none!important;grid-column:auto!important}
+#cadre [role="tablist"] [role="tab"][aria-selected="true"],#cadre .guide-tabs button.ici{background:#35597a!important;color:#fff!important;border-color:#35597a!important;box-shadow:none!important}
+#cadre [role="tablist"] [role="tab"]:hover:not([aria-selected="true"]){background:#e8edf2!important;color:#35597a!important;border-color:#d6dfe5!important;transform:none!important}
+#cadre .jeu-cadre-guide{padding:0!important;margin:0!important;max-width:none!important}
+#cadre .guide-intro{position:static!important;display:block;min-height:0!important;height:auto!important;width:auto!important;padding:12px 0 16px!important;margin:0 0 16px!important;border:0!important;box-shadow:none!important;background:transparent!important;transform:none!important}
+#cadre .guide-section,#cadre .cad-boucle-guide{position:static!important;display:block;min-height:0!important;height:auto!important;max-height:none!important;scroll-snap-align:none!important;overflow:visible!important;padding:20px 22px!important;margin:0!important;border:1px solid #d7e0e5!important;border-radius:12px!important;background:transparent!important;box-shadow:none!important}
+#cadre .guide-section[hidden],#cadre .guide-intro[hidden],#cadre .guide-mesure[hidden]{display:none!important}
+#cadre .guide-sections{display:block!important}
+#cadre .guide-capacite,#cadre .guide-dimension,#cadre .guide-source,#cadre .guide-exemple,#cadre .guide-source-exemple,#cadre .guide-source-indicateur,#cadre .guide-methodes article,#cadre .guide-poids{border:1px solid #d7e0e5;border-radius:12px;min-height:0;background:transparent;box-shadow:none;padding:14px 16px}
+#cadre .guide-capacite.actif,#cadre .guide-source.actif{background:#e8edf2;border-color:#35597a;box-shadow:inset 0 0 0 1px #35597a;transform:none}
+#cadre .guide-scale-layout{display:grid;grid-template-columns:1fr minmax(240px,320px);gap:28px;align-items:start;margin:16px 0 20px}
+#cadre .guide-scale-detail h4{font-size:21px;line-height:1.3;margin:8px 0 12px;color:#293742}
+#cadre .guide-scale-detail p{font-size:14px;line-height:1.5;color:#53616d;margin:12px 0}
+#cadre .guide-scale-measured{display:inline-flex;flex-direction:column;gap:4px;border:1px solid #d7e0e5;border-radius:12px;padding:12px 18px;background:transparent}
+#cadre .guide-scale-measured span{font-size:12px;color:#53616d}
+#cadre .guide-scale-measured b{font-size:30px;line-height:1.15;color:#293742}
+#cadre .guide-scale-control{display:block;font-size:14px;font-weight:600;color:#35597a;margin:16px 0}
+#cadre .guide-scale-control output{float:right;font-variant-numeric:tabular-nums}
+#cadre .guide-scale-control input{display:block;width:100%;margin:12px 0 0;accent-color:#35597a}
+#cadre .guide-scale-detail .guide-score-carte{min-height:0;border:2px solid var(--score-couleur);border-radius:12px;padding:12px 16px;gap:6px}
+#cadre .guide-scale-bands{display:flex;flex-direction:column;gap:3px}
+#cadre .guide-scale-row{display:grid;grid-template-columns:34px 1fr;align-items:center;gap:10px;border:2px solid transparent;border-radius:9px;padding:3px 10px 3px 3px;background:transparent;font-size:13px;color:#293742}
+#cadre .guide-scale-row b{display:grid;place-items:center;height:26px;border-radius:7px;font-size:13px}
+#cadre .guide-scale-row.courant{border-color:var(--palier);transform:translateX(-5px)}
+@media(max-width:760px){#cadre [role="tablist"] [role="tab"],#cadre .guide-tabs button{flex:1 0 125px!important;font-size:13px!important}#cadre .guide-scale-layout{grid-template-columns:1fr;gap:20px}#cadre .guide-section{padding:16px!important}}
+
+/* Même hauteur et même traitement sur les deux niveaux de navigation. */
+#cadre #contenu-cadre [role="tablist"] [role="tab"]{height:56px!important;min-height:56px!important;box-sizing:border-box!important}
+#cadre #contenu-cadre [role="tablist"] [role="tab"]:not([aria-selected="true"]){background:transparent!important;border-color:transparent!important}
+#cadre #contenu-cadre [role="tablist"] [role="tab"]:hover:not([aria-selected="true"]){background:#e8edf2!important;border-color:#d6dfe5!important}
