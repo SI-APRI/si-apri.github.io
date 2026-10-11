@@ -589,3 +589,52 @@
 #cadre #contenu-cadre [role="tablist"] [role="tab"]{height:56px!important;min-height:56px!important;box-sizing:border-box!important}
 #cadre #contenu-cadre [role="tablist"] [role="tab"]:not([aria-selected="true"]){background:transparent!important;border-color:transparent!important}
 #cadre #contenu-cadre [role="tablist"] [role="tab"]:hover:not([aria-selected="true"]){background:#e8edf2!important;border-color:#d6dfe5!important}
+
+/* Direction éditoriale : lecture progressive, fond continu, navigation légère. */
+#cadre #contenu-cadre{color:#293742;font-family:Inter,Arial,sans-serif}
+#cadre #contenu-cadre .zone-onglet{padding-top:26px!important}
+#cadre #contenu-cadre .cadre-primary-tabs.cadre-primary-tabs{gap:0 24px!important;justify-content:flex-start!important;border-bottom:1px solid #d8dde1!important;padding:0!important;margin:0!important}
+#cadre #contenu-cadre .cadre-primary-tabs.cadre-primary-tabs [role=tab]{flex:0 1 auto!important;min-width:0!important;height:auto!important;min-height:44px!important;padding:12px 0!important;border:0!important;border-bottom:2px solid transparent!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;color:#68737d!important;font-size:14px!important;font-weight:400!important;line-height:1.4!important}
+#cadre #contenu-cadre .cadre-primary-tabs.cadre-primary-tabs [aria-selected=true]{color:#293742!important;border-bottom-color:#56636e!important;font-weight:600!important}
+#cadre #contenu-cadre button:focus-visible{outline:2px solid #56636e!important;outline-offset:4px!important}
+#cadre #contenu-cadre :is(.guide-section,.cad-boucle-guide,.cad-blanc){background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important;padding:12px 0 24px!important}
+#cadre #contenu-cadre .guide-heading{margin-bottom:28px!important}
+#cadre #contenu-cadre :is(.guide-heading h3,.cad-boucle-guide h3){font-size:clamp(25px,3vw,36px)!important;line-height:1.25!important;letter-spacing:-.025em!important;font-weight:500!important;margin:0 0 14px!important}
+#cadre #contenu-cadre .guide-heading p{max-width:70ch!important;font-size:17px!important;line-height:1.7!important;color:#67737d!important;margin:0!important}
+#cadre #contenu-cadre :is(.guide-capacite,.guide-dimension,.guide-source,.guide-source-exemple,.guide-source-indicateur,.guide-poids,.guide-methodes>article,.cad-ch-e,.cad-nrm>div,.cad-boucle-etapes>*,.cad-boucle-note,.cad-info,.cad-outil){background:transparent!important;box-shadow:none!important;border:0!important;border-radius:0!important;border-top:1px solid #d8dde1!important;padding:24px 0!important;min-height:0!important}
+#cadre #contenu-cadre :is(.guide-capacite,.guide-dimension,.guide-source)::before,#cadre #contenu-cadre :is(.guide-capacite,.guide-dimension,.guide-source)::after{display:none!important}
+#cadre #contenu-cadre :is(.guide-dimension>span,.guide-source-index){display:none!important}
+#cadre #contenu-cadre :is(.guide-dimension h4,.guide-source b,.guide-capacite h4,.guide-methodes h4){font-size:19px!important;line-height:1.45!important;font-weight:500!important;color:#293742!important;margin:0 0 8px!important}
+#cadre #contenu-cadre :is(.guide-capacite p,.guide-methodes p,.cad-boucle-etapes p){font-size:15px!important;line-height:1.7!important;color:#68737d!important}
+#cadre #contenu-cadre :is(.guide-dimensions,.guide-sources){gap:12px 32px!important}
+#cadre #contenu-cadre .guide-dimensions{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+#cadre #contenu-cadre .guide-source.actif{border-top-color:#596873!important;box-shadow:inset 0 1px #596873!important}
+#cadre #contenu-cadre .capacity-scene{gap:56px;margin:36px 0}
+#cadre #contenu-cadre .capacity-situation{background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important;padding:20px 12px!important}
+#cadre #contenu-cadre .capacity-situation p{font-size:clamp(20px,2vw,25px)!important;font-weight:400;line-height:1.65!important}
+#cadre #contenu-cadre .capacity-situation:after{width:56px!important}
+#cadre #contenu-cadre .capacity-scene .guide-capacite.actif{background:transparent!important;border-top-color:#68747e!important;box-shadow:inset 0 1px #68747e!important}
+#cadre #contenu-cadre .capacity-scene .guide-capacite.receiving{background:#e7ebee!important;box-shadow:none!important;transition:background .3s}
+#cadre #contenu-cadre .capacity-badge{border:0!important;padding:0!important;color:#68737d!important;font-size:11px!important;font-weight:400!important}
+#cadre #contenu-cadre :is(.capacity-controls button,.cad-export button,.cad-doc-dl){background:transparent!important;border:0!important;border-bottom:1px solid #b7c0c7!important;border-radius:0!important;color:#56636e!important;box-shadow:none!important;padding:8px 0!important}
+#cadre #contenu-cadre .capacity-controls>div{gap:22px!important}
+#cadre #contenu-cadre .guide-label{font-weight:500!important;letter-spacing:.12em!important;font-size:11px!important;color:#78818a!important}
+#cadre #contenu-cadre :is(.guide-renvoi,.guide-fin,.cad-caption){color:#68737d!important;line-height:1.7!important}
+#cadre #contenu-cadre .guide-scale-detail{background:transparent!important;box-shadow:none!important;border:0!important;padding:0 28px 0 0!important}
+#cadre #contenu-cadre .cad-ctl{gap:16px 32px!important;margin:12px 0 28px!important}
+#cadre #contenu-cadre .cad-ch{gap:28px!important}
+#cadre #contenu-cadre .cad-dsc{padding:24px 0!important}
+#cadre #contenu-cadre #guide-modele .guide-heading h3{font-size:18px!important;font-weight:500!important;letter-spacing:0!important;color:#68737d!important;margin-bottom:12px!important}
+#cadre #contenu-cadre .model-step-nav{display:flex!important;gap:32px!important;justify-content:center!important;border:0!important;margin:8px 0 0!important;padding:0!important;background:transparent!important}
+#cadre #contenu-cadre .model-step-nav button[role=tab]{flex:none!important;min-height:42px!important;height:auto!important;padding:10px 0!important;border:0!important;border-bottom:1px solid transparent!important;border-radius:0!important;background:transparent!important;color:#78818a!important;font-size:14px!important;font-weight:400!important;box-shadow:none!important}
+#cadre #contenu-cadre .model-step-nav button[aria-selected=true]{color:#293742!important;border-bottom-color:#56636e!important}
+#cadre #contenu-cadre .model-stage{max-width:780px;margin:0 auto;padding:54px 0 44px;text-align:center;min-height:300px;box-sizing:border-box}
+#cadre #contenu-cadre .model-stage h4{font-size:clamp(27px,3.2vw,39px)!important;line-height:1.25!important;font-weight:400!important;letter-spacing:-.025em!important;color:#293742!important;margin:0 0 24px!important}
+#cadre #contenu-cadre .model-statement{font-size:clamp(18px,1.8vw,22px)!important;line-height:1.75!important;font-weight:400!important;margin:0 auto!important;max-width:58ch;color:#43515c!important}
+#cadre #contenu-cadre .model-caption{font-size:14px!important;line-height:1.75!important;margin:22px auto 0!important;max-width:66ch;color:#78818a!important}
+#cadre #contenu-cadre .model-step-footer{max-width:780px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;border-top:1px solid #d8dde1;padding-top:18px;gap:20px}
+#cadre #contenu-cadre .model-step-footer button{border:0;background:transparent;color:#56636e;font:14px Inter,Arial,sans-serif;padding:8px 0;cursor:pointer}
+#cadre #contenu-cadre .model-step-footer button:disabled{opacity:.35;cursor:default}
+#cadre #contenu-cadre .model-step-footer span{font-size:12px;color:#78818a}
+@media(max-width:700px){#cadre #contenu-cadre .cadre-primary-tabs.cadre-primary-tabs{gap:0 18px!important}#cadre #contenu-cadre .cadre-primary-tabs.cadre-primary-tabs [role=tab]{font-size:13px!important}#cadre #contenu-cadre .guide-dimensions{grid-template-columns:repeat(2,minmax(0,1fr))!important}#cadre #contenu-cadre .model-step-nav{gap:18px!important}#cadre #contenu-cadre .model-stage{padding:34px 0;min-height:330px}#cadre #contenu-cadre .capacity-scene{gap:26px}#cadre #contenu-cadre .capacity-situation:after{width:0!important}}
+@media(prefers-reduced-motion:reduce){#cadre #contenu-cadre *{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
