@@ -94,14 +94,43 @@ export default async function render(el, apri){
   [t('Une échelle commune','A common scale'),t('Leurs valeurs sont ensuite <strong>normalisées sur des échelles de résilience de 0 à 10</strong>, afin de rendre les indicateurs comparables entre eux.','Their values are then <strong>normalized on resilience scales from 0 to 10</strong>, so that the indicators can be compared with one another.')]
  ];
  modelGroups.forEach(([label,body,detail])=>modelCopy.append(apri.h('<div class="model-group"><h4>'+e(label)+'</h4><div><p>'+body+'</p>'+(detail?'<p class="model-detail">'+e(detail)+'</p>':'')+'</div></div>')));
- const sc=section('capacites',t('Trois capacités','Three capacities'),t('Les capacités décrivent la manière dont un système anticipe les perturbations, en absorbe les effets et se transforme lorsque les conditions changent.','Capacities describe how a system anticipates disruption, absorbs its effects and transforms when conditions change.'));
- const caps=apri.h('<div class="guide-capacites"></div>');sc.append(caps);
- ATTR.forEach(a=>{const card=apri.h('<article class="guide-capacite" data-capacite="'+a.id+'" style="--capacity-color:'+a.c+'"><h4>'+t(a.fr,a.en)+'</h4><p>'+e(T('cad_'+a.id))+'</p></article>');caps.append(card);});
- const ex=apri.h('<div class="guide-exemple"><div class="guide-exemple-meta"><span class="guide-label">'+t('EXEMPLE ILLUSTRATIF','ILLUSTRATIVE EXAMPLE')+'</span><span class="guide-exemple-compteur" aria-hidden="true"></span></div><blockquote class="guide-exemple-phrase" aria-live="polite"></blockquote><div class="guide-exemple-note">'+t('L’exemple est relié à une ou plusieurs capacités pour rendre le modèle concret. Ce n’est pas une question à résoudre.','The example is linked to one or more capacities to make the model concrete. It is not a question to solve.')+'</div></div>');sc.append(ex);
- let ix=0;const phrase=ex.querySelector('.guide-exemple-phrase');
- const showSituation=()=>{if(!root.isConnected)return;const x=SITUATIONS[ix];phrase.classList.add('guide-sortie');caps.querySelectorAll('.guide-capacite').forEach(c=>c.classList.toggle('actif',x.a.includes(c.dataset.capacite)));window.setTimeout(()=>{if(!root.isConnected)return;phrase.textContent='« '+t(x.fr,x.en)+' »';phrase.classList.remove('guide-sortie');ex.querySelector('.guide-exemple-compteur').textContent=String(ix+1).padStart(2,'0')+' / '+String(SITUATIONS.length).padStart(2,'0');ix=(ix+1)%SITUATIONS.length;},180);};
- showSituation();const timer=window.setInterval(showSituation,4300);root._guideTimer=timer;
-
+ const sc=section('capacites',t('Trois capacités','Three capacities'),t('Les ressources d’un territoire lui permettent d’anticiper, d’absorber et de s’adapter.','A territory’s resources enable it to anticipate, absorb and adapt.'));
+ const layout=apri.h('<div class="capacity-scene"></div>');sc.append(layout);
+ const ex=apri.h('<div class="capacity-situation"><span class="guide-label">'+t('SITUATION','SITUATION')+'</span><p></p></div>');layout.append(ex);
+ const caps=apri.h('<div class="guide-capacites"></div>');layout.append(caps);
+ ATTR.forEach(a=>caps.append(apri.h('<article class="guide-capacite" data-capacite="'+a.id+'"><div class="capacity-card-title"><h4>'+t(a.fr,a.en)+'</h4><span class="capacity-badge" hidden>'+t('Exemple associé','Related example')+'</span></div><p>'+e(T('cad_'+a.id))+'</p></article>')));
+ const controls=apri.h('<div class="capacity-controls"><button type="button" data-action="prev">'+t('Précédent','Previous')+'</button><span class="capacity-counter" aria-live="off"></span><div><button type="button" data-action="replay">'+t('Rejouer','Replay')+'</button><button type="button" data-action="pause">'+t('Pause','Pause')+'</button><button type="button" data-action="next">'+t('Suivant','Next')+'</button></div></div>');sc.append(controls);
+ const sceneStyle=document.createElement('style');sceneStyle.textContent=`
+ #cadre #guide-capacites .guide-heading h3{font-size:clamp(28px,3.5vw,44px);letter-spacing:-.035em;margin-bottom:12px}
+ #cadre .capacity-scene{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:42px;align-items:center;margin:30px 0 24px}
+ #cadre .capacity-scene .guide-capacites{grid-template-columns:1fr!important;gap:14px!important}
+ #cadre .capacity-scene .guide-capacite{--capacity-color:#77818a;min-height:104px!important;padding:18px 20px!important;border-left-width:4px!important}
+ #cadre .capacity-scene .guide-capacite.actif{background:#eef0f2!important;box-shadow:0 0 0 1px #66717b!important}
+ #cadre .capacity-scene .guide-capacite.receiving{box-shadow:0 0 0 3px #66717b!important}
+ #cadre .capacity-card-title{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:8px}
+ #cadre .capacity-card-title h4{margin:0!important}
+ #cadre .capacity-badge{font-size:11px;line-height:1.3;color:#56616b;border:1px solid #bbc2c8;border-radius:20px;padding:4px 8px;white-space:nowrap}
+ #cadre .capacity-badge[hidden]{display:none!important}
+ #cadre .capacity-situation{position:relative;background:#fff;border:1px solid #d7dce1;border-radius:15px;padding:24px;text-align:center;box-shadow:0 5px 20px #29374208}
+ #cadre .capacity-situation p{font-size:18px;line-height:1.6;margin:14px 0 0;color:#293742}
+ #cadre .capacity-situation:after{content:'';position:absolute;width:42px;border-top:1px dashed #a5adb4;left:100%;top:50%}
+ #cadre .capacity-controls{border-top:1px solid #d7dce1;padding-top:18px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+ #cadre .capacity-controls>div{display:flex;gap:10px;flex-wrap:wrap}
+ #cadre .capacity-controls button{background:transparent!important;border:1px solid #b7c0c7!important;border-radius:6px!important;color:#35434e!important;padding:8px 12px!important;font-size:13px!important;cursor:pointer}
+ #cadre .capacity-controls button:hover{background:#e4e8eb!important}
+ #cadre .capacity-controls button:focus-visible{outline:2px solid #35434e;outline-offset:3px}
+ #cadre .capacity-counter{font-size:12px;color:#66717b}
+ @media(max-width:640px){#cadre .capacity-scene{grid-template-columns:1fr;gap:26px;margin-top:22px}#cadre .capacity-situation:after{width:0;height:26px;border-top:0;border-left:1px dashed #a5adb4;left:50%;top:100%}#cadre .capacity-controls{flex-wrap:wrap}#cadre .capacity-scene .guide-capacite{min-height:0!important}}
+ `;sc.append(sceneStyle);
+ let ix=0,playing=true,phase='reading',deadline=Date.now()+5000;const flying=[];const reduced=window.matchMedia('(prefers-reduced-motion: reduce)');
+ const stopFlight=()=>{flying.splice(0).forEach(n=>{n.getAnimations().forEach(a=>a.cancel());n.remove();});ex.style.opacity='1';caps.querySelectorAll('.receiving').forEach(c=>c.classList.remove('receiving'));};
+ const showSituation=()=>{stopFlight();const s=SITUATIONS[ix];ex.querySelector('p').textContent=t(s.fr,s.en);controls.querySelector('.capacity-counter').textContent=(ix+1)+' / '+SITUATIONS.length;caps.querySelectorAll('.guide-capacite').forEach(c=>{const active=s.a.includes(c.dataset.capacite);c.classList.toggle('actif',active);c.querySelector('.capacity-badge').hidden=!active;});phase='reading';deadline=Date.now()+5000;};
+ const absorb=()=>{const from=ex.getBoundingClientRect();const targets=[...caps.querySelectorAll('.guide-capacite.actif')];targets.forEach(target=>{target.classList.add('receiving');if(reduced.matches)return;const to=target.getBoundingClientRect();const clone=document.createElement('div');clone.setAttribute('aria-hidden','true');clone.textContent=ex.querySelector('p').textContent;clone.style.cssText='position:fixed;z-index:9999;pointer-events:none;box-sizing:border-box;display:flex;align-items:center;justify-content:center;text-align:center;background:#fff;color:#293742;border:1px solid #9aa4ad;border-radius:15px;padding:24px;font:18px/1.6 Inter,Arial,sans-serif;left:'+from.left+'px;top:'+from.top+'px;width:'+from.width+'px;height:'+from.height+'px;';document.body.append(clone);flying.push(clone);clone.animate([{transform:'translate(0,0) scale(1)',opacity:1},{transform:'translate('+(to.left+to.width/2-from.left-from.width/2)+'px,'+(to.top+to.height/2-from.top-from.height/2)+'px) scale(.12)',opacity:0}],{duration:900,easing:'cubic-bezier(.55,.06,.68,.19)',fill:'forwards'});});if(!reduced.matches)ex.style.opacity='.12';phase='absorbing';deadline=Date.now()+1100;};
+ controls.querySelector('[data-action="prev"]').onclick=()=>{ix=(ix+SITUATIONS.length-1)%SITUATIONS.length;showSituation();};
+ controls.querySelector('[data-action="next"]').onclick=()=>{ix=(ix+1)%SITUATIONS.length;showSituation();};
+ controls.querySelector('[data-action="replay"]').onclick=()=>{showSituation();playing=true;controls.querySelector('[data-action="pause"]').textContent=t('Pause','Pause');};
+ controls.querySelector('[data-action="pause"]').onclick=()=>{playing=!playing;showSituation();controls.querySelector('[data-action="pause"]').textContent=playing?t('Pause','Pause'):t('Reprendre','Resume');};
+ showSituation();const timer=window.setInterval(()=>{if(!root.isConnected){stopFlight();window.clearInterval(timer);return;}if(sc.hidden||document.hidden||!playing){stopFlight();phase='reading';deadline=Date.now()+5000;return;}if(Date.now()<deadline)return;if(phase==='reading')absorb();else{ix=(ix+1)%SITUATIONS.length;showSituation();}},100);root._guideTimer=timer;
  const sd=section('dimensions',t('Sept dimensions','Seven dimensions'),t('Les sept dimensions regroupent les attributs et indicateurs qui composent le diagnostic APRI.','The seven dimensions group the attributes and indicators that make up the APRI assessment.'));
  const dimgrid=apri.h('<div class="guide-dimensions"></div>');sd.append(dimgrid);
  DIMS.forEach((k,i)=>dimgrid.append(apri.h('<article class="guide-dimension"><span>'+String(i+1).padStart(2,'0')+'</span><h4>'+e(T(k))+'</h4></article>')));
@@ -141,11 +170,11 @@ export default async function render(el, apri){
   panels.forEach(p=>p.getAnimations({subtree:true}).forEach(a=>{if(a.id==='apri-entrance')a.cancel();}));
   if(!panel||window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
   const groups='.guide-heading,.guide-model-copy,.guide-capacites,.guide-dimensions,.guide-sources,.guide-source-flux';
-  const items=[...panel.children].flatMap(child=>child.matches(groups)?[...child.children].filter(x=>x.tagName!=='STYLE'):[child]);
+  const items=[...panel.children].filter(child=>child.tagName!=='STYLE').flatMap(child=>child.matches(groups)?[...child.children].filter(x=>x.tagName!=='STYLE'):[child]);
   items.forEach((item,i)=>{const anim=item.animate([{opacity:0,translate:'0 22px'},{opacity:1,translate:'0 0'}],{duration:650,delay:i*170,easing:'cubic-bezier(.22,.61,.36,1)',fill:'backwards'});anim.id='apri-entrance';});
  };
  nav.setAttribute('role','tablist');
- const select=id=>{buttons.forEach(b=>{const active=b.dataset.cible===id;b.classList.toggle('ici',active);b.setAttribute('aria-selected',String(active));b.tabIndex=active?0:-1;});panels.forEach(panel=>panel.hidden=panel.id!==id);revealPanel(panels.find(panel=>panel.id===id));};
+ const select=id=>{buttons.forEach(b=>{const active=b.dataset.cible===id;b.classList.toggle('ici',active);b.setAttribute('aria-selected',String(active));b.tabIndex=active?0:-1;});panels.forEach(panel=>panel.hidden=panel.id!==id);stopFlight();if(id==='guide-capacites')showSituation();revealPanel(panels.find(panel=>panel.id===id));};
  buttons.forEach((b,i)=>{b.id='tab-'+b.dataset.cible;b.setAttribute('role','tab');b.onclick=()=>select(b.dataset.cible);b.onkeydown=ev=>{let n;if(ev.key==='ArrowRight')n=(i+1)%buttons.length;else if(ev.key==='ArrowLeft')n=(i+buttons.length-1)%buttons.length;else if(ev.key==='Home')n=0;else if(ev.key==='End')n=buttons.length-1;else return;ev.preventDefault();select(buttons[n].dataset.cible);buttons[n].focus();};});
  panels.forEach(panel=>{panel.setAttribute('role','tabpanel');panel.setAttribute('aria-labelledby','tab-'+panel.id);});select('guide-modele');
 }
