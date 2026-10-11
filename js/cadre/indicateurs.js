@@ -64,8 +64,8 @@ export function vueIndicateurs(el, apri, d){
   detail.querySelector('.ib-top').remove();detail.querySelector('.ib-description')?.remove();
   detail.append(meta);
   const scale=detail.querySelector('.ib-scale'),caption=scale.querySelector('p');
-  scale.querySelector('h4').textContent=method(x).includes('quantil')?t('Référence mondiale · Quantiles','Global reference · Quantiles'):t('Repère normatif local','Local normative reference');
-  caption.textContent=method(x).includes('quantil')?t('Normalisation : position de la valeur observée dans la distribution mondiale.','Normalization: position of the observed value in the global distribution.'):t('Normalisation : rangs fixes entre une situation critique et une situation optimale.','Normalization: fixed ranks between critical and optimal situations.');scale.append(caption);
+  scale.querySelector('h4').remove();
+  caption.textContent=method(x).includes('quantil')?t('Normalisation par quantiles : position de la valeur observée dans la distribution mondiale de référence.','Quantile normalization: position of the observed value in the global reference distribution.'):t('Repère normatif local : normalisation par rangs fixes entre une situation critique et une situation optimale.','Local normative reference: normalization using fixed ranks between critical and optimal situations.');scale.append(caption);
   list.querySelectorAll('[data-row]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.row===String(x.ligne))));
   if(focus){if(matchMedia('(max-width:640px)').matches)detail.scrollIntoView({block:'start',behavior:'smooth'});detail.focus({preventScroll:true});}
  }
