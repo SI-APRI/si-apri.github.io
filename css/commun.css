@@ -54,11 +54,19 @@ body.defile nav.principal .sous{background:rgba(10,34,46,.82)}
 body.serre header{gap:14px;padding:0 20px}
 body.serre nav.principal .item>a{padding:10px 7px;font-size:12.5px}
 body.serre .langue{margin-left:6px}
-/* Keep both institutional identities; collapse navigation when space is tight. */
-body.tres-serre nav.principal{display:none;position:absolute;top:var(--barre);left:0;right:0;flex-direction:column;align-items:stretch;background:rgba(10,34,46,.97);padding:10px 16px;max-height:calc(100dvh - var(--barre));overflow:auto}
-body.tres-serre nav.principal.ouvert{display:flex}
-body.tres-serre nav.principal .sous{position:static;opacity:1;visibility:visible;transform:none;box-shadow:none;background:transparent;padding:0 0 6px 14px;min-width:0}
-body.tres-serre .menu{display:block}
+/* Preserve the same horizontal layout in every language. */
+@media(min-width:1101px){
+ header,body.serre header{gap:14px;padding:0 20px}
+ nav.principal{flex:1 1 0;min-width:0;margin-left:auto}
+ nav.principal .item{flex:1 1 0;min-width:0}
+ nav.principal .item:has(>a.nav-pictogramme){flex:0 0 44px}
+ nav.principal .item>a,body.serre nav.principal .item>a{display:block;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:10px 7px;font-size:12.5px}
+ nav.principal .item.a-sous>a{padding-right:20px}
+ nav.principal .item.a-sous>a::after{position:absolute;right:7px;top:17px;margin:0}
+ .langue,body.serre .langue{flex:none;margin-left:6px}
+ .menu,body.tres-serre .menu{display:none}
+}
+
 
 /* ---------- sections ---------- */
 section{min-height:100dvh;scroll-margin-top:var(--barre);position:relative}
