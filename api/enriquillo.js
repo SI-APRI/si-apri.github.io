@@ -26,7 +26,7 @@ module.exports=async(req,res)=>{
   res.setHeader('Vercel-CDN-Cache-Control','no-store');
   res.setHeader('X-Robots-Tag','noindex, nofollow, noarchive');
   res.setHeader('X-Content-Type-Options','nosniff');
-  res.setHeader('Referrer-Policy','no-referrer');
+  res.setHeader('Referrer-Policy','same-origin');
   res.setHeader('X-Frame-Options','DENY');
   res.setHeader('Content-Security-Policy',"default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; base-uri 'none'; form-action 'self'; frame-ancestors 'none'");
   const send=(status,body,type='text/html; charset=utf-8')=>{res.statusCode=status;res.setHeader('Content-Type',type);res.end(req.method==='HEAD'?undefined:body);};
