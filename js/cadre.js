@@ -1,6 +1,5 @@
 export const onglets = [
  {id:'modele',fr:'Le modèle',en:'The model'},
- {id:'ponderation',fr:'Indicateurs et échelles',en:'Indicators and scales'},
  {id:'indicateurs',fr:'Calcul des scores',en:'Score calculation'},
  {id:'boucles',fr:'Boucles de rétroaction',en:'Feedback loops'},
  {id:'tester',fr:'Tester le concept',en:'Test the concept'},
