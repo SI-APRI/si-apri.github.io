@@ -79,11 +79,28 @@ export default async function render(el, apri){
  t('Discrétisation par quantiles : lorsqu’une distribution internationale ou régionale fiable existe, la valeur brute est située dans cette distribution puis affectée à une classe de score.','Quantile discretization: when a reliable international or regional distribution exists, the raw value is located within it and assigned a score class.'),
  t('Repère normatif local : sans référence comparative robuste, deux scénarios locaux — critique et optimal — encadrent onze niveaux ordinaux, de 0 à 10.','Local normative reference: without a robust comparative reference, two local scenarios — critical and optimal — frame eleven ordinal levels from 0 to 10.')
  ];
+ const modelQuestions=[
+ t("Sur quoi repose le modèle APRI ?","What is the APRI model based on?"),
+ t("Quels sont les trois attributs de la résilience ?","What are the three attributes of resilience?"),
+ t("Quelles ressources composent un territoire résilient ?","Which resources make up a resilient territory?"),
+ t("D’où viennent les données ?","Where do the data come from?"),
+ t("Comment observer les attributs de la résilience ?","How can resilience attributes be observed?"),
+ t("Quel indicateur montre que les bâtiments peuvent résister à un cyclone ?","Which indicator shows buildings can withstand a cyclone?"),
+ t("Comment mesurer la capacité des institutions à anticiper ?","How can institutional anticipatory capacity be measured?"),
+ t("Comment les écosystèmes peuvent-ils absorber un choc ?","How can ecosystems absorb a shock?"),
+ t("Qu’est-ce qui aide un ménage à faire face à la perte d’un revenu ?","What helps a household cope with losing an income?"),
+ t("En quoi les relations sociales aident-elles à absorber un choc ?","How do social relationships help absorb a shock?"),
+ t("Quel savoir-faire aide à s’adapter à la sécheresse ?","Which skills help adaptation to drought?"),
+ t("Comment les savoirs culturels contribuent-ils à anticiper ?","How does cultural knowledge support anticipation?"),
+ t("Comment comparer des indicateurs mesurés dans des unités différentes ?","How can indicators measured in different units be compared?"),
+ t("Comment normaliser avec une distribution de référence fiable ?","How can a reliable reference distribution be used for normalization?"),
+ t("Comment normaliser sans référence comparative robuste ?","How can normalization work without a robust comparative reference?")
+ ];
  const stage=apri.h('<div class="model-stage model-auto"><p class="model-statement"></p></div>');sm.append(stage);
  const modelStyle=document.createElement('style');modelStyle.textContent='#cadre #contenu-cadre .model-auto{display:flex;align-items:center;justify-content:center;min-height:260px;padding:36px 0;max-width:850px}#cadre #contenu-cadre .model-auto .model-statement{font-size:clamp(23px,2.6vw,34px);line-height:1.6;font-weight:400;margin:0;text-wrap:pretty}@media(max-width:700px){#cadre #contenu-cadre .model-auto{min-height:280px;padding:24px 0}}';sm.append(modelStyle);
- let modelIndex=0,modelElapsed=0,modelLast=performance.now();
- const showModel=()=>{stage.querySelector('p').textContent=modelTexts[modelIndex];stage.getAnimations().forEach(a=>a.cancel());if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches)stage.animate([{opacity:0,transform:'translateY(8px)'},{opacity:1,transform:'translateY(0)'}],{duration:600,easing:'ease-out'});};showModel();
- const modelTimer=setInterval(()=>{const now=performance.now(),delta=now-modelLast;modelLast=now;if(!sm.isConnected){clearInterval(modelTimer);return;}if(sm.hidden||document.hidden)return;modelElapsed+=delta;if(modelElapsed>=5000){modelElapsed=0;modelIndex=(modelIndex+1)%modelTexts.length;showModel();}},100);
+ let modelIndex=0,modelElapsed=0,modelQuestion=true,modelLast=performance.now();
+ const showModel=()=>{stage.querySelector('p').textContent=modelQuestion?modelQuestions[modelIndex]:modelTexts[modelIndex];stage.dataset.phase=modelQuestion?'question':'answer';stage.getAnimations().forEach(a=>a.cancel());if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches)stage.animate([{opacity:0,transform:'translateY(8px)'},{opacity:1,transform:'translateY(0)'}],{duration:600,easing:'ease-out'});};showModel();
+ const modelTimer=setInterval(()=>{const now=performance.now(),delta=now-modelLast;modelLast=now;if(!sm.isConnected){clearInterval(modelTimer);return;}if(sm.hidden||document.hidden)return;modelElapsed+=delta;if(modelElapsed>=(modelQuestion?3000:5000)){modelElapsed=0;if(modelQuestion){modelQuestion=false;}else{modelQuestion=true;modelIndex=(modelIndex+1)%modelTexts.length;}showModel();}},100);
  
  // Original slow minor-key score with synthesized piano and bowed strings.
  const soundButton=document.createElement('button');soundButton.type='button';soundButton.className='model-music';sm.append(soundButton);
