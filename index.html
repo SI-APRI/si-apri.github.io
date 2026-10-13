@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="preload" as="image" href="img/fond.jpg">
-<link rel="stylesheet" href="css/commun.css?v=20261011-brand">
+<link rel="stylesheet" href="css/commun.css?v=20261013-fonds">
 <style>nav.principal .item > a.nav-pictogramme{display:flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;padding-inline:10px}nav.principal .nav-pictogramme svg{display:block;flex-shrink:0}@media(min-width:1101px){nav.principal{grid-template-columns:40px .85fr 1.1fr 1.1fr 1.3fr 1.1fr .8fr 100px}}</style>
 </head>
 <body>
@@ -28,6 +28,7 @@
  </div>
 </header>
 
+<div id="fonds" aria-hidden="true"></div>
 <div id="points"></div>
 
 <main id="contenu-principal" tabindex="-1">
@@ -111,6 +112,29 @@ const points = document.getElementById('points');
 const ids = ['accueil', ...SECTIONS.map(s=>s.id)];
 points.innerHTML = ids.map(id=>`<a href="#${id}" data-sec="${id}" aria-label="${id}"></a>`).join('');
 
+// background photo: one per main tab (a sub-page keeps its parent's photo).
+// To change a photo, replace the file img/fond-<tab>.jpg or edit this list.
+const FONDS = {accueil:'img/fond.jpg', territoire:'img/fond-territoire.jpg', cadre:'img/fond-cadre.jpg',
+ resultats:'img/fond-resultats.jpg', boucles:'img/fond-boucles.jpg', fiches:'img/fond-fiches.jpg', ressources:'img/fond-ressources.jpg'};
+const fonds = document.getElementById('fonds');
+const couches = {};
+let fondActif = null;
+function changerFond(id){
+ const url = FONDS[id] || FONDS.accueil;
+ if(url===fondActif) return;
+ fondActif = url;
+ let c = couches[url];
+ const montrer = ()=>{ if(fondActif!==url) return; fonds.querySelectorAll('div').forEach(d=>d.classList.toggle('visible', d===c)); };
+ if(c){ montrer(); return; }
+ c = couches[url] = document.createElement('div');
+ fonds.append(c);
+ const img = new Image();
+ img.onload = ()=>{ c.style.backgroundImage = `url("${url}")`; requestAnimationFrame(montrer); };
+ img.src = url;
+}
+// once the page is idle, fetch the other photos so a jump shows them at once
+addEventListener('load', ()=>setTimeout(()=>Object.values(FONDS).forEach(u=>{ new Image().src = u; }), 2500));
+
 // active section: tab in the bar (a sub-page lights its parent) and dot
 let courant = 'accueil';
 function marquer(id){
@@ -118,6 +142,7 @@ function marquer(id){
  const parent = SECTIONS.find(s=>s.id===id)?.menu || id;
  nav.querySelectorAll('.item').forEach(i=>i.classList.toggle('actif', i.dataset.sec===parent));
  points.querySelectorAll('a').forEach(a=>a.classList.toggle('actif', a.dataset.sec===id));
+ changerFond(parent);
 }
 // the section crossing the line at 45 % of the screen is the current one
 let rafSuivi;
