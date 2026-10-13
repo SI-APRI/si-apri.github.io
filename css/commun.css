@@ -12,6 +12,10 @@ html{scroll-behavior:smooth;scroll-snap-type:y proximity}
 section{scroll-snap-align:start}
 body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;color:#fff;background:var(--nuit);-webkit-font-smoothing:antialiased}
 body::before{content:"";position:fixed;inset:0;z-index:-2;background:url(../img/fond.jpg) center/cover no-repeat}
+/* one photo per main tab, cross-faded above the default one (index.html, changerFond) */
+#fonds{position:fixed;inset:0;z-index:-2;pointer-events:none}
+#fonds div{position:absolute;inset:0;background:center/cover no-repeat;opacity:0;transition:opacity .9s ease}
+#fonds div.visible{opacity:1}
 body::after{content:"";position:fixed;inset:0;z-index:-1;background:rgba(10,34,46,.62);transition:background .4s}
 body.defile::after{background:rgba(10,34,46,.72)}
 a{color:var(--bleu)}
