@@ -3,7 +3,7 @@
 :root{
  --nuit:#0a222e;--bleu:#397fa3;--bleu-clair:#5aa3c8;--bleu-pale:#eaf3f8;
  --vert:#2f7a5b;--vert-pale:#e7f3ec;--rouge:#b5523b;--ambre:#c98a1b;
- --texte:#1f3a4a;--texte-doux:#587082;--filet:#dbe6ee;--carte:rgba(255,255,255,.72);
+ --texte:#1f3a4a;--texte-doux:#587082;--filet:#dbe6ee;--carte:rgba(255,255,255,.6);
  --barre:72px;--rayon:16px;
  --cat1:#397fa3;--cat2:#2f7a5b;--cat3:#c98a1b;--cat4:#b5523b;--cat5:#7a5ea8;--cat6:#4f9d9a;--cat7:#8a6d3b;
 }
