@@ -3,7 +3,7 @@
 :root{
  --nuit:#0a222e;--bleu:#397fa3;--bleu-clair:#5aa3c8;--bleu-pale:#eaf3f8;
  --vert:#2f7a5b;--vert-pale:#e7f3ec;--rouge:#b5523b;--ambre:#c98a1b;
- --texte:#1f3a4a;--texte-doux:#587082;--filet:#dbe6ee;--carte:rgba(255,255,255,.95);
+ --texte:#1f3a4a;--texte-doux:#587082;--filet:#dbe6ee;--carte:rgba(255,255,255,.72);
  --barre:72px;--rayon:16px;
  --cat1:#397fa3;--cat2:#2f7a5b;--cat3:#c98a1b;--cat4:#b5523b;--cat5:#7a5ea8;--cat6:#4f9d9a;--cat7:#8a6d3b;
 }
@@ -16,8 +16,8 @@ body::before{content:"";position:fixed;inset:0;z-index:-2;background:url(../img/
 #fonds{position:fixed;inset:0;z-index:-2;pointer-events:none}
 #fonds div{position:absolute;inset:0;background:center/cover no-repeat;opacity:0;transition:opacity .9s ease}
 #fonds div.visible{opacity:1}
-body::after{content:"";position:fixed;inset:0;z-index:-1;background:rgba(10,34,46,.62);transition:background .4s}
-body.defile::after{background:rgba(10,34,46,.72)}
+body::after{content:"";position:fixed;inset:0;z-index:-1;background:rgba(10,34,46,.46);transition:background .4s}
+body.defile::after{background:rgba(10,34,46,.54)}
 a{color:var(--bleu)}
 
 /* Keyboard focus stays visible against both dark backgrounds and light cards. */
@@ -74,7 +74,7 @@ body.serre .langue{margin-left:6px}
 
 /* ---------- sections ---------- */
 section{min-height:100dvh;scroll-margin-top:var(--barre);position:relative}
-section.page{padding:calc(var(--barre) + 24px) 32px 32px}
+section.page{padding:calc(var(--barre) + clamp(32px,6vh,64px)) clamp(24px,5vw,80px) clamp(24px,4vh,40px)}
 #accueil{display:grid;place-items:center;text-align:center;padding:var(--barre) 24px 0}
 #accueil h1{font-size:clamp(40px,6vw,76px);font-weight:700;letter-spacing:-.02em;margin:0 0 22px;text-shadow:0 2px 24px rgba(0,0,0,.35)}
 #accueil p{font-size:clamp(16px,1.6vw,20px);margin:0 0 30px;opacity:.95}
@@ -91,7 +91,7 @@ section.page{padding:calc(var(--barre) + 24px) 32px 32px}
 @keyframes descend{from{transform:translateY(-12px)}to{transform:translateY(32px)}}
 /* "up next" cue under each section card: same line and type as the home cue,
    in normal flow after the card so it never sits on maps, modules or controls */
-.fleche.suivant{width:max-content;max-width:100%;margin:clamp(20px,4vh,36px) auto 0;padding:10px 18px 6px;min-height:44px;text-align:center}
+.fleche.suivant{width:max-content;max-width:100%;margin:clamp(40px,9vh,96px) auto clamp(16px,4vh,40px);padding:10px 18px 6px;min-height:44px;text-align:center}
 .fleche-sur{font-size:10.5px;line-height:1;text-transform:uppercase;letter-spacing:.2em;font-weight:500;opacity:.7;margin-bottom:-4px;text-shadow:0 1px 8px rgba(0,0,0,.65)}
 .fleche.suivant .fleche-trait{height:24px}
 .fleche.suivant .fleche-trait::after{height:10px}
@@ -99,7 +99,9 @@ section.page{padding:calc(var(--barre) + 24px) 32px 32px}
 section.page{scroll-margin-top:0}
 
 /* the white card holding a section */
-.carte-page{background:var(--carte);color:var(--texte);border-radius:var(--rayon);box-shadow:0 20px 60px rgba(0,0,0,.22);padding:28px 32px;max-width:1500px;margin:0 auto;min-height:calc(100dvh - var(--barre) - 56px)}
+.carte-page{background:var(--carte);-webkit-backdrop-filter:blur(18px) saturate(1.15);backdrop-filter:blur(18px) saturate(1.15);border:1px solid rgba(255,255,255,.55);color:var(--texte);border-radius:var(--rayon);box-shadow:0 20px 60px rgba(0,0,0,.22);padding:28px 32px;max-width:1360px;margin:0 auto;min-height:calc(100dvh - var(--barre) - 180px)}
+/* without backdrop blur the photo would show through sharply: stay nearly opaque */
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.carte-page{background:rgba(255,255,255,.94)}}
 .carte-page.sans-marge{padding:10px}
 .chargement{display:grid;place-items:center;min-height:300px;color:var(--texte-doux);font-size:14px}
 .chargement::before{content:"";width:22px;height:22px;border:2.5px solid var(--filet);border-top-color:var(--bleu);border-radius:50%;animation:tourne 1s linear infinite;margin-right:10px}
@@ -177,7 +179,7 @@ footer a{color:#fff}
  nav.principal .sous a{color:rgba(255,255,255,.85);padding:6px 10px}
  nav.principal .sous a small{display:none}
  .menu{display:block}.langue{margin-left:0}
- section.page{padding:calc(var(--barre) + 12px) 10px 16px}
+ section.page{padding:calc(var(--barre) + 24px) 16px 16px}
  .carte-page{padding:18px 16px}
  .colonnes{grid-template-columns:1fr}
  .grille.deux{grid-template-columns:1fr}
