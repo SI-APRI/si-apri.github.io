@@ -645,3 +645,5 @@
 html body section#cadre{background:transparent!important}
 html body #cadre #contenu-cadre{background:rgba(242,244,245,.92)!important;background-clip:padding-box!important;border:10px solid rgba(255,255,255,.42)!important;border-radius:22px!important;box-shadow:0 20px 60px rgba(0,0,0,.22)!important}
 @media(max-width:1100px){html body #cadre #contenu-cadre{border-width:6px!important;border-radius:16px!important}}
+/* Mesure de la résilience : plus de question en titre, la phrase s'affiche directement. */
+#cadre #contenu-cadre .model-auto .model-question{display:none!important}
