@@ -569,9 +569,15 @@ export function qualifier(delta, lang = 'fr') {
   const t = tailleEffet(delta);
   const sens = t.k === 'negligeable' ? 'nul' : delta > 0 ? 'hausse' : 'baisse';
   const fr = lang !== 'en';
-  const sensMot = { hausse: fr ? 'positif' : 'positive', baisse: fr ? 'négatif' : 'negative', nul: '' }[sens];
-  const mot = fr ? t.fr : t.en;
-  const texte = fr ? `effet ${mot}${sensMot ? ', ' + sensMot : ''}` : `${mot} effect${sensMot ? ', ' + sensMot : ''}`;
+  // Spanish and Creole have their own words (the code used to fall back on French)
+  const LOC = {
+    es: { m: { negligeable: 'insignificante', faible: 'débil', modere: 'moderado', fort: 'fuerte' }, s: { hausse: 'positivo', baisse: 'negativo' }, e: 'efecto' },
+    ht: { m: { negligeable: 'neglijab', faible: 'fèb', modere: 'modere', fort: 'fò' }, s: { hausse: 'pozitif', baisse: 'negatif' }, e: 'efè' },
+  }[lang];
+  const sensMot = LOC ? (LOC.s[sens] || '') : { hausse: fr ? 'positif' : 'positive', baisse: fr ? 'négatif' : 'negative', nul: '' }[sens];
+  const mot = LOC ? LOC.m[t.k] : fr ? t.fr : t.en;
+  const texte = LOC ? `${LOC.e} ${mot}${sensMot ? ', ' + sensMot : ''}`
+    : fr ? `effet ${mot}${sensMot ? ', ' + sensMot : ''}` : `${mot} effect${sensMot ? ', ' + sensMot : ''}`;
   const n = { negligeable: 0, faible: 1, modere: 2, fort: 3 }[t.k];
   const fleche = sens === 'nul' ? '→' : (sens === 'hausse' ? '↑' : '↓').repeat(n);
   const coul = { hausse: '#1a8a4f', baisse: '#c33a24', nul: '#8a93a5' }[sens];
