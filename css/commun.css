@@ -238,3 +238,16 @@ body.photo-libre::after,body.photo-libre.defile::after{background:rgba(10,34,46,
 /* no questions as titles in the Cadre: the statement shows at once */
 #cadre#cadre .model-auto .model-question,#cadre#cadre .landscape-story .landscape-question{display:none!important}
 #cadre#cadre .landscape-story[data-phase=question] .landscape-answer{visibility:visible!important}
+/* slideshows of the Cadre: side arrows and a segmented bar showing how many remain */
+#cadre .slide-frame{position:relative;width:100%;padding:0 44px;box-sizing:border-box}
+#cadre .slide-step{position:absolute;top:50%;transform:translateY(-50%);width:40px;height:44px;padding:0;background:transparent;border:0;color:#536c79;font:28px/1 Helvetica,Arial,sans-serif;cursor:pointer}
+#cadre .slide-step.is-prev{left:0}#cadre .slide-step.is-next{right:0}#cadre .slide-step:hover{color:#182f3a}
+#cadre .seg-bar{display:flex;gap:6px;max-width:620px;margin:8px auto 0;padding:0 44px}
+#cadre .seg-bar button{flex:1 1 0;min-width:0;height:24px;padding:0;border:0;background:transparent;cursor:pointer;display:flex;align-items:center}
+#cadre .seg-bar button::before{content:"";display:block;width:100%;height:4px;border-radius:2px;background:#d3dbe0;transition:background .3s}
+#cadre .seg-bar button.fait::before{background:#9fb1bb}
+#cadre .seg-bar button.ici::before{background:#35597a;height:6px}
+#cadre .seg-bar button:hover::before{background:#7f939e}
+#cadre#cadre .seg-bar button::before{background:#d3dbe0!important}
+#cadre#cadre .seg-bar button.fait::before{background:#9fb1bb!important}
+#cadre#cadre .seg-bar button.ici::before{background:#35597a!important;height:6px}
