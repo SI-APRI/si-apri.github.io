@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="preload" as="image" href="img/fond.jpg">
-<link rel="stylesheet" href="css/commun.css?v=20261014-cadres">
+<link rel="stylesheet" href="css/commun.css?v=20261014-legendes">
 <style>nav.principal .item > a.nav-pictogramme{display:flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;padding-inline:10px}nav.principal .nav-pictogramme svg{display:block;flex-shrink:0}@media(min-width:1101px){nav.principal{grid-template-columns:40px .85fr 1.1fr 1.1fr 1.3fr 1.1fr .8fr 100px}}</style>
 </head>
 <body>
@@ -119,13 +119,15 @@ const FONDS = {accueil:'img/fond.jpg', territoire:'img/fond-territoire.jpg', cad
 const fonds = document.getElementById('fonds');
 // caption of each photo, shown in the open space under its section card
 const LEGENDES = {
- territoire:"Vallée cultivée entre des mornes dénudés",
- cadre:"Rivière en lit de galets au pied d'un morne boisé",
- resultats:"Canal d'irrigation entre une parcelle labourée et un chemin",
+ accueil:"Port de Corail, Grand'Anse",
+ territoire:"Vallée cultivée entre des mornes dénudés · Camp-Perrin, Sud",
+ cadre:"Rivière la Voldrogue au pied d'un morne boisé · Grand'Anse",
+ resultats:"Canal d'irrigation entre une parcelle labourée et un chemin · Camp-Perrin, Sud",
  boucles:"Mangroves et récif vus d'avion",
- fiches:"Champ de maïs et cocotiers",
+ fiches:"Champ de maïs et cocotiers · Camp-Perrin, Sud",
  ressources:"Pâturage sur une pente rocailleuse"
 };
+{ const p = document.createElement('p'); p.className='legende-photo legende-hero'; p.textContent = LEGENDES.accueil; document.getElementById('accueil').append(p); }
 document.querySelectorAll('section.page').forEach(sec=>{
  const parent = SECTIONS.find(s=>s.id===sec.id)?.menu || sec.id;
  const txt = LEGENDES[parent], fl = sec.querySelector('.fleche.suivant');
