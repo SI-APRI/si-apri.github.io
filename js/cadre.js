@@ -17,10 +17,10 @@ export default async function render(el,apri,actif){
  const zone=document.createElement('div');zone.className='zone-onglet';zone.dataset.onglet=actif;el.append(zone);
  zone.textContent=apri.t('Chargement…','Loading…');
  try{
-  if(actif==='paysage'){const m=await import('./cadre/boucles.js');if(!zone.isConnected)return;zone.textContent='';await m.renderPaysage(zone,apri);
+  if(actif==='paysage'){const m=await import('./cadre/boucles.js?v=20261014c');if(!zone.isConnected)return;zone.textContent='';await m.renderPaysage(zone,apri);
   }else if(actif==='ponderation'){const m=await import('./cadre/indicateurs.js');if(!zone.isConnected)return;zone.textContent='';await m.renderCatalogue(zone,apri);
   }else if(guide[actif]){
-   const m=await import('./cadre/jeu.js?v=20261014');if(!zone.isConnected)return;zone.textContent='';await m.default(zone,apri);
+   const m=await import('./cadre/jeu.js?v=20261014c');if(!zone.isConnected)return;zone.textContent='';await m.default(zone,apri);
    const inner=zone.querySelector('.guide-tabs');const button=inner?.querySelector('[data-cible="guide-'+guide[actif]+'"]');button?.click();inner?.remove();
    zone.querySelectorAll('.guide-section').forEach(p=>{p.removeAttribute('role');p.setAttribute('aria-labelledby',p.id+'-title');});
   }else{
