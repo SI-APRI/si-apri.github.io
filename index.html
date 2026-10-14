@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="preload" as="image" href="img/fond.jpg">
-<link rel="stylesheet" href="css/commun.css?v=20261014-legendes">
+<link rel="stylesheet" href="css/commun.css?v=20261014-photo">
 <style>nav.principal .item > a.nav-pictogramme{display:flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;padding-inline:10px}nav.principal .nav-pictogramme svg{display:block;flex-shrink:0}@media(min-width:1101px){nav.principal{grid-template-columns:40px .85fr 1.1fr 1.1fr 1.3fr 1.1fr .8fr 100px}}</style>
 </head>
 <body>
@@ -170,6 +170,11 @@ function suivre(){
  rafSuivi = requestAnimationFrame(()=>{
   const y = innerHeight*0.45;
   for(const id of ids){ const r = document.getElementById(id).getBoundingClientRect(); if(r.top<=y && r.bottom>y){ if(id!==courant) marquer(id); break; } }
+  // between two frames, when no card covers the middle band of the screen, lift the blue veil
+  const haut = innerHeight*0.4, bas = innerHeight*0.6;
+  const couvert = [...document.querySelectorAll('.carte-page')].some(c=>{ const r=c.getBoundingClientRect(); return r.bottom>haut && r.top<bas; });
+  const accueil = document.getElementById('accueil').getBoundingClientRect().bottom > innerHeight*0.5;
+  document.body.classList.toggle('photo-libre', !couvert && !accueil);
  });
 }
 addEventListener('scroll', suivre, {passive:true}); addEventListener('resize', suivre);
