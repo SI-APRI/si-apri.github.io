@@ -1012,7 +1012,7 @@ function construire(){
   const bathyInfo=document.createElement('div');bathyInfo.id='bathy-legend';bathyInfo.hidden=true;
   bathyInfo.style.cssText='margin:8px 12px;font:11px/1.5 system-ui;color:#315970';
   bathyInfo.innerHTML=(apFrench?'<b>Profondeurs en mètres</b><p>Courbes principales : 500 m à cette échelle (1 000 ou 2 000 m en dézoomant), avec des courbes complémentaires près des côtes. Le relief est ombré et coloré ; lire la profondeur sur les courbes.</p>':'<b>Depths in metres</b><p>Main contours: 500 m at this scale (1,000 or 2,000 m when zooming out), with additional shallow-water contours. Relief is shaded and coloured; read depth from contour labels.</p>')+
-   '<a href="https://tiles.arcgis.com/tiles/C8EMgrsFcRFL6LrL/arcgis/rest/services/GEBCO_basemap_NCEI/MapServer" target="_blank" rel="noopener">Relief · GEBCO 2024 / NOAA NCEI</a><br><a href="https://tiles.arcgis.com/tiles/C8EMgrsFcRFL6LrL/arcgis/rest/services/GEBCO_contours/MapServer" target="_blank" rel="noopener">Courbes · GEBCO 2023 / NOAA NCEI</a><p>'+
+   '<a href="https://tiles.arcgis.com/tiles/C8EMgrsFcRFL6LrL/arcgis/rest/services/GEBCO_basemap_NCEI/MapServer" target="_blank" rel="noopener">Relief · GEBCO 2024 / NOAA NCEI</a><br><a href="https://tiles.arcgis.com/tiles/C8EMgrsFcRFL6LrL/arcgis/rest/services/GEBCO_contours/MapServer" target="_blank" rel="noopener">Contours · GEBCO 2023 / NOAA NCEI</a><p>'+
    (apFrench?'Vue régionale, non destinée à la navigation. Le fond terrestre change également pendant l’activation.':'Regional overview, not for navigation. Land basemap also changes while enabled.')+'</p>';
   hote.querySelector('input[data-cle="bathy"]').closest('.groupe').appendChild(bathyInfo);
 }

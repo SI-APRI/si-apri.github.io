@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="preload" as="image" href="img/fond.jpg">
-<link rel="stylesheet" href="css/commun.css?v=20261014-photo">
+<link rel="stylesheet" href="css/commun.css?v=20261014-langues">
 <style>nav.principal .item > a.nav-pictogramme{display:flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;padding-inline:10px}nav.principal .nav-pictogramme svg{display:block;flex-shrink:0}@media(min-width:1101px){nav.principal{grid-template-columns:40px .85fr 1.1fr 1.1fr 1.3fr 1.1fr .8fr 100px}}</style>
 </head>
 <body>
@@ -63,7 +63,7 @@
 </footer>
 
 <script type="module">
-import {apri, SECTIONS, charger, changerLangue, appliquerHash, menus} from './js/apri.js';
+import {apri, SECTIONS, charger, changerLangue, appliquerHash, menus, traduire} from './js/apri.js';
 
 const TXT = {en:{saut:'Skip to content',sous:'Information System (IS)',titre:'Resilience Observatory',accroche:'The APRI information system for landscape resilience.',
  cta:'Explore the results','vers-territoire':'Territory',charge:'Loading…',
@@ -94,14 +94,14 @@ function construireNav(){
    (sous.length?`<div class="sous">${sous.map(x=>`<a href="${x.href}">${apri.esc(x.t)}${x.d?`<small>${apri.esc(x.d)}</small>`:''}</a>`).join('')}</div>`:'');
   nav.append(div);
  }
- const projet=document.createElement('div'); projet.className='item'; projet.innerHTML='<a href="enriquillo.html">'+(l==='fr'?'Projet Enriquillo':l==='es'?'Proyecto Enriquillo':'Enriquillo')+'</a>'; nav.append(projet);
+ const projet=document.createElement('div'); projet.className='item'; projet.innerHTML='<a href="enriquillo.html">'+(l==='fr'?'Projet Enriquillo':l==='es'?'Proyecto Enriquillo':l==='ht'?'Pwojè Enriquillo':'Enriquillo Project')+'</a>'; nav.append(projet);
 
  const iconLinks=[
   [nav.querySelector('[data-sec="accueil"] > a'),FR.accueil&& (TXT[l]?.accueil||FR.accueil),'<path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/>'],
-  [projet.querySelector('a'),l==='fr'?'Projet Enriquillo':l==='es'?'Proyecto Enriquillo':'Enriquillo','<path d="m2 18 7-11 5 7 3-4 5 8M3 21h18"/><circle cx="17" cy="5" r="2"/>']
+  [projet.querySelector('a'),(l==='fr'?'Projet Enriquillo':l==='es'?'Proyecto Enriquillo':l==='ht'?'Pwojè Enriquillo':'Enriquillo Project'),'<path d="m2 18 7-11 5 7 3-4 5 8M3 21h18"/><circle cx="17" cy="5" r="2"/>']
  ];
  iconLinks.forEach(([a,label,shape])=>{a.classList.add('nav-pictogramme');a.setAttribute('aria-label',label);a.title=label;a.innerHTML='<svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">'+shape+'</svg>';});
- const projectLink=projet.querySelector('a');projectLink.classList.remove('nav-pictogramme');projectLink.textContent='Proyecto Enriquillo';projectLink.title='Proyecto Enriquillo';projectLink.setAttribute('aria-label','Proyecto Enriquillo');
+ const projectLink=projet.querySelector('a');projectLink.classList.remove('nav-pictogramme');projectLink.textContent=(l==='fr'?'Projet Enriquillo':l==='es'?'Proyecto Enriquillo':l==='ht'?'Pwojè Enriquillo':'Enriquillo Project');projectLink.title=(l==='fr'?'Projet Enriquillo':l==='es'?'Proyecto Enriquillo':l==='ht'?'Pwojè Enriquillo':'Enriquillo Project');projectLink.setAttribute('aria-label',(l==='fr'?'Projet Enriquillo':l==='es'?'Proyecto Enriquillo':l==='ht'?'Pwojè Enriquillo':'Enriquillo Project'));
  nav.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{nav.classList.remove('ouvert');document.querySelector('.menu').setAttribute('aria-expanded','false');}));
  marquer(courant);
 }
@@ -127,12 +127,22 @@ const LEGENDES = {
  fiches:"Champ de maïs et cocotiers · Camp-Perrin, Sud",
  ressources:"Pâturage sur une pente rocailleuse"
 };
-{ const p = document.createElement('p'); p.className='legende-photo legende-hero'; p.textContent = LEGENDES.accueil; document.getElementById('accueil').append(p); }
+const LEGENDES_EN = {
+ accueil:"Port of Corail, Grand'Anse",
+ territoire:"Cultivated valley between bare hills · Camp-Perrin, Sud",
+ cadre:"The Voldrogue river below a forested hill · Grand'Anse",
+ resultats:"Irrigation canal between a ploughed plot and a path · Camp-Perrin, Sud",
+ boucles:"Mangroves and reef seen from the air",
+ fiches:"Maize field and coconut palms · Camp-Perrin, Sud",
+ ressources:"Grazing on a rocky slope"
+};
+const legende = k => apri.t(LEGENDES[k], LEGENDES_EN[k]);
+{ const p = document.createElement('p'); p.className='legende-photo legende-hero'; p.dataset.legende='accueil'; p.textContent = LEGENDES.accueil; document.getElementById('accueil').append(p); }
 document.querySelectorAll('section.page').forEach(sec=>{
  const parent = SECTIONS.find(s=>s.id===sec.id)?.menu || sec.id;
  const txt = LEGENDES[parent], fl = sec.querySelector('.fleche.suivant');
  if(!txt || !fl) return;
- const p = document.createElement('p'); p.className='legende-photo'; p.textContent = txt;
+ const p = document.createElement('p'); p.className='legende-photo'; p.dataset.legende=parent; p.textContent = txt;
  sec.insertBefore(p, fl);
 });
 
@@ -201,8 +211,34 @@ async function langue(l){
  document.querySelectorAll('.langue button').forEach(b=>b.setAttribute('aria-pressed', String(b.dataset.l===l)));
  await changerLangue(l);
  document.querySelectorAll('[data-t]').forEach(e=>{const v=TXT[l][e.dataset.t]; if(v) e.textContent=v;});
+ document.querySelectorAll('[data-legende]').forEach(e=>e.textContent=legende(e.dataset.legende));
+ document.querySelector('.menu').setAttribute('aria-label', apri.t('Menu','Menu'));
+ nav.setAttribute('aria-label', apri.t('Navigation','Navigation'));
+ document.querySelector('.langue').setAttribute('aria-label', apri.t('Langue','Language'));
  construireNav(); ajuster();
+ traduireTout(document.body);
 }
+// Safety net for Spanish and Creole: any text or label drawn by a module that skipped the
+// dictionary is looked up there once it appears on screen (French or English source text).
+const ATTRS = ['title','aria-label','placeholder'];
+function traduireAttrs(e){ for(const a of ATTRS){ const v0=e.getAttribute(a); if(!v0) continue; const v=traduire(v0.trim()); if(v!=null && v!==v0) e.setAttribute(a, v); } }
+function traduireTexte(n){ const t=n.textContent, k=t.trim(); if(k.length<2 || !/[A-Za-zÀ-ÿ]/.test(k)) return; const v=traduire(k); if(v!=null && v!==k) n.textContent=t.replace(k, v); }
+function traduireTout(racine){
+ if(apri.lang!=='es' && apri.lang!=='ht') return;
+ if(racine.nodeType===3){ traduireTexte(racine); return; }
+ if(racine.nodeType!==1 || racine.closest('script,style')) return;
+ traduireAttrs(racine);
+ const w=document.createTreeWalker(racine, NodeFilter.SHOW_TEXT|NodeFilter.SHOW_ELEMENT); let x;
+ while((x=w.nextNode())){ if(x.nodeType===3){ if(!x.parentElement?.closest('script,style')) traduireTexte(x); } else traduireAttrs(x); }
+}
+new MutationObserver(ms=>{
+ if(apri.lang!=='es' && apri.lang!=='ht') return;
+ for(const m of ms){
+  if(m.type==='childList') m.addedNodes.forEach(traduireTout);
+  else if(m.type==='characterData') traduireTexte(m.target);
+  else if(m.type==='attributes') traduireAttrs(m.target);
+ }
+}).observe(document.body, {subtree:true, childList:true, characterData:true, attributes:true, attributeFilter:ATTRS});
 document.querySelectorAll('.langue button').forEach(b=>b.onclick=()=>langue(b.dataset.l));
 const nav0 = (navigator.language||'fr').slice(0,2);
 let l0 = ({en:'en', es:'es', ht:'ht'})[nav0] || 'fr'; try{ l0 = localStorage.getItem('apri_lang') || l0; }catch(e){}
