@@ -228,3 +228,13 @@ body::after{transition:background .6s ease}
 body.photo-libre::after,body.photo-libre.defile::after{background:rgba(10,34,46,0)}
 /* Indicateurs et échelles: its workspace forced 620 px, making that frame taller than the others */
 #cadre#cadre .ib-workspace{min-height:0!important}
+
+/* Cadre de résilience: every sub-tab gets exactly the territory frame's height;
+   longer content scrolls inside the frame instead of stretching it */
+@media(min-width:1101px){
+ #cadre#cadre #contenu-cadre#contenu-cadre{height:calc(100dvh - var(--barre) - 54px);min-height:440px;display:flex;flex-direction:column;overflow:hidden}
+ #cadre#cadre#cadre .zone-onglet{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin}
+}
+/* no questions as titles in the Cadre: the statement shows at once */
+#cadre#cadre .model-auto .model-question,#cadre#cadre .landscape-story .landscape-question{display:none!important}
+#cadre#cadre .landscape-story[data-phase=question] .landscape-answer{visibility:visible!important}
